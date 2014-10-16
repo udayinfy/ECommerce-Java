@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: javax.xml.soap-api-1.3.5">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.xml.soap/javax.xml.soap-api/1.3.5/e11c0f07a92f6d02a347dd9c55ee56692a6d9f7e/javax.xml.soap-api-1.3.5.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.xml.soap/javax.xml.soap-api/1.3.5/a56a7675d35c8b023d804d774239bee073fa5d78/javax.xml.soap-api-1.3.5-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

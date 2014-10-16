@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: geronimo-activation_1.1_spec-1.0.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.geronimo.specs/geronimo-activation_1.1_spec/1.0.1/79c75e201af44cf766e78a2515c3f88a19f69e1f/geronimo-activation_1.1_spec-1.0.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.geronimo.specs/geronimo-activation_1.1_spec/1.0.1/f53e96961ec1026dde74ead4a22ac107dada9354/geronimo-activation_1.1_spec-1.0.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

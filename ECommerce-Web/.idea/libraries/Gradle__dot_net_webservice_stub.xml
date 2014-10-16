@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Gradle: dot_net_webservice_stub">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/libs/dot_net_webservice_stub.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
