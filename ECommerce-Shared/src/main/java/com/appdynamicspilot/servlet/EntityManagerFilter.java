@@ -49,7 +49,6 @@ public class EntityManagerFilter implements Filter {
 
         EntityManagerHelper.getInstance().getEntityManager().close();
         EntityManagerHelper.getInstance().setEntityManager(null);
-
     }
 
     public void destroy() {

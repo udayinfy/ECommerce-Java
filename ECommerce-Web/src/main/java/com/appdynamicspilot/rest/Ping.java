@@ -18,9 +18,10 @@ public class Ping {
 	
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
-	public void ping(@Context HttpServletResponse response) throws IOException {
+	public Response ping(@Context HttpServletResponse response) throws IOException {
 		response.setStatus(204);
 		response.flushBuffer();
+        return Response.noContent().build();
 	}
 }
 	

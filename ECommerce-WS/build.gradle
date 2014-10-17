@@ -14,9 +14,6 @@ dependencies {
 
     compile 'mysql:mysql-connector-java:5.1.33';
 
-    compile 'com.sun.jersey:jersey-core:1.18.1';
-    compile 'com.sun.jersey:jersey-servlet:1.18.1';
-    compile 'com.sun.jersey:jersey-server:1.18.1';
     compile 'javax.servlet:jstl:1.2';
     compile 'javax.xml.ws:jaxws-api:2.2.11';
     compile 'commons-dbcp:commons-dbcp:1.4';

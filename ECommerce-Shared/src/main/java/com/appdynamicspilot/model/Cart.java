@@ -33,7 +33,7 @@ public class Cart implements java.io.Serializable {
     @XmlElement(name="cart-id")
 	private Long id;
 
-    @OneToMany(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.REFRESH,fetch=FetchType.LAZY)
 	private List<Item> items = new ArrayList<Item>();
 
     @ManyToOne(fetch=FetchType.LAZY)
