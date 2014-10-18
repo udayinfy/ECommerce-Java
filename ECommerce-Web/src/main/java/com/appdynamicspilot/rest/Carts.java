@@ -160,7 +160,7 @@ public class Carts {
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public String checkout(@Context HttpServletRequest req) {
-		ShoppingCart cart = (ShoppingCart) req.getSession(true).getAttribute("CART");
+		Cart cart = (Cart) req.getSession(true).getAttribute("CART");
 		User user = (User) req.getSession(true).getAttribute("USER");
 		
 		if (user == null) {
@@ -170,14 +170,14 @@ public class Carts {
 			return "Nothing In cart to checkout.";
 		}
 		
-			List<ShoppingCartItem> items = cart.getAllItems();
+			List<Item> items = cart.getItems();
 			List<Long> orderIdList = new ArrayList<Long>();
 			String orderIds = "";
 			boolean outOfStock = false;
 			try {
-			for (ShoppingCartItem item:items) {
-				Long orderId = getCartService().checkOut(Long.parseLong(item.getId()), 1);
-				if (Long.parseLong(item.getId())!=0){
+			for (Item item:items) {
+				Long orderId = getCartService().checkOut(item.getId(), 1);
+				if (item.getId()!=0){
 					orderIds = ", " + orderIds;
 				}
 				if (orderId == 0) {	
