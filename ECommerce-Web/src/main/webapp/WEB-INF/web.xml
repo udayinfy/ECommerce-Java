@@ -12,26 +12,26 @@
     <res-type>javax.sql.DataSource</res-type>
     <res-auth>Container</res-auth>
   </resource-ref>
-    <filter>
-        <filter-name>Jersey-Filter</filter-name>
+    <!--<filter>-->
+        <!--<filter-name>Jersey-Filter</filter-name>-->
 
-        <filter-class>org.glassfish.jersey.servlet.ServletContainer</filter-class>
-        <init-param>
-            <param-name>jersey.config.server.provider.classnames</param-name>
-            <param-value>
-                com.appdynamicspilot.rest.Carts,
-                com.appdynamicspilot.rest.Items,
-                com.appdynamicspilot.rest.Ping,
-                com.appdynamicspilot.rest.CatalogRequest
-            </param-value>
-            </init-param>
-        <load-on-startup>1</load-on-startup>
-    </filter>
+        <!--<filter-class>org.glassfish.jersey.servlet.ServletContainer</filter-class>-->
+        <!--<init-param>-->
+            <!--<param-name>jersey.config.server.provider.classnames</param-name>-->
+            <!--<param-value>-->
+                <!--com.appdynamicspilot.rest.Carts,-->
+                <!--com.appdynamicspilot.rest.Items,-->
+                <!--com.appdynamicspilot.rest.Ping,-->
+                <!--com.appdynamicspilot.rest.CatalogRequest-->
+            <!--</param-value>-->
+            <!--</init-param>-->
+    <!--</filter>-->
 
-    <filter-mapping>
-        <filter-name>Jersey-Filter</filter-name>
-        <url-pattern>/rest/*</url-pattern>
-    </filter-mapping>
+    <!--<filter-mapping>-->
+        <!--<filter-name>Jersey-Filter</filter-name>-->
+        <!--<url-pattern>/rest/*</url-pattern>-->
+    <!--</filter-mapping>-->
+
 
     <filter>
     <filter-name>emFilter</filter-name>
@@ -57,6 +57,19 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <servlet>
+        <servlet-name>jaxrs</servlet-name>
+        <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+        <init-param>
+            <param-name>com.sun.jersey.config.property.packages</param-name>
+            <param-value>com.appdynamicspilot.rest</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>jaxrs</servlet-name>
+        <url-pattern>/rest/*</url-pattern>
+    </servlet-mapping>
 
   <context-param>
     <param-name>contextConfigLocation</param-name>
@@ -108,7 +121,7 @@
     <error-code>404</error-code>
     <location>/404.jsp</location>
   </error-page>
-  
+
 
 
     <servlet>
