@@ -31,12 +31,12 @@ public class MessageConsumer implements MessageListener {
             try {
                 MapMessage mapMessage = (MapMessage) message;
                 String command = mapMessage.getString("COMMAND");
-                QueryExecutor qe=new QueryExecutor();
-                qe.executeQuery(10l,mapMessage.getString("ORDER_ID"),mapMessage.getString("EMAIL_ID")+" user has placed order request");
+                QueryExecutor qe = new QueryExecutor();
+                qe.executeQuery(10l, mapMessage.getString("ORDER_ID"), mapMessage.getString("EMAIL_ID") + " user has placed order request");
                 log.info("received message=" + command);
 
                 if ("CMD_MAIL".equals(command)) {
-                    mailService.sendOrderMail(mapMessage.getString("EMAIL_ID"),mapMessage.getString("ORDER_ID"));
+                    mailService.sendOrderMail(mapMessage.getString("EMAIL_ID"), mapMessage.getString("ORDER_ID"));
                 }
             } catch (Exception e) {
                 e.printStackTrace();

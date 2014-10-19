@@ -1,7 +1,6 @@
 package com.appdynamicspilot.servlet;
 
 import com.appdynamicspilot.model.Cart;
-import com.appdynamicspilot.model.User;
 import com.appdynamicspilot.service.CartService;
 import com.appdynamicspilot.util.SpringContext;
 
@@ -22,11 +21,11 @@ public class CartSessionListener implements HttpSessionListener {
     public void sessionDestroyed(HttpSessionEvent event) {
         HttpSession session = event.getSession();
         if (session != null) {
-                Cart cart = (Cart) session.getAttribute("CART");
-                if (cart  != null){
-                    CartService service = (CartService) SpringContext.getBean("cartService");
-                    service.deleteCart(cart);
-                }
+            Cart cart = (Cart) session.getAttribute("CART");
+            if (cart != null) {
+                CartService service = (CartService) SpringContext.getBean("cartService");
+                service.deleteCart(cart);
+            }
         }
 
     }

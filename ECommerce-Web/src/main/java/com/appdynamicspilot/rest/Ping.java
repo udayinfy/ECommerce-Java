@@ -15,13 +15,12 @@ import javax.ws.rs.core.Response;
 @Path("/ping")
 public class Ping {
 
-	
-	@GET
-	@Produces(MediaType.TEXT_PLAIN)
-	public Response ping(@Context HttpServletResponse response) throws IOException {
-		response.setStatus(204);
-		response.flushBuffer();
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response ping(@Context HttpServletResponse response) throws IOException {
+        response.setStatus(204);
+        response.flushBuffer();
         return Response.noContent().build();
-	}
+    }
 }
-	

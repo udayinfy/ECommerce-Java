@@ -24,7 +24,7 @@ public class DiskIoServlet extends HttpServlet {
         System.out.println("Data written will be " + (dataAmount * 1024));
         response.getWriter().println("Data written will be " + (dataAmount * 1024));
         writeFile(dataAmount);
-        response.getWriter().println("File successfully written");	
+        response.getWriter().println("File successfully written");
     }
 
     private void writeFile(int dataAmount) {
@@ -47,6 +47,5 @@ public class DiskIoServlet extends HttpServlet {
             System.out.println(exc);
 
         }
-
     }
 }
