@@ -7,7 +7,7 @@ import javax.persistence.*;
  */
 
 @Entity
-@Table(name="ITEM")
+@Table(name="item")
 public class InventoryItem {
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY)
