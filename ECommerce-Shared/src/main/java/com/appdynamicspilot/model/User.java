@@ -8,7 +8,7 @@ import javax.persistence.*;
 
  */
 @Entity
-@Table(name="User")
+@Table(name="user")
 public class User implements java.io.Serializable {
 
 	private static Logger log = Logger.getLogger(User.class.getName());
