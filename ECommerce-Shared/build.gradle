@@ -31,7 +31,7 @@ dependencies {
     compile 'org.codehaus.castor:castor:1.3.3';
     compile 'org.codehaus.castor:castor-xml:1.3.3';
 
-    //compile 'axis:axis:1.4';
+    compile 'axis:axis:1.4';
     compile 'org.apache.axis:axis-jaxrpc:1.4';
     compile 'org.apache.axis:axis:1.4';
     //compile'wsdl4j:wsdl4j:1.6.3';
