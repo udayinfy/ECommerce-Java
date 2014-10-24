@@ -14,7 +14,7 @@ import javax.servlet.ServletConfig;
  */
 public class CrossAppServlet extends HttpServlet {
     private String host = null;
-    public void init(SerlvetConfig config) {
+    public void init(ServletConfig config) {
 
         String envSuffix = config.getInitParameter("VAR");
         if (envSuffix == null) {
