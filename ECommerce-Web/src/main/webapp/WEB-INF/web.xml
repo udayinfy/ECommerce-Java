@@ -71,6 +71,20 @@
         <url-pattern>/rest/*</url-pattern>
     </servlet-mapping>
 
+
+    <servlet>
+        <servlet-name>CrossApp</servlet-name>
+        <servlet-class>com.appdynamicspilot.servlet.CrossAppServlet</servlet-class>
+        <init-param>
+            <param-name>VAR</param-name>
+            <param-value>ENVLBR_PORT_80_TCP_ADDR</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CrossApp</servlet-name>
+        <url-pattern>/crossapp</url-pattern>
+    </servlet-mapping>
+
   <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>/WEB-INF/applicationContext.xml /WEB-INF/applicationContext-jms.xml</param-value>
