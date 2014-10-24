@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
+import java.net.URL;
+import javax.servlet.ServletConfig;
 
 /**
  * Created by aleftik on 10/24/14.
