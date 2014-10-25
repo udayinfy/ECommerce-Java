@@ -7,7 +7,7 @@
 <struts>
     <constant name="struts.objectFactory" value="org.apache.struts2.spring.StrutsSpringObjectFactory" />
     <constant name="struts.enable.DynamicMethodInvocation" value="true"/>
-    <constant name="struts.action.excludePattern" value="/rest/.*" />
+    <constant name="struts.action.excludePattern" value="/rest/.*,/crossapp" />
 
 	<package name="com.appdy.*" extends="struts-default" >
 		<interceptors>
