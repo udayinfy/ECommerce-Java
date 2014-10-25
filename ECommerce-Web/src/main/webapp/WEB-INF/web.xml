@@ -77,7 +77,7 @@
         <servlet-class>com.appdynamicspilot.servlet.CrossAppServlet</servlet-class>
         <init-param>
             <param-name>VAR</param-name>
-            <param-value>ENVLBR_PORT_80_TCP_ADDR</param-value>
+            <param-value>REST_URL</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>

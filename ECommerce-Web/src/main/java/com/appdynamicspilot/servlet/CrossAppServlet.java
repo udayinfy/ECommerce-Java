@@ -18,7 +18,7 @@ public class CrossAppServlet extends HttpServlet {
 
         String envSuffix = config.getInitParameter("VAR");
         if (envSuffix == null) {
-            envSuffix = "ENVLBR_PORT_80_TCP_ADDR";
+            envSuffix = "REST_URL";
         }
         Map<String, String> envs = System.getenv();
 
@@ -31,8 +31,10 @@ public class CrossAppServlet extends HttpServlet {
     }
     public void sevice(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         if (host != null) {
-            URL url = new URL("http://" + host + request.getContextPath() + "/rest/items/all");
-            url.openConnection().getContent();
+            if (!"".equals(host)) {
+                URL url = new URL("http://" + host + request.getContextPath() + "/rest/items/all");
+                url.openConnection().getContent();
+            }
         }
         response.setStatus(204);
     }
