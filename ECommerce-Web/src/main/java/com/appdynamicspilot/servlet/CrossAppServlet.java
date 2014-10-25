@@ -29,7 +29,8 @@ public class CrossAppServlet extends HttpServlet {
         }
 
     }
-    public void sevice(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    @Override
+    public void service(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         if (host != null) {
             if (!"".equals(host)) {
                 URL url = new URL("http://" + host + request.getContextPath() + "/rest/items/all");
@@ -38,4 +39,6 @@ public class CrossAppServlet extends HttpServlet {
         }
         response.setStatus(204);
     }
+
+
 }
