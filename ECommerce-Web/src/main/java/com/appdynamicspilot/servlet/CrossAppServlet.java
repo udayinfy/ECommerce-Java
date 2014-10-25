@@ -31,7 +31,7 @@ public class CrossAppServlet extends HttpServlet {
     }
     public void sevice(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         if (host != null) {
-            URL url = new URL("http://" + host + "/rest/items/all");
+            URL url = new URL("http://" + host + request.getContextPath() + "/rest/items/all");
             url.openConnection().getContent();
         }
         response.setStatus(204);
