@@ -16,9 +16,11 @@ dependencies {
     compile 'org.apache.struts:struts2-spring-plugin:2.3.16.3';
 
     compile 'mysql:mysql-connector-java:5.1.33';
-
-    compile 'com.sun.jersey:jersey-servlet:1.18.1';
-    compile 'com.sun.jersey:jersey-core:1.18.1';
+    compile 'javax.ws.rs:javax.ws.rs-api:2.0.1';
+    compile  'org.glassfish.jersey.containers:jersey-container-jetty-servlet:2.13';
+    compile 'org.glassfish.jersey.containers:jersey-container-servlet-core:2.13';
+//    compile 'com.sun.jersey:jersey-servlet:1.18.1';
+//    compile 'com.sun.jersey:jersey-core:1.18.1';
 
     compile 'javax.servlet:jstl:1.2';
     compile 'javax.xml.ws:jaxws-api:2.2.11';

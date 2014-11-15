@@ -10,15 +10,25 @@ import javax.persistence.*;
 @Entity
 @Table(name="user")
 public class User implements java.io.Serializable {
-
+	public enum CUSTOMER_TYPE  {DIAMOND,PLATINUM,GOLD,SILVER,BRONZE};
 	private static Logger log = Logger.getLogger(User.class.getName());
 	private static final long serialVersionUID = 1L;
-	private Long id;
-	private String email;
-	private String password;
-	
+	private Long id  = null;
+	private String email = null;
+	private String password= null;
+	private String customerName = null;
+	private CUSTOMER_TYPE customerType = null;
 
-    @Id
+	@Column(name="customer_name")
+	public String getCustomerName() {
+		return customerName;
+	}
+
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
+
+	@Id
     @GeneratedValue( strategy = GenerationType.IDENTITY)
 	public Long getId() {
 		return id;
@@ -42,6 +52,16 @@ public class User implements java.io.Serializable {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	@Column(name="customer_type")
+	@Enumerated(EnumType.STRING)
+	public CUSTOMER_TYPE getCustomerType() {
+		return this.customerType;
+	}
+
+	public void setCustomerType(CUSTOMER_TYPE customerType) {
+		this.customerType = customerType;
 	}
 
 }

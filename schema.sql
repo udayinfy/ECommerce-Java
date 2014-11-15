@@ -104,6 +104,8 @@ CREATE TABLE `user` (
   `id` bigint(20) NOT NULL auto_increment,
   `email` varchar(100) NOT NULL,
   `password` varchar(32) NOT NULL,
+  `customer_name` varchar(32) NOT NULL,
+  `customer_type` varchar(32) NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -115,8 +117,9 @@ CREATE TABLE `user` (
 
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 LOCK TABLES `user` WRITE;
-INSERT INTO `user` VALUES (1,'test','appdynamics'),(2,'appdynamics','appdynamics'),(3,'vikash','appdynamics'
-),(4,'santo','appdynamics'),(5,'ravi','appdynamics'),(6,'root','appdynamics');
+INSERT INTO `user` VALUES (1,'test','appdynamics','appd','GOLD'),(2,'appdynamics','appdynamics','appd','PLATINUM'),(3,'vikash','appdynamics',
+'Val Chibisov', 'PLATINUM'),(4,'santo','appdynamics','Bhaskar Sunkara','BRONZE'),(5,'ravi','appdynamics','Mark Prichard','DIAMOND'),(6,'root','appdynamics','Adam Leftik','SILVER');
+
 UNLOCK TABLES;
 
 
