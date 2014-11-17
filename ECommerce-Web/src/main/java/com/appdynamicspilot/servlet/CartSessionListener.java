@@ -23,7 +23,9 @@ public class CartSessionListener implements HttpSessionListener {
         if (session != null) {
             Cart cart = (Cart) session.getAttribute("CART");
             if (cart != null) {
+
                 CartService service = (CartService) SpringContext.getBean("cartService");
+
                 service.deleteCart(cart);
             }
         }

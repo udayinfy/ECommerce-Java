@@ -17,7 +17,7 @@ import com.appdynamicspilot.util.ArgumentUtils;
 
 import org.springframework.transaction.annotation.Transactional;
 
-public class CartPersistence extends BasePersistenceImpl{
+public class CartPersistence extends BasePersistenceImpl {
 	/**
 	 * Logger for this class
 	 */
@@ -60,9 +60,19 @@ public class CartPersistence extends BasePersistenceImpl{
     }
 
     public void deleteCart(Cart cart) {
+        if (getEntityManager() == null) {
+            setEntityManager(findEntityManger());
+        }
+
         Cart attachedCart = getEntityManager().find(Cart.class,cart.getId());
         if (attachedCart != null) {
             delete(attachedCart);
         }
+    }
+
+    private EntityManager findEntityManger() {
+        EntityManagerHolder holder = (EntityManagerHolder) SpringContext.getBean("entityManagerHolder");
+        emf = holder.getEntityManagerFactory();
+        return emf.createEntityManager();
     }
 }

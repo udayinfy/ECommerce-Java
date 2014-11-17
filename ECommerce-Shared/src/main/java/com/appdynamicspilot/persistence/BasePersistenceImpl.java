@@ -33,9 +33,6 @@ public class BasePersistenceImpl {
 	 *            serializable object
 	 * @throws PersistenceException
 	 */
-//	public void update(final Serializable object) {
-//		getSession().update(object);
-//	}
     @Transactional
     public void update(final Serializable object) {
         EntityManager entityManager = getEntityManager();
@@ -64,10 +61,9 @@ public class BasePersistenceImpl {
 
 
     public EntityManager getEntityManager() {
-//           return this.em;
            return EntityManagerHelper.getInstance().getEntityManager();
     }
-//    @PersistenceContext(name="pu")
+
     public void setEntityManager(EntityManager em) {
         this.em = em;
     }

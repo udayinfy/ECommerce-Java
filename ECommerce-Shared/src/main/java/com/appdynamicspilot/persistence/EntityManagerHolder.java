@@ -11,7 +11,6 @@ public class EntityManagerHolder {
 
     private EntityManagerFactory em;
 
-//    @PersistenceContext(unitName = "pu")
     public void setEntityManagerFactory(EntityManagerFactory em) {
         this.em = em;
     }
