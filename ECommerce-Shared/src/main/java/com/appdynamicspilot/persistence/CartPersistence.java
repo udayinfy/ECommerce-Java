@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 
+import com.appdynamicspilot.util.SpringContext;
 import org.apache.log4j.Logger;
 
 import com.appdynamicspilot.model.Cart;
@@ -72,7 +73,7 @@ public class CartPersistence extends BasePersistenceImpl {
 
     private EntityManager findEntityManger() {
         EntityManagerHolder holder = (EntityManagerHolder) SpringContext.getBean("entityManagerHolder");
-        emf = holder.getEntityManagerFactory();
+        EntityManagerFactory emf = holder.getEntityManagerFactory();
         return emf.createEntityManager();
     }
 }
