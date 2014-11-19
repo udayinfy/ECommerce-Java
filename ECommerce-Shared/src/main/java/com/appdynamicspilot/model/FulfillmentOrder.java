@@ -9,15 +9,15 @@ import javax.xml.bind.annotation.XmlElement;
 @XmlRootElement(name = "fulfillment-order")
 public class FulfillmentOrder {
 
-    @XmlElement(name="id")
+    @XmlElement
     private Long id = null;
-    @XmlElement(name="price")
+    @XmlElement
     private Double price = null;
-    @XmlElement(name="username")
+    @XmlElement
     private String username = null;
-    @XmlElement(name="userId")
+    @XmlElement
     private Long userId = null;
-    @XmlElement(name="customer-type")
+    @XmlElement
     private User.CUSTOMER_TYPE type = null;
 
 
