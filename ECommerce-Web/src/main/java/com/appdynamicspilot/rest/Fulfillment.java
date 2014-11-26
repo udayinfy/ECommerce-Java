@@ -1,7 +1,12 @@
 package com.appdynamicspilot.rest;
 
 import com.appdynamicspilot.model.FulfillmentOrder;
+import com.appdynamicspilot.persistence.EntityManagerHolder;
+import com.appdynamicspilot.util.SpringContext;
 
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityManager;
+import javax.persistence.Query
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -16,10 +21,14 @@ public class Fulfillment {
     @POST
     @Consumes(MediaType.APPLICATION_XML)
     public void fulfillOrder(FulfillmentOrder order) {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+            EntityManager mgr = findEntityManager();
+            Query q = mgr.createNativeQuery("SELECT * FROM Zips WHERE upper(CITY)='SPRINGFIELD'");
+            q.getResultList();
+    }
+
+    public EntityManager findEntityManager() {
+        EntityManagerHolder holder = (EntityManagerHolder) SpringContext.getBean("entityManagerHolder");
+        EntityManagerFactory emf = holder.getEntityManagerFactory();
+        return emf.createEntityManager();
     }
 }
