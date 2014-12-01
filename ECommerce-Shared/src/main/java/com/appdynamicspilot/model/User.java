@@ -9,7 +9,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="user")
-@SecondaryTable(name="CITY", foreignKey = @ForeignKey(name = "city_id") )
+@SecondaryTable(name="City", foreignKey = @ForeignKey(name = "city_id") )
 public class User implements java.io.Serializable {
 	public enum CUSTOMER_TYPE  {DIAMOND,PLATINUM,GOLD,SILVER,BRONZE};
 	private static Logger log = Logger.getLogger(User.class.getName());
