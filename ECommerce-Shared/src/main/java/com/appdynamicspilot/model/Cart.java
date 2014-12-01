@@ -66,7 +66,7 @@ public class Cart implements java.io.Serializable {
 	}
 
 
-    public double getCartTotal() {
+    public Double getCartTotal() {
         double total=0;
         if (items != null ) {
            for (Item item:items)  {
@@ -74,6 +74,22 @@ public class Cart implements java.io.Serializable {
            }
         }
         return total;
+	}
+
+	public Item getTopItem() {
+		int count  = 0;
+		Item topItem = null;
+		for (Item i: items) {
+			if (count == 0) {
+				topItem = i;
+			}
+			count ++;
+
+			if (i.getPrice()  > topItem.getPrice())    {
+				topItem = i;
+			}
+		}
+		return topItem;
 	}
 
     public void addItem(Item item) {

@@ -106,9 +106,12 @@ CREATE TABLE `user` (
   `password` varchar(32) NOT NULL,
   `customer_name` varchar(32) NOT NULL,
   `customer_type` varchar(32) NOT NULL,
+  `city_id`       int(11) NOT NULL,
   PRIMARY KEY  (`id`),
-  UNIQUE KEY `email` (`email`)
+  UNIQUE KEY `email` (`email`),
+   CONSTRAINT `FK3E7312386675DF` FOREIGN KEY (`city_id`) REFERENCES `City` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 --
 -- Dumping data for table `user`
@@ -117,8 +120,8 @@ CREATE TABLE `user` (
 
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 LOCK TABLES `user` WRITE;
-INSERT INTO `user` VALUES (1,'test','appdynamics','appd','GOLD'),(2,'appdynamics','appdynamics','appd','PLATINUM'),(3,'vikash','appdynamics',
-'Val Chibisov', 'PLATINUM'),(4,'santo','appdynamics','Bhaskar Sunkara','BRONZE'),(5,'ravi','appdynamics','Mark Prichard','DIAMOND'),(6,'root','appdynamics','Adam Leftik','SILVER');
+INSERT INTO `user` VALUES (1,'test','appdynamics','appd','GOLD',3805),(2,'appdynamics','appdynamics','appd','PLATINUM',3806),(3,'vikash','appdynamics',
+'Val Chibisov', 'PLATINUM',3807),(4,'santo','appdynamics','Bhaskar Sunkara','BRONZE',3808),(5,'ravi','appdynamics','Mark Prichard','DIAMOND',3809),(6,'root','appdynamics','Adam Leftik','SILVER',3810);
 
 UNLOCK TABLES;
 
