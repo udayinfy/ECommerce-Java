@@ -19,23 +19,10 @@ public class FulfillmentProducer extends JmsGatewaySupport {
     public void sendFulfillment(final FulfillmentOrder order) {
         getJmsTemplate().send(new MessageCreator() {
             public Message createMessage(Session session) throws JMSException {
-                TextMessage msg = session.createTextMessage();
-                msg.setText(orderToString(order));
+                ObjectMessage msg = session.createObjectMessage(order);
                 return msg;
             }
         });
-    }
-
-    private String orderToString(FulfillmentOrder order) {
-        StringWriter writer = new StringWriter();
-        try {
-            JAXBContext jaxbContext = JAXBContext.newInstance(FulfillmentOrder.class);
-            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-            jaxbMarshaller.marshal(order, writer);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return writer.toString();
     }
 
 }
