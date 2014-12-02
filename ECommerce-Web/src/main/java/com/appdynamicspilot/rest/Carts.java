@@ -60,6 +60,8 @@ public class Carts {
         User user = (User) req.getSession(true).getAttribute("USER");
         cart.setUser(user);
         cart.addItem(item);
+        //trigger the mdic
+        cart.getCartTotal();
         cart.setUser(user);
         getCartService().saveItemInCart(cart);
 
