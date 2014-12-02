@@ -25,13 +25,13 @@ public class FulfillmentOrder {
 
     }
 
-    public FulfillmentOrder(Item item,User user) {
-        this.id = item.getId();
-        this.price = item.getPrice();
-        this.userId = user.getId();
-        this.username = user.getEmail();
-        this.type = user.getCustomerType();
 
+    public FulfillmentOrder(Long itemId, Double price, Long userId, String username, int userType) {
+        this.id = itemId;
+        this.price = price;
+        this.userId = userId;
+        this.username = username;
+        this.type = User.CUSTOMER_TYPE.values()[userType];
     }
 
     public Long getId() {
