@@ -4,13 +4,14 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlElement;
+import java.io.Serializable;
 
 /**
  * Created by aleftik on 11/14/14.
  */
 @XmlRootElement(name = "fulfillment-order")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class FulfillmentOrder {
+public class FulfillmentOrder implements Serializable {
 
     @XmlElement
     private Long id = null;
