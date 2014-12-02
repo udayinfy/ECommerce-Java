@@ -39,5 +39,9 @@ public class ImageServlet extends HttpServlet {
             out.write(buf, 0, i);
         }
 
+        if (in != null) {
+            try {in.close();} catch (IOException ioe) {}
+        }
+
     }
 }
