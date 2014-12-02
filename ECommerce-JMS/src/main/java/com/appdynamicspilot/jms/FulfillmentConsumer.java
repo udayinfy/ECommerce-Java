@@ -33,6 +33,7 @@ public class FulfillmentConsumer implements MessageListener {
             FulfillmentOrder order = (FulfillmentOrder) msg.getObject();
             postToRest(order);
         } catch (Exception e) {
+            e.printStackTrace();
             logger.severe(e.toString());
         }
 
@@ -51,19 +52,7 @@ public class FulfillmentConsumer implements MessageListener {
         WebTarget target = ClientBuilder.newClient().target(getRestUrl());
         final String mediaType = MediaType.APPLICATION_XML;
         final Entity<FulfillmentOrder> entity = Entity.entity(order, mediaType);
-        Response response = target.request().post(entity, Response.class);
+        Response response = target.request().post(entity);
     }
 
-
-    private String orderToString(FulfillmentOrder order) {
-        StringWriter writer = new StringWriter();
-        try {
-            JAXBContext jaxbContext = JAXBContext.newInstance(FulfillmentOrder.class);
-            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-            jaxbMarshaller.marshal(order, writer);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return writer.toString();
-    }
 }
