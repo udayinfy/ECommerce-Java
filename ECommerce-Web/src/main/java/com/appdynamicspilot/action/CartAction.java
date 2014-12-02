@@ -122,6 +122,8 @@ public class CartAction extends ActionSupport implements Preparable,
                 if (cart == null) {
                     cart = new Cart();
                 }
+                //trigger the mdic
+                cart.getCartTotal();
                 getServletRequest().getSession().setAttribute("CART", cart);
                 cart.addItem(item);
                 cart.setUser(user);
@@ -167,6 +169,8 @@ public class CartAction extends ActionSupport implements Preparable,
         List<Item> cartList = null;
         if (cart != null) {
             cartList = cartService.getAllItemsByUser(user.getId());
+            //trigger the mdic
+            cart.getCartTotal();
         } else {
             cartList = Collections.EMPTY_LIST;
         }
