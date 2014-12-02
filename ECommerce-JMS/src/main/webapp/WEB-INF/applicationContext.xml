@@ -60,7 +60,7 @@
     </bean>
 
     <bean id="fulfillmentDestination" class="org.apache.activemq.command.ActiveMQQueue">
-        <constructor-arg value="OrderQueue" />
+        <constructor-arg value="fulfillmentQueue" />
     </bean>
 
     <!-- a pooling based JMS provider -->
