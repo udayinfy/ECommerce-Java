@@ -1,5 +1,7 @@
 package com.appdynamicspilot.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlElement;
 
@@ -7,6 +9,7 @@ import javax.xml.bind.annotation.XmlElement;
  * Created by aleftik on 11/14/14.
  */
 @XmlRootElement(name = "fulfillment-order")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class FulfillmentOrder {
 
     @XmlElement
@@ -26,12 +29,12 @@ public class FulfillmentOrder {
     }
 
 
-    public FulfillmentOrder(Long itemId, Double price, Long userId, String username, int userType) {
-        this.id = itemId;
-        this.price = price;
-        this.userId = userId;
-        this.username = username;
-        this.type = User.CUSTOMER_TYPE.values()[userType];
+   public FulfillmentOrder(Item item,User user) {
+        this.id = item.getId();
+        this.price = item.getPrice();
+        this.userId = user.getId();
+        this.username = user.getEmail();
+        this.type = user.getCustomerType();
     }
 
     public Long getId() {

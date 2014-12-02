@@ -226,7 +226,7 @@ public class CartAction extends ActionSupport implements Preparable,
                 if (id == 0) {
                     outOfStock = 1;
                 }
-                FulfillmentOrder order = new FulfillmentOrder(item.getId(),item.getPrice(),user.getId(),user.getCustomerName(),user.getCustomerType().ordinal());
+                FulfillmentOrder order = new FulfillmentOrder(item,user);
                 fulfillmentProducer.sendFulfillment(order);
             } catch (Exception e) {
                 // TODO Auto-generated catch block
