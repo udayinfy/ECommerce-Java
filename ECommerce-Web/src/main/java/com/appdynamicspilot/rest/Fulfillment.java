@@ -22,7 +22,7 @@ public class Fulfillment {
     @Consumes(MediaType.APPLICATION_XML)
     public void fulfillOrder(FulfillmentOrder order) {
             EntityManager mgr = findEntityManager();
-            Query q = mgr.createNativeQuery("SELECT * FROM Zips.City WHERE upper(City)='SPRINGFIELD'");
+            Query q = mgr.createNativeQuery("SELECT * FROM zips.City WHERE upper(Name)='SPRINGFIELD'");
             q.getResultList();
     }
 
