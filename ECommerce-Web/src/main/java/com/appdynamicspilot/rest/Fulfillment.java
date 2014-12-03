@@ -6,6 +6,7 @@ import com.appdynamicspilot.util.SpringContext;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -22,9 +23,12 @@ public class Fulfillment {
     @Consumes(MediaType.APPLICATION_XML)
     public void fulfillOrder(FulfillmentOrder order) {
             EntityManager mgr = findEntityManager();
+            EntityTransaction txn = mgr.getTransaction();
+            txn.begin();
             Query q = mgr.createNativeQuery("{call appdy.getItem(?)}");
             q.setParameter(1,3);
             q.executeUpdate();
+            txn.commit();
     }
 
     public EntityManager findEntityManager() {
