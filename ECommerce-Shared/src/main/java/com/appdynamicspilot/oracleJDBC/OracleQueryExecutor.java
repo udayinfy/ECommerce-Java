@@ -30,7 +30,8 @@ public class OracleQueryExecutor {
 			CallableStatement cs = null;
 			try {
 				connection = ds.getConnection();
-				cs = connection.prepareCall("{ call get_items() }");
+				cs = connection.prepareCall("{ call getItems(?) }");
+                cs.setInt(1,3);
 				cs.execute();
 			} catch (Exception ex) {
 				LOGGER.error("This may be ignored in case of Oracle is not setup");
