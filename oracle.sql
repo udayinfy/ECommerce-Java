@@ -13,7 +13,7 @@ EXECUTE IMMEDIATE 'GRANT CONNECT, CREATE SESSION, RESOURCE TO APPDY';
 EXECUTE IMMEDIATE 'CREATE USER INVENTORY IDENTIFIED BY INVENTORY';
 EXECUTE IMMEDIATE 'GRANT CONNECT, CREATE SESSION, RESOURCE TO INVENTORY';
 EXECUTE IMMEDIATE 'CREATE TABLE appdy.cart (cart_id number NOT NULL,item_id number NOT NULL,user_id number NOT NULL,PRIMARY KEY  (cart_id))';
-EXECUTE IMMEDIATE 'CREATE TABLE appdy.item (item_id number NOT NULL, title varchar2(255) NOT NULL,imagePath varchar2(255) default NULL, PRIMARY KEY  (item_id))';
+EXECUTE IMMEDIATE 'CREATE TABLE appdy.item (item_id number NOT NULL, title varchar2(4000) NOT NULL,imagePath varchar2(4000) default NULL, PRIMARY KEY  (item_id))';
 EXECUTE IMMEDIATE 'CREATE TABLE appdy.customer (customer_id number NOT NULL,email varchar2(255) NOT NULL,password varchar2(32) NOT NULL,PRIMARY KEY  (customer_id))';
 EXECUTE IMMEDIATE 'CREATE TABLE INVENTORY.ITEM (item_id number NOT NULL,quantity number default NULL,PRIMARY KEY  (item_id))';
 EXECUTE IMMEDIATE 'CREATE TABLE INVENTORY.orders (order_id number NOT NULL,quantity number default NULL,createdOn date default NULL,item_Id number default NULL,PRIMARY KEY  (order_id))';
