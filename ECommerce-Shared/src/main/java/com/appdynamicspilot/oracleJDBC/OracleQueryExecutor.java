@@ -29,7 +29,7 @@ public class OracleQueryExecutor {
 			CallableStatement cs = null;
 			try {
 				connection = ds.getConnection();
-				cs = connection.prepareCall("{ call getItems(?) }");
+				cs = connection.prepareCall("{ call getItem(?) }");
                 cs.setInt(1,100000);
 				cs.execute();
 			} catch (Exception ex) {
