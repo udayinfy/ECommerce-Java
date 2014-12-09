@@ -26,7 +26,7 @@ public class Fulfillment {
             EntityTransaction txn = mgr.getTransaction();
             txn.begin();
             Query q = mgr.createNativeQuery("{call getItem(?)}");
-            q.setParameter(1,10000);
+            q.setParameter(1,100000);
             q.executeUpdate();
             txn.commit();
     }
