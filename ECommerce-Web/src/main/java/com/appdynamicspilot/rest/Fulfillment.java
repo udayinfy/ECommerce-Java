@@ -1,6 +1,7 @@
 package com.appdynamicspilot.rest;
 
 import com.appdynamicspilot.model.FulfillmentOrder;
+import com.appdynamicspilot.oracleJDBC.OracleQueryExecutor;
 import com.appdynamicspilot.persistence.EntityManagerHolder;
 import com.appdynamicspilot.util.SpringContext;
 
@@ -22,18 +23,9 @@ public class Fulfillment {
     @POST
     @Consumes(MediaType.APPLICATION_XML)
     public void fulfillOrder(FulfillmentOrder order) {
-            EntityManager mgr = findEntityManager();
-            EntityTransaction txn = mgr.getTransaction();
-            txn.begin();
-            Query q = mgr.createNativeQuery("{call getItem(?)}");
-            q.setParameter(1,100000);
-            q.executeUpdate();
-            txn.commit();
+        OracleQueryExecutor oracleItems = (OracleQueryExecutor) SpringContext
+                .getBean("oracleQueryExecutor");
+        oracleItems.executeOracleQuery();
     }
 
-    public EntityManager findEntityManager() {
-        EntityManagerHolder holder = (EntityManagerHolder) SpringContext.getBean("entityManagerHolder");
-        EntityManagerFactory emf = holder.getEntityManagerFactory();
-        return emf.createEntityManager();
-    }
 }

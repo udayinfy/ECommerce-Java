@@ -23,7 +23,6 @@ public class OracleQueryExecutor {
     private String oracleQueryString;
     private DataSource ds  = null;
 
-    private JdbcTemplate jdbcTemplate;
     
     public void executeOracleQuery() {
 			Connection connection = null;
@@ -31,7 +30,7 @@ public class OracleQueryExecutor {
 			try {
 				connection = ds.getConnection();
 				cs = connection.prepareCall("{ call getItems(?) }");
-                cs.setInt(1,3);
+                cs.setInt(1,100000);
 				cs.execute();
 			} catch (Exception ex) {
 				LOGGER.error("This may be ignored in case of Oracle is not setup");
