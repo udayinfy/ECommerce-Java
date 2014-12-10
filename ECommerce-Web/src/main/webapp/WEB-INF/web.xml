@@ -24,6 +24,7 @@
                 com.appdynamicspilot.rest.Items,
                 com.appdynamicspilot.rest.Ping,
                 com.appdynamicspilot.rest.CatalogRequest,
+                com.appdynamicspilot.rest.UserLogin,
                 com.appdynamicspilot.rest.Fulfillment
             </param-value>
             </init-param>
