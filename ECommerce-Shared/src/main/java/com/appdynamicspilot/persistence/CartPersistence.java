@@ -42,6 +42,7 @@ public class CartPersistence extends BasePersistenceImpl {
         q.executeUpdate();
         txn.commit();
 	}
+
 	
 	public Integer getCartSize(Long userId){
         List<Item> list = getAllItemsByUser(userId);
@@ -75,5 +76,14 @@ public class CartPersistence extends BasePersistenceImpl {
         EntityManagerHolder holder = (EntityManagerHolder) SpringContext.getBean("entityManagerHolder");
         EntityManagerFactory emf = holder.getEntityManagerFactory();
         return emf.createEntityManager();
+    }
+
+    public void deleteItemInCart(String username, Long id) {
+        Query q = getEntityManager().createQuery("SELECT c FROM Cart c where c.user.email = :userid");
+        q.setParameter("userid",username);
+        Cart c = (Cart)q.getSingleResult();
+        Item i = getEntityManager().find(Item.class, id);
+        c.removeItem(i);
+        update(c);
     }
 }

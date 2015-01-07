@@ -137,6 +137,7 @@
                                                             <div>
                                                                 <s:submit name="submitValue" cssClass="submit"
                                                                           key="label.buynow"/>
+                                                                <input type="button" value="Delete from Cart" onclick="document.location.href='./ViewCart!removeAllItems.action'">
                                                             </div>
                                                         </s:form>
                                                     </div>

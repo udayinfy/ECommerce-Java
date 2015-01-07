@@ -66,8 +66,8 @@ public class CartService implements CartServiceInterface {
 		}
 	}
 	
-	public void deleteItemInCart(Long id) {
-		//getCart
+	public void deleteItemInCart(String username, Long id) {
+		cartPersistence.deleteItemInCart(username,id);
 	}
 	
 	public Integer getCartSize(Long userId){

@@ -15,7 +15,7 @@ public interface CartServiceInterface {
 	void deleteCartItems(Long userId);
 	void setCartPersistence(CartPersistence cartPersistence);
 	Long checkOut(Long itemId,Integer quantity) throws Exception;
-	void deleteItemInCart(Long id);
+	void deleteItemInCart(String username,Long id);
 	Integer getCartSize(Long userId);
     List<Item> getAllItemsByUser(Long userId);
     void deleteCart(Cart cart);

@@ -30,32 +30,15 @@
     </bean>
 
     <bean id="springContext" class="com.appdynamicspilot.util.SpringContext" />
-    <bean id="oraDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" >
-        <property name="url" value="${oracle.oracleConnectionString}" />
-        <property name="driverClassName" value="${oracle.DBDriver}" />
-        <property name="username" value="${oracle.username}" />
-        <property name="password" value="${oracle.password}" />
-        <property name="removeAbandoned" value="true"/>
-        <property name="initialSize" value="${oracle.initSize}" />
-        <property name="maxActive" value="${oracle.maxActive}" />
-    </bean>
-    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName">
-            <value>${hibernate.connection.driver_class}</value>
-        </property>
-        <property name="url">
-            <value>${hibernate.connection.url}</value>
-        </property>
-        <property name="username">
-            <value>${hibernate.connection.username}</value>
-        </property>
-        <property name="password">
-            <value>${hibernate.connection.password}</value>
-        </property>
 
+    <bean id="oraDataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName" value="java:comp/env/jdbc/OracleECommerceDB"/>
     </bean>
 
-	 		 
+
+    <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName" value="java:comp/env/jdbc/ECommerceDB"/>
+    </bean>
 
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">

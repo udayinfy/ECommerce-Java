@@ -20,6 +20,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.appdynamicspilot.service.UserService;
 import org.apache.log4j.Logger;
 
 import com.appdynamicspilot.jms.MessageProducer;
@@ -56,8 +57,14 @@ public class Carts {
             cart = new Cart();
         }
         Item item = getCartService().getItemPersistence().getItemByID(id);
-        cart = new Cart();
         User user = (User) req.getSession(true).getAttribute("USER");
+
+        if (user == null) {
+            String username = req.getHeader("USERNAME");
+            log.error("***NO SESSION SO USING HEADER:" + username);
+            user = getUserService().getMemberByLoginName(username);
+           log.error("**USER IS NOW " + user.getId());
+        }
         cart.setUser(user);
         cart.addItem(item);
         //trigger the mdic
@@ -102,7 +109,11 @@ public class Carts {
     @DELETE
     @Produces(MediaType.APPLICATION_XML)
     public Response deleteItemInCart(@Context HttpServletRequest req, @Context HttpServletResponse response, @PathParam("id") Long id) {
-        getCartService().deleteItemInCart(id);
+        String username = req.getHeader("username");
+        if (username != null) {
+            getCartService().deleteItemInCart(username,id);
+        }
+
         return Response.noContent().build();
     }
 
@@ -165,7 +176,12 @@ public class Carts {
         User user = (User) req.getSession(true).getAttribute("USER");
 
         if (user == null) {
-            return "User not logged in. Nothing to checkout.";
+            String username = req.getHeader("USERNAME");
+            if (username == null) {
+                return "User not logged in. Nothing to checkout.";
+            } else {
+                user = getUserService().getMemberByLoginName(username);
+            }
         }
         if (cart == null) {
             return "Nothing In cart to checkout.";
@@ -205,5 +221,9 @@ public class Carts {
 
     public CartService getCartService() {
         return (CartService) SpringContext.getBean("cartService");
+    }
+
+    public UserService getUserService() {
+        return (UserService) SpringContext.getBean("userService");
     }
 }

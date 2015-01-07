@@ -26,6 +26,8 @@ public class Cart implements java.io.Serializable {
 
 	private static Logger log = Logger.getLogger(Cart.class.getName());
 	private static final long serialVersionUID = 1L;
+	@Transient
+	private Double fakeAmount = 0.0;
 
 
     @Id
@@ -67,13 +69,15 @@ public class Cart implements java.io.Serializable {
 
 
     public Double getCartTotal() {
-        double total=0;
-        if (items != null ) {
-           for (Item item:items)  {
-                total+=item.getPrice();
-           }
-        }
-        return total;
+		if (fakeAmount == 0.0) {
+			double total = 0;
+			if (items != null) {
+				for (Item item : items) {
+					total += item.getPrice();
+				}
+			}
+			return total;
+		} return fakeAmount;
 	}
 
 	public Item getTopItem() {
@@ -90,6 +94,10 @@ public class Cart implements java.io.Serializable {
 			}
 		}
 		return topItem;
+	}
+
+	public void setAmount(Double amt) {
+		this.fakeAmount = amt;
 	}
 
     public void addItem(Item item) {

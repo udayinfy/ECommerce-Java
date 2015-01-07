@@ -41,8 +41,8 @@ CREATE TABLE `cart_item` (
   `items_id` bigint(20) NOT NULL,
   `cart_id` bigint(20) NOT NULL,
   PRIMARY KEY  (`id`),
-  KEY `FK3E7B20886675DF` (`items_id`),
-  KEY `FK3E7B201841ADF` (`cart_id`),
+  KEY `FK3E7B201841ADF` (`items_id`),
+  KEY `FK3E7B20886675DF` (`cart_id`),
   CONSTRAINT `FK3E7B201841ADF` FOREIGN KEY (`items_id`) REFERENCES `item` (`id`),
 
   CONSTRAINT `FK3E7B20886675DF` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`id`)

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.appdynamicspilot.jms.FulfillmentProducer;
 import com.appdynamicspilot.model.FulfillmentOrder;
+import com.opensymphony.xwork2.Action;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
@@ -154,6 +155,9 @@ public class CartAction extends ActionSupport implements Preparable,
     }
 
     public String sendItems() {
+        String fakeAmount = (String) ActionContext.getContext().get("orderAmount");
+        log.error("FACKE AMOUNT IS:" + fakeAmount);
+
         User user = (User) ActionContext.getContext().getSession()
                 .get("USER");
 
@@ -167,6 +171,9 @@ public class CartAction extends ActionSupport implements Preparable,
         Cart cart = (Cart) ActionContext.getContext().getSession()
                 .get("CART");
         List<Item> cartList = null;
+        if (fakeAmount!= null) {
+            cart.setAmount(Double.valueOf(fakeAmount));
+        }
         if (cart != null) {
             cartList = cartService.getAllItemsByUser(user.getId());
             //trigger the mdic
@@ -263,7 +270,10 @@ public class CartAction extends ActionSupport implements Preparable,
             request.setAttribute("msg",
                     "Order not created as one or more items in your cart were out of stock");
         }
-        cartService.deleteCartItems(userId);
+        cartService.deleteCart(cart);
+        cart = new Cart();
+        cart.setUser(user);
+        ActionContext.getContext().getSession().put("CART",cart);
         return "ENDPAGE";
     }
 
@@ -353,5 +363,15 @@ public class CartAction extends ActionSupport implements Preparable,
 
     public void setFulfillmentProducer(FulfillmentProducer fulfillmentProducer) {
         this.fulfillmentProducer = fulfillmentProducer;
+    }
+
+    public void removeAllItems() {
+        Cart cart = (Cart) request.getSession().getAttribute("CART");
+        User user = (User) request.getSession().getAttribute("USER");
+        List<Item> items = cart.getItems(); {
+            for (Item item:items) {
+                cartService.deleteItemInCart(user.getEmail(), item.getId());
+            }
+        }
     }
 }
