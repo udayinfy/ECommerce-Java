@@ -3,6 +3,7 @@
 -- Host: 127.0.0.1    Database: world
 -- ------------------------------------------------------
 -- Server version	5.1.51-debug-l
+USE `appdy`;
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
