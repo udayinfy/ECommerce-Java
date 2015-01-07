@@ -156,7 +156,6 @@ public class CartAction extends ActionSupport implements Preparable,
 
     public String sendItems() {
         String fakeAmount = (String) ActionContext.getContext().get("orderAmount");
-        log.error("FACKE AMOUNT IS:" + fakeAmount);
 
         User user = (User) ActionContext.getContext().getSession()
                 .get("USER");

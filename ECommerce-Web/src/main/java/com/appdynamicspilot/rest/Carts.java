@@ -70,9 +70,7 @@ public class Carts {
 
         if (user == null) {
             String username = req.getHeader("USERNAME");
-            log.error("***NO SESSION SO USING HEADER:" + username);
             user = getUserService().getMemberByLoginName(username);
-           log.error("**USER IS NOW " + user.getId());
         }
         cart.setUser(user);
         cart.addItem(item);
