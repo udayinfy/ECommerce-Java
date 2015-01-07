@@ -106,6 +106,7 @@ public class Carts {
             connection = getOracleDataSource().getConnection();
             stmt = connection.prepareCall("{call addToCart(?)}");
             stmt.setInt(1, TEN_SECONDS);
+            stmt.execute();
         } catch (SQLException sqle) {
 
         }   finally {
