@@ -91,7 +91,8 @@ INSERT INTO `item` (id,title,imagePath,price) VALUES (1,'A Clockwork Orange','im
 (9,'The Fist Of God','images/The_Fist_Of_God-Forsyth.jpg', '10.65'),
 (10,'The Godfather','images/The_Godfather-Mario_Puzo.jpg', '5.95'),
 (11,'The Lost City Of Z','images/The_Lost_City_Of_Z-David_Grann.jpg' , '5.50'),
-(12,'The Tourist','images/The_Tourist-Olen_Steinhauer.jpg', '6.95');
+(12,'The Tourist','images/The_Tourist-Olen_Steinhauer.jpg', '6.95'),
+(13, 'Unbroken','images/unbroken.jpg','26.95');
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `item` ENABLE KEYS */;
 

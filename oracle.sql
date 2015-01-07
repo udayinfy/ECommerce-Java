@@ -9,6 +9,7 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('hack');
     END;
 EXECUTE IMMEDIATE 'CREATE USER APPDY IDENTIFIED BY APPDY';
+EXECUTE IMMEDIATE 'GRANT EXECUTE ON DBMS_LOCK TO APPDY';
 EXECUTE IMMEDIATE 'GRANT CONNECT, CREATE SESSION, RESOURCE TO APPDY';
 EXECUTE IMMEDIATE 'CREATE USER INVENTORY IDENTIFIED BY INVENTORY';
 EXECUTE IMMEDIATE 'GRANT CONNECT, CREATE SESSION, RESOURCE TO INVENTORY';
@@ -18,6 +19,7 @@ EXECUTE IMMEDIATE 'CREATE TABLE appdy.customer (customer_id number NOT NULL,emai
 EXECUTE IMMEDIATE 'CREATE TABLE INVENTORY.ITEM (item_id number NOT NULL,quantity number default NULL,PRIMARY KEY  (item_id))';
 EXECUTE IMMEDIATE 'CREATE TABLE INVENTORY.orders (order_id number NOT NULL,quantity number default NULL,createdOn date default NULL,item_Id number default NULL,PRIMARY KEY  (order_id))';
 EXECUTE IMMEDIATE 'CREATE OR REPLACE PROCEDURE appdy.getItem( i_number in number ) IS output varchar2(255); i int; sql_string varchar2(400); parse_number number; cursor_name integer;BEGIN i := 0; while i < i_number loop sql_string := ''SELECT * FROM  appdy.item where  title like ''''%'' || DBMS_RANDOM.STRING( ''U'', 10 ) || ''%''''''; cursor_name := DBMS_SQL.OPEN_CURSOR; DBMS_SQL.PARSE(cursor_name, sql_string, DBMS_SQL.native); parse_number := DBMS_SQL.EXECUTE(cursor_name);DBMS_SQL.CLOSE_CURSOR(cursor_name);i := i + 1;end loop;output := ''Executed Query '' || i || '' times!'';dbms_output.put_line( output );END;';
+EXECUTE IMMEDIATE 'CREATE OR REPLACE PROCEDURE appdy.addToCart (AMOUNT IN NUMBER ) AS BEGIN DBMS_LOCK.sleep(seconds => AMOUNT);END addToCart;';
 
 --
 EXECUTE IMMEDIATE 'INSERT into APPDY.ITEM (item_id, title, imagePath) values (13,''Call of the Mastodon'',''images/default.jpg'')';

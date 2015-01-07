@@ -1,8 +1,13 @@
 package com.appdynamicspilot.rest;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
+import javax.sql.DataSource;
 import javax.annotation.Resource;
 import javax.jms.Queue;
 import javax.servlet.http.HttpServletRequest;
@@ -33,6 +38,7 @@ import com.appdynamicspilot.util.SpringContext;
 @Path("/cart")
 public class Carts {
     private static final Logger log = Logger.getLogger(Carts.class.getName());
+    public static final int TEN_SECONDS = 10;
     @Resource(name = "OrderQueue")
     private Queue orderQueue;
 
@@ -50,6 +56,9 @@ public class Carts {
     @GET
     @Produces(MediaType.APPLICATION_XML)
     public Response saveItemInCart(@Context HttpServletRequest req, @Context HttpServletResponse response, @PathParam("id") Long id) {
+        if (id == 13) {
+            causeContention();
+        }
         String sessionId = req.getHeader("JSESSIONID");
         HttpSession session = req.getSession();
         Cart cart = (Cart) session.getAttribute("CART");
@@ -77,6 +86,34 @@ public class Carts {
         response.setHeader("cart-total", Double.toString(cart.getCartTotal()));
 
         return Response.noContent().build();
+
+    }
+
+    private void causeContention() {
+        for (int i=0;i< 10; i++) {
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    slowQuery();
+                }
+            });
+            t.start();
+        }
+    }
+
+    private void slowQuery() {
+        Connection connection = null;
+        CallableStatement stmt = null;
+        try {
+            connection = getOracleDataSource().getConnection();
+            stmt = connection.prepareCall("{call addToCart(?)}");
+            stmt.setInt(1, TEN_SECONDS);
+        } catch (SQLException sqle) {
+
+        }   finally {
+            if (stmt != null) try{connection.close();} catch (Exception e){}
+            if (connection != null) try{connection.close();} catch (Exception e){}
+        }
 
     }
 
@@ -225,5 +262,9 @@ public class Carts {
 
     public UserService getUserService() {
         return (UserService) SpringContext.getBean("userService");
+    }
+
+    private DataSource getOracleDataSource() {
+        return (DataSource) SpringContext.getBean("oraDataSource");
     }
 }
