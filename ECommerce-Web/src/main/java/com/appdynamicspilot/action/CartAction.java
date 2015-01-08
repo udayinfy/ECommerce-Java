@@ -364,7 +364,7 @@ public class CartAction extends ActionSupport implements Preparable,
         this.fulfillmentProducer = fulfillmentProducer;
     }
 
-    public void removeAllItems() {
+    public String removeAllItems() {
         Cart cart = (Cart) request.getSession().getAttribute("CART");
         User user = (User) request.getSession().getAttribute("USER");
         List<Item> items = cart.getItems(); {
@@ -372,5 +372,7 @@ public class CartAction extends ActionSupport implements Preparable,
                 cartService.deleteItemInCart(user.getEmail(), item.getId());
             }
         }
+        return "SUCCESS";
     }
+
 }
