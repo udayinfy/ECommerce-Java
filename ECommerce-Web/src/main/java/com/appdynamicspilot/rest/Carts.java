@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import javax.sql.DataSource;
 import javax.annotation.Resource;
@@ -39,6 +38,8 @@ import com.appdynamicspilot.util.SpringContext;
 public class Carts {
     private static final Logger log = Logger.getLogger(Carts.class.getName());
     public static final int TEN_SECONDS = 10;
+    public static final int TITLE_TO_CAUSE_SLOWDOWN = 13;
+    public static final int ONE_SECOND = 1;
     @Resource(name = "OrderQueue")
     private Queue orderQueue;
 
@@ -56,7 +57,7 @@ public class Carts {
     @GET
     @Produces(MediaType.APPLICATION_XML)
     public Response saveItemInCart(@Context HttpServletRequest req, @Context HttpServletResponse response, @PathParam("id") Long id) {
-        if (id == 13) {
+        if (id == TITLE_TO_CAUSE_SLOWDOWN) {
             causeContention();
         }
         String sessionId = req.getHeader("JSESSIONID");
@@ -78,7 +79,7 @@ public class Carts {
         cart.getCartTotal();
         cart.setUser(user);
         getCartService().saveItemInCart(cart);
-
+        slowQuery(ONE_SECOND);
         session.setAttribute("CART", cart);
         response.setHeader("cart-size", String.valueOf(getCartService().getCartSize(user.getId())));
         response.setHeader("cart-total", Double.toString(cart.getCartTotal()));
@@ -92,20 +93,20 @@ public class Carts {
             Thread t = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    slowQuery();
+                    slowQuery(TEN_SECONDS);
                 }
             });
             t.start();
         }
     }
 
-    private void slowQuery() {
+    private void slowQuery(int seconds) {
         Connection connection = null;
         CallableStatement stmt = null;
         try {
             connection = getOracleDataSource().getConnection();
             stmt = connection.prepareCall("{call addToCart(?)}");
-            stmt.setInt(1, TEN_SECONDS);
+            stmt.setInt(1, seconds);
             stmt.execute();
         } catch (SQLException sqle) {
 
