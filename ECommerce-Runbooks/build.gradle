@@ -4,12 +4,6 @@ apply plugin:'application'
 
 sourceCompatibility=1.6
 
-repositories {
-    maven {
-        url nexusUrl + nexusCentral
-    }
-}
-
 idea {
     module {
         jdkName = "1.6"
@@ -24,9 +18,6 @@ sourceSets {
     }
 }
 
-dependencies {
-    compile 'org.apache.tomcat:tomcat-catalina-jmx-remote:8.0.15'
-}
 
 mainClassName = 'com.appdynamicspilot.runbook.ResetConnectionPoolAction'
 
