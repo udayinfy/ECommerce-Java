@@ -1,0 +1,41 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin:'application'
+
+sourceCompatibility=1.6
+
+repositories {
+    maven {
+        url nexusUrl + nexusCentral
+    }
+}
+
+idea {
+    module {
+        jdkName = "1.6"
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+    }
+}
+
+dependencies {
+    compile 'org.apache.tomcat:tomcat-catalina-jmx-remote:8.0.15'
+}
+
+mainClassName = 'com.appdynamicspilot.runbook.ResetConnectionPoolAction'
+
+
+task uberjar(type: Jar, dependsOn: 'build') {
+    from files(sourceSets.main.output.classesDir)
+    from configurations.runtime.asFileTree.files.collect { zipTree(it) }
+
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+}
