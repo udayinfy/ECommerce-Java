@@ -34,6 +34,8 @@ import com.appdynamicspilot.model.User;
 import com.appdynamicspilot.service.CartService;
 import com.appdynamicspilot.util.SpringContext;
 
+import com.appdynamics.apm.appagent.api.*;
+
 @Path("/cart")
 public class Carts {
     private static final Logger log = Logger.getLogger(Carts.class.getName());
@@ -101,8 +103,10 @@ public class Carts {
     }
 
     private void slowQuery(int seconds) {
+        IMetricAndEventReporter reporter = AgentDelegate.getMetricAndEventPublisher();
         Connection connection = null;
         CallableStatement stmt = null;
+        reporter.reportSumMetric("ECommerce Demo|Slow Query Calls|Call Count",1);
         try {
             connection = getOracleDataSource().getConnection();
             stmt = connection.prepareCall("{call addToCart(?)}");
