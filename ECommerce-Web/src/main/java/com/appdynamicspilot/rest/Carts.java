@@ -106,7 +106,7 @@ public class Carts {
         IMetricAndEventReporter reporter = AgentDelegate.getMetricAndEventPublisher();
         Connection connection = null;
         CallableStatement stmt = null;
-        reporter.reportSumMetric("ECommerce Demo|Slow Query Calls|Call Count",1);
+        reporter.reportSumMetric("Custom Metrics|ECommerce Demo|Slow Query Calls|Call Count",1);
         try {
             connection = getOracleDataSource().getConnection();
             stmt = connection.prepareCall("{call addToCart(?)}");
