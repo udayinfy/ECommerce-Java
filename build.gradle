@@ -55,5 +55,3 @@ task createDB << {
     sql.execute(sqlString);
 }
 
-
-

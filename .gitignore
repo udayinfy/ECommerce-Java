@@ -2,3 +2,14 @@
 .gradle/**
 /**.class
 **/build/**
+**/*.iml
+**/*.iws
+**/*.ipr
+
+# Mac
+.DS_Store
+
+# Gradle
+build/
+.gradle/
+gradle/
