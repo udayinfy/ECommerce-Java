@@ -10025,11 +10025,31 @@ EXECUTE IMMEDIATE 'INSERT into APPDY.ITEM (item_id, title, imagePath) values (10
 --
 EXECUTE IMMEDIATE 'INSERT INTO appdy.customer (customer_id, email, password) VALUES (1,''test'',''appdynamics'')';
 EXECUTE IMMEDIATE 'INSERT INTO appdy.customer (customer_id, email, password) VALUES  (2,''appdynamics'',''appdynamics'')';
-EXECUTE IMMEDIATE 'INSERT INTO appdy.customer (customer_id, email, password) VALUES  (3,''vikash'',''appdynamics'')';
-EXECUTE IMMEDIATE 'INSERT INTO appdy.customer (customer_id, email, password) VALUES  (4,''santo'',''appdynamics'')';
-EXECUTE IMMEDIATE 'INSERT INTO appdy.customer (customer_id, email, password) VALUES  (5,''ravi'',''appdynamics'')';
-EXECUTE IMMEDIATE 'INSERT INTO appdy.customer (customer_id, email, password) VALUES  (6,''root'',''appdynamics'')';
-
+EXECUTE IMMEDIATE 'INSERT INTO appdy.customer (customer_id, email, password) VALUES  (3,''val.chibisov@appdynamics.com'',''appdynamics'')';
+EXECUTE IMMEDIATE 'INSERT INTO appdy.customer (customer_id, email, password) VALUES  (4,''bhaskar.sunkara@appdynamics.com'',''appdynamics'')';
+EXECUTE IMMEDIATE 'INSERT INTO appdy.customer (customer_id, email, password) VALUES  (5,''mark.prichard@appdynamics.com'',''appdynamics'')';
+EXECUTE IMMEDIATE 'INSERT INTO appdy.customer (customer_id, email, password) VALUES  (6,''adam.leftik@appdynamics.com'',''appdynamics'')';
+EXECUTE IMMEDIATE 'INSERT INTO appdy.customer (customer_id, email, password) VALUES  (7,''sid.choudhury@appdynamics.com'',''appdynamics'')';
+EXECUTE IMMEDIATE 'INSERT INTO appdy.customer (customer_id, email, password) VALUES  (8,''rey.ong@appdynamics.com'',''appdynamics'')';
+EXECUTE IMMEDIATE 'INSERT INTO appdy.customer (customer_id, email, password) VALUES  (9,''mahesh.gandhe@appdynamics.com'',''appdynamics'')';
+EXECUTE IMMEDIATE 'INSERT INTO appdy.customer (customer_id, email, password) VALUES  (10,''nima haddadkaveh@appdynamics.com'',''appdynamics'')';
+EXECUTE IMMEDIATE 'INSERT INTO appdy.customer (customer_id, email, password) VALUES  (11,''ariel.smollar@appdynamics.com'',''appdynamics'')';
+EXECUTE IMMEDIATE 'INSERT INTO appdy.customer (customer_id, email, password) VALUES  (12,''amod.gupta@appdynamics.com'',''appdynamics'')';
+EXECUTE IMMEDIATE 'INSERT INTO appdy.customer (customer_id, email, password) VALUES  (13,''omed.habib@appdynamics.com'',''appdynamics'')';
+EXECUTE IMMEDIATE 'INSERT INTO appdy.customer (customer_id, email, password) VALUES  (14,''ian.mcguinness@appdynamics.com'',''appdynamics'')';
+EXECUTE IMMEDIATE 'INSERT INTO appdy.customer (customer_id, email, password) VALUES  (15,''harish.nataraj@appdynamics.com'',''appdynamics'')';
+EXECUTE IMMEDIATE 'INSERT INTO appdy.customer (customer_id, email, password) VALUES  (16,''ian.withrow@appdynamics.com'',''appdynamics'')';
+EXECUTE IMMEDIATE 'INSERT INTO appdy.customer (customer_id, email, password) VALUES  (17,''shiv.loka@appdynamics.com'',''appdynamics'')';
+EXECUTE IMMEDIATE 'INSERT INTO appdy.customer (customer_id, email, password) VALUES  (18,''akankshu.dhawan@appdynamics.com'',''appdynamics'')';
+EXECUTE IMMEDIATE 'INSERT INTO appdy.customer (customer_id, email, password) VALUES  (19,''jeff.morgan@appdynamics.com'',''appdynamics'')';
+EXECUTE IMMEDIATE 'INSERT INTO appdy.customer (customer_id, email, password) VALUES  (20,''pamela.clark@appdynamics.com'',''appdynamics'')';
+EXECUTE IMMEDIATE 'INSERT INTO appdy.customer (customer_id, email, password) VALUES  (21,''steve.hetland@appdynamics.com'',''appdynamics'')';
+EXECUTE IMMEDIATE 'INSERT INTO appdy.customer (customer_id, email, password) VALUES  (22,''lynn.davidson@appdynamics.com'',''appdynamics'')';
+EXECUTE IMMEDIATE 'INSERT INTO appdy.customer (customer_id, email, password) VALUES  (23,''ellen.evans@appdynamics.com'',''appdynamics'')';
+EXECUTE IMMEDIATE 'INSERT INTO appdy.customer (customer_id, email, password) VALUES  (24,''jacquie.finney@appdynamics.com'',''appdynamics'')';
+EXECUTE IMMEDIATE 'INSERT INTO appdy.customer (customer_id, email, password) VALUES  (25,''charles.smith@appdynamics.com'',''appdynamics'')';
+EXECUTE IMMEDIATE 'INSERT INTO appdy.customer (customer_id, email, password) VALUES  (26,''eric.mackay@appdynamics.com'',''appdynamics'')';
+EXECUTE IMMEDIATE 'INSERT INTO appdy.customer (customer_id, email, password) VALUES  (27,''byron.martin@appdynamics.com'',''appdynamics'')';
 
 EXECUTE IMMEDIATE 'INSERT into INVENTORY.ITEM (item_id, quantity) values (4,100)';
 EXECUTE IMMEDIATE 'INSERT into INVENTORY.ITEM (item_id, quantity) values (10,100)';

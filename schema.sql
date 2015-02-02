@@ -1,11 +1,3 @@
-/*
-SQLyog - Free MySQL GUI v5.01
-Host - 5.0.16-nt : Database - appdy
-*********************************************************************
-Server version : 5.0.16-nt
-*/
-
-
 create database if not exists `appdy`;
 
 USE `appdy`;
@@ -20,13 +12,11 @@ CREATE TABLE `cart` (
   PRIMARY KEY  (`id`),
   KEY `FK2E7B201841ADF` (`user_id`),
   CONSTRAINT `FK2E7B201841ADF` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `cart`
 --
-
 
 /*!40000 ALTER TABLE `cart` DISABLE KEYS */;
 LOCK TABLES `cart` WRITE;
@@ -44,15 +34,12 @@ CREATE TABLE `cart_item` (
   KEY `FK3E7B201841ADF` (`items_id`),
   KEY `FK3E7B20886675DF` (`cart_id`),
   CONSTRAINT `FK3E7B201841ADF` FOREIGN KEY (`items_id`) REFERENCES `item` (`id`),
-
   CONSTRAINT `FK3E7B20886675DF` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`id`)
-
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `cart`
 --
-
 
 /*!40000 ALTER TABLE `cart_item` DISABLE KEYS */;
 LOCK TABLES `cart_item` WRITE;
@@ -76,7 +63,6 @@ CREATE TABLE `item` (
 --
 -- Dumping data for table `item`
 --
-
 
 /*!40000 ALTER TABLE `item` DISABLE KEYS */;
 LOCK TABLES `item` WRITE;
@@ -112,24 +98,43 @@ CREATE TABLE `user` (
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
 --
 -- Dumping data for table `user`
 --
 
-
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 LOCK TABLES `user` WRITE;
-INSERT INTO `user` VALUES (1,'test','appdynamics','appd','GOLD','San Francisco'),(2,'appdynamics','appdynamics','appd','PLATINUM','Paris'),(3,'vikash','appdynamics',
-'Val Chibisov', 'PLATINUM','San Francisco'),(4,'santo','appdynamics','Bhaskar Sunkara','BRONZE','Bangalore'),(5,'ravi','appdynamics','Mark Prichard','DIAMOND','London'),(6,'root','appdynamics','Adam Leftik','SILVER','Honolulu');
-
+INSERT INTO `user` VALUES 
+(1,'test','appdynamics','appd','GOLD','San Francisco'),
+(2,'appdynamics','appdynamics','appd','PLATINUM','Paris'),
+(3,'val.chibisov@appdynamics.com','appdynamics', 'Val Chibisov', 'SILVER','San Francisco'),
+(4,'bhaskar.sunkara@appdynamics.com','appdynamics','Bhaskar Sunkara','DIAMOND','Bangalore'),
+(5,'mark.prichard@appdynamics.com','appdynamics','Mark Prichard','BRONZE','London'),
+(6,'adam.leftik@appdynamics.com','appdynamics','Adam Leftik','BRONZE','Honolulu'),
+(7,'sid.choudhury@appdynamics.com','appdynamics','Sid Choudhury','BRONZE','San Francisco'),
+(8,'rey.ong@appdynamics.com','appdynamics','Rey Ong','SILVER','San Francisco'),
+(9,'mahesh.gandhe@appdynamics.com','appdynamics','Mahesh Gandhe','SILVER','San Francisco'),
+(10,'nima haddadkaveh@appdynamics.com','appdynamics','Nima Haddakaveh','SILVER','San Francisco'),
+(11,'ariel.smollar@appdynamics.com','appdynamics','Ariel Smollar','SILVER','San Francisco'),
+(12,'amod.gupta@appdynamics.com','appdynamics','Amod Gupta','SILVER','Bangalore'),
+(13,'omed.habib@appdynamics.com','appdynamics','Omed Habib','SILVER','San Francisco'),
+(14,'ian.mcguinness@appdynamics.com','appdynamics','Ian McGuinness','SILVER','London'),
+(15,'harish.nataraj@appdynamics.com','appdynamics','Harish Nataraj','SILVER','Bangalore'),
+(16,'ian.withrow@appdynamics.com','appdynamics','Ian Withrow','SILVER','Honolulu'),
+(17,'shiv.loka@appdynamics.com','appdynamics','Shiv Loka','PLATINUM','San Francisco'),
+(18,'akankshu.dhawan@appdynamics.com','appdynamics','Akankshu Dhawan','PLATINUM','Bangalore'),
+(19,'jeff.morgan@appdynamics.com','appdynamics','Jeff Morgan','PLATINUM','San Francisco'),
+(20,'pamela.clark@appdynamics.com','appdynamics','Pamela Clark','PLATINUM','Honolulu'),
+(21,'steve.hetland@appdynamics.com','appdynamics','Steve Hetland','PLATINUM','Honolulu'),
+(22,'lynn.davidson@appdynamics.com','appdynamics','Lynn Davidson','PLATINUM','Honolulu'),
+(23,'ellen.evans@appdynamics.com','appdynamics','Ellen Evans','PLATINUM','Honolulu'),
+(24,'jacquie.finney@appdynamics.com','appdynamics','Jacquie Finney','PLATINUM','Honolulu'),
+(25,'charles.smith@appdynamics.com','appdynamics','Charles Smith','PLATINUM','Honolulu'),
+(26,'eric.mackay@appdynamics.com','appdynamics','Eric MacKay','DIAMOND','Honolulu'),
+(27,'byron.martin@appdynamics.com','appdynamics','Byron Martin','DIAMOND','Honolulu');
 UNLOCK TABLES;
 
-
-
-
 /*!40101 SET NAMES utf8 */;
-
 /*!40101 SET SQL_MODE=''*/;
 
 create database if not exists `inventory`;
@@ -139,8 +144,7 @@ USE `inventory`;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
-/*Table structure for table `item` */
-
+/* Table structure for table `item` */
 DROP TABLE IF EXISTS `item`;
 
 CREATE TABLE `item` (
@@ -149,34 +153,24 @@ CREATE TABLE `item` (
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-/*Data for the table `item` */
-
-insert  into `item`(`id`,`quantity`) values (4,100),
-
+/* Data for the table `item` */
+insert  into `item`(`id`,`quantity`) values 
+(4,100),
 (10,100),
 (11,100),
 (12,100),
 (13,100),
 (14,100),
-
 (7,100),
-
 (3,100),
-
 (8,100),
-
 (5,100),
-
 (9,100),
-
 (1,100),
-
 (2,100),
-
 (6,100);
 
-/*Table structure for table `orders` */
-
+/* Table structure for table `orders` */
 DROP TABLE IF EXISTS `orders`;
 
 CREATE TABLE `orders` (
@@ -188,10 +182,22 @@ CREATE TABLE `orders` (
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-/*Data for the table `orders` */
-
-insert  into `orders`(`id`,`quantity`,`createdOn`,`item_Id`) values (1,1,'2008-12-04 10:14:44',1),(2,1,'2008-12-04 10:15:47',1),(3,1,'2008-12-04 10:15:49',1),(4,1,'2008-12-04 10:15:49',1),(5,1,'2008-12-04 10:15:50',1),(6,1,'2008-12-04 10:15:51',1),(7,1,'2008-12-04 10:15:51',1),(8,1,'2008-12-04 10:15:52',1),(9,1,'2008-12-04 10:20:45',1),(10,1,'2008-12-04 10:21:33',1),(11,1,'2008-12-04 10:24:08',1),(12,1,'2008-12-04 10:25:10',2);
+/* Data for the table `orders` */
+insert  into `orders`(`id`,`quantity`,`createdOn`,`item_Id`) values 
+(1,1,'2008-12-04 10:14:44',1),
+(2,1,'2008-12-04 10:15:47',1),
+(3,1,'2008-12-04 10:15:49',1),
+(4,1,'2008-12-04 10:15:49',1),
+(5,1,'2008-12-04 10:15:50',1),
+(6,1,'2008-12-04 10:15:51',1),
+(7,1,'2008-12-04 10:15:51',1),
+(8,1,'2008-12-04 10:15:52',1),
+(9,1,'2008-12-04 10:20:45',1),
+(10,1,'2008-12-04 10:21:33',1),
+(11,1,'2008-12-04 10:24:08',1),
+(12,1,'2008-12-04 10:25:10',2);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+
 commit;
