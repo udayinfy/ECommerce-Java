@@ -65,10 +65,14 @@ public class CartPersistence extends BasePersistenceImpl {
         if (getEntityManager() == null) {
             setEntityManager(findEntityManger());
         }
-
-        Cart attachedCart = getEntityManager().find(Cart.class,cart.getId());
-        if (attachedCart != null) {
-            delete(attachedCart);
+        if (cart != null) {
+            Long cartId = cart.getId();
+            if (cartId != null) {
+                Cart attachedCart = getEntityManager().find(Cart.class, cartId);
+                if (attachedCart != null) {
+                    delete(attachedCart);
+                }
+            }
         }
     }
 
