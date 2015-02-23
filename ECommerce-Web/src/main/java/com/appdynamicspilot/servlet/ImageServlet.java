@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class ImageServlet extends HttpServlet {
-    private static final int MILLIS = 1000;
     private ServletContext context = null;
 
     public void init(ServletConfig config) {
@@ -22,10 +21,10 @@ public class ImageServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Random rand = new Random();
-        int pickedNumber = rand.nextInt(10);
+        int pickedNumber = rand.nextInt(400);
 
         try {
-            Thread.currentThread().sleep(pickedNumber * MILLIS);
+            Thread.currentThread().sleep(pickedNumber);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
