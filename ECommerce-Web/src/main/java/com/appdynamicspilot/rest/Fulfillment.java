@@ -1,7 +1,7 @@
 package com.appdynamicspilot.rest;
 
 import com.appdynamicspilot.model.FulfillmentOrder;
-import com.appdynamicspilot.oracleJDBC.OracleQueryExecutor;
+import com.appdynamicspilot.oracle.jdbc.OracleQueryExecutor;
 import com.appdynamicspilot.persistence.EntityManagerHolder;
 import com.appdynamicspilot.util.SpringContext;
 
