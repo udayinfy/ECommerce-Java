@@ -76,7 +76,7 @@
         </property>
     </bean>
 
-	<bean id="oracleQueryExecutor" class="com.appdynamicspilot.oracleJDBC.OracleQueryExecutor">
+	<bean id="oracleQueryExecutor" class="com.appdynamicspilot.oracle.jdbc.OracleStatementExecutor">
         <property name="oracleQueryString" value="${oracle.queryString}"></property>
         <property name="dataSource" ref="oraDataSource"/>
 	</bean>
