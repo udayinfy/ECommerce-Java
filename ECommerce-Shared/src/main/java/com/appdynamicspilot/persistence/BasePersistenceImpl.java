@@ -17,9 +17,16 @@ import javax.persistence.*;
  */
 public class BasePersistenceImpl {
 
+    private final static Logger LOGGER = Logger.getLogger(BasePersistenceImpl.class.getName());
+
     private EntityManagerFactory emf = null;
 
     private EntityManager em = null;
+
+    private static final int DEFAULT_INTERNAL = 15;
+
+    private int interval = DEFAULT_INTERNAL;
+
 
     /**
 	 * Logger for this class
@@ -102,6 +109,30 @@ public class BasePersistenceImpl {
             }
         }
 	}
+
+    /**
+     * @return the interval
+     */
+    public int getInterval() {
+        return interval;
+    }
+
+    /**
+     * @param interval
+     *            the interval to set
+     */
+    public void setInterval(int interval) {
+        if (interval < 0) {
+            LOGGER.warn("Invalid interval: " + interval + "; setting to default: " + DEFAULT_INTERNAL);
+            this.interval = DEFAULT_INTERNAL;
+        } else {
+            this.interval = interval;
+        }
+    }
+
+    protected boolean shouldFireSlow() {
+        return (Math.random() * 100) <= interval;
+    }
 
 
 }
