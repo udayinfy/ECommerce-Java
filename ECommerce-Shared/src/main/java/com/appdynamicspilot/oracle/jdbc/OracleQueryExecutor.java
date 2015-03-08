@@ -18,29 +18,31 @@ import org.springframework.jdbc.core.simple.SimpleJdbcCall;
  * @author Sharat Jagannath
  *
  */
-public class OracleQueryExecutor {
+public class abstract OracleQueryExecutor {
     private final static Logger LOGGER = Logger.getLogger(OracleQueryExecutor.class.getName());
     private String oracleQueryString;
     private DataSource ds  = null;
 
     
-    public void executeOracleQuery() {
-			Connection connection = null;
-			CallableStatement cs = null;
-			try {
-				connection = ds.getConnection();
-				cs = connection.prepareCall("{ call getItem(?) }");
-                cs.setInt(1,200);
-				cs.execute();
-			} catch (Exception ex) {
-				LOGGER.error("This may be ignored in case of Oracle is not setup");
-				LOGGER.error(ex.getMessage());
-			} finally {
-				if (cs != null) try {cs.close();} catch (Exception ex) {}
-				if (connection != null) try {connection.close();} catch (Exception ex) {}
-			}
-		LOGGER.info("Done");
-    }
+//    public void executeOracleQuery() {
+//			Connection connection = null;
+//			CallableStatement cs = null;
+//			try {
+//				connection = ds.getConnection();
+//				cs = connection.prepareCall("{ call getItem(?) }");
+//                cs.setInt(1,200);
+//				cs.execute();
+//			} catch (Exception ex) {
+//				LOGGER.error("This may be ignored in case of Oracle is not setup");
+//				LOGGER.error(ex.getMessage());
+//			} finally {
+//				if (cs != null) try {cs.close();} catch (Exception ex) {}
+//				if (connection != null) try {connection.close();} catch (Exception ex) {}
+//			}
+//		LOGGER.info("Done");
+//    }
+
+    public abstract void  executeOracleQuery();
     
     public void setOracleQueryString(String oracleQueryString) {
         this.oracleQueryString = oracleQueryString;
