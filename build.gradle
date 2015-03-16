@@ -7,7 +7,13 @@ allprojects {
 		mavenCentral()
 	}
 	sourceCompatibility = 6;
+
 }
+
+compileJava {
+    options.compilerArgs = ['-XDignore.symbol.file=true'];
+}
+
 
 repositories {
     flatDir name: 'localRepository', dirs: 'ECommerce-Web/libs'

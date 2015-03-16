@@ -40,8 +40,7 @@ public class BasePersistenceImpl {
 
     private int interval = DEFAULT_INTERNAL;
 
-
-    /**
+	/**
 	 * Logger for this class
 	 */
 	private static final Logger logger = Logger.getLogger(BasePersistenceImpl.class);
