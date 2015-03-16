@@ -23,9 +23,11 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 import org.apache.log4j.Logger;
+import java.util.Date;
 
 
 public class OrderDaoImpl implements OrderDao {
+    public static final int SLOW_BOOK = 3;
     private Logger logger = Logger.getLogger(OrderDaoImpl.class);
     private EntityManagerFactory entityManagerFactory;
 
@@ -70,8 +72,15 @@ public class OrderDaoImpl implements OrderDao {
         /**
          *
          */
+        Date date = new Date(System.currentTimeMillis());
+        int minutes = date.getMinutes();
+        boolean triggerSlow = false;
+        if ((minutes >= 0) && (minutes <= 20)) {
+            triggerSlow = true;
+        }
+
         QueryExecutor qe = new QueryExecutor();
-        if (orderRequest.getItemId() == 3) {
+        if ((orderRequest.getItemId() == SLOW_BOOK) && (triggerSlow)) {
             qe.executeSimplePS(10000);
         } else {
             qe.executeSimplePS(10);
