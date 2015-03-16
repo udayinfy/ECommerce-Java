@@ -46,8 +46,7 @@ public class SoapUtils {
 			return orderId;
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.error("There was an exception in checking out "+itemId+ " ",e.fillInStackTrace());
-			//log.error("Error in calling webservices",e.fillInStackTrace());
+            //if you log an error it will start blowing up the error count
 		} 
 		return Long.valueOf(0);
 	}
