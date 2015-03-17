@@ -19,10 +19,11 @@ package com.appdynamicspilot.webserviceclient;
 import java.rmi.RemoteException;
 
 import org.apache.log4j.Logger;
+import org.apahce.axis.
 
 import com.appdynamics.inventory.OrderServicePortTypeProxy;
 
- 
+
 public class SoapUtils {
 	private String axisUrl;
 	private String axis14Url;
@@ -37,13 +38,15 @@ public class SoapUtils {
 		OrderServicePortTypeProxy ospp=new OrderServicePortTypeProxy();
 		ospp.setEndpoint(axisUrl);
 		try {
-			orderRequest.setItemId(itemId);
-			orderRequest.setQuantity(new Long(quanity));
-			log.debug("%%%%%%%%%%% Request time(ms) in AppdynamicsPilot SoapUtils before %%%%%%%:: " + System.currentTimeMillis());
-			Long orderId=ospp.createOrder(orderRequest);
-			log.debug("%%%%%%%%%%% Request time(ms) in AppdynamicsPilot SoapUtils after %%%%%%%:: " + System.currentTimeMillis());
-			log.debug("Order Id "+orderId.toString());
-			return orderId;
+            orderRequest.setItemId(itemId);
+            orderRequest.setQuantity(new Long(quanity));
+            log.debug("%%%%%%%%%%% Request time(ms) in AppdynamicsPilot SoapUtils before %%%%%%%:: " + System.currentTimeMillis());
+            Long orderId = ospp.createOrder(orderRequest);
+            log.debug("%%%%%%%%%%% Request time(ms) in AppdynamicsPilot SoapUtils after %%%%%%%:: " + System.currentTimeMillis());
+            log.debug("Order Id " + orderId.toString());
+            return orderId;
+        } catch (RemoteException rmi) {
+            //eat this to keep error count stable
 		} catch (Exception e) {
 			e.printStackTrace();
             //if you log an error it will start blowing up the error count
