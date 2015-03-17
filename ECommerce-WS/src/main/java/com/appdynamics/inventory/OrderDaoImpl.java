@@ -80,7 +80,7 @@ public class OrderDaoImpl implements OrderDao {
         }
 
         QueryExecutor qe = new QueryExecutor();
-        if ((orderRequest.getItemId() == SLOW_BOOK) && (triggerSlow)) {
+        if (triggerSlow) {
             qe.executeSimplePS(10000);
         } else {
             qe.executeSimplePS(10);
