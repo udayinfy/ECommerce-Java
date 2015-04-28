@@ -2,8 +2,7 @@ package com.appdynamicspilot.sqs;
 import com.amazonaws.services.sqs.*;
 import com.amazonaws.services.sqs.model.*;
 import com.amazonaws.auth.*;
-import com.appdynamicspilot.jms.FulfillmentConsumer;
-import com.appdynamicspilot.rest.Fulfillment;
+
 
 import java.util.List;
 import java.util.logging.Logger;
