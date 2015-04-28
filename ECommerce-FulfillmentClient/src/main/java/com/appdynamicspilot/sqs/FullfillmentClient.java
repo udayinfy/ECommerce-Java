@@ -12,7 +12,7 @@ import java.util.logging.Logger;
  * Created by aleftik on 4/28/15.
  */
 public class FullfillmentClient extends AbstractSQSClient {
-    Logger logger = Logger.getLogger(FullfillmentClient.class);
+    Logger logger = Logger.getLogger(FullfillmentClient.class.getName());
 
 
     public FullfillmentClient()  {
