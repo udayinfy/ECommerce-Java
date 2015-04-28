@@ -19,6 +19,7 @@ package com.appdynamicspilot.rest;
 import com.appdynamicspilot.model.FulfillmentOrder;
 import com.appdynamicspilot.oracle.jdbc.OracleQueryExecutor;
 import com.appdynamicspilot.persistence.EntityManagerHolder;
+import com.appdynamicspilot.sqs.SQSFullfilmentSender;
 import com.appdynamicspilot.util.SpringContext;
 
 import javax.persistence.EntityManagerFactory;
@@ -42,6 +43,13 @@ public class Fulfillment {
         OracleQueryExecutor oracleItems = (OracleQueryExecutor) SpringContext
                 .getBean("oracleQueryExecutor");
         oracleItems.executeOracleQuery();
+        sendFulfillmentOrder(order);
     }
+
+    private void sendFulfillmentOrder(FulfillmentOrder order) {
+        SQSFullfilmentSender sender = new SQSFullfilmentSender();
+        sender.sendOrder(order);
+    }
+
 
 }
