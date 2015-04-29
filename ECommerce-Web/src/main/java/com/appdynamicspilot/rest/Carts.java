@@ -288,7 +288,7 @@ public class Carts {
 
     private DataSource getOracleDataSource() {
         try {
-            return (DataSource) new InitialContext().lookup("jdbc/OracleECommerceDB");
+            return (DataSource) new InitialContext().lookup("java:/comp/env/jdbc/OracleECommerceDB");
         } catch (Exception ex) {
             log.fatal(ex);
         }

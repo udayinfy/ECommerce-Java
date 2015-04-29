@@ -10,11 +10,11 @@ import java.util.logging.Logger;
 /**
  * Created by aleftik on 4/28/15.
  */
-public class FullfillmentClient extends AbstractSQSClient {
-    Logger logger = Logger.getLogger(FullfillmentClient.class.getName());
+    public class FulfillmentClient extends AbstractSQSClient {
+    Logger logger = Logger.getLogger(FulfillmentClient.class.getName());
 
 
-    public FullfillmentClient()  {
+    public FulfillmentClient()  {
         super();
     }
 
@@ -30,7 +30,7 @@ public class FullfillmentClient extends AbstractSQSClient {
     }
 
     public static void main(String [] args) {
-        FullfillmentClient client = new FullfillmentClient();
+        FulfillmentClient client = new FulfillmentClient();
         client.recieveMessages();
     }
 }

@@ -22,7 +22,7 @@ sourceSets {
 }
 
 
-mainClassName = 'com.appdynamicspilot.sqs.FullfillmentClient'
+mainClassName = 'com.appdynamicspilot.sqs.FulfillmentClient';
 
 
 task uberjar(type: Jar, dependsOn: 'build') {
