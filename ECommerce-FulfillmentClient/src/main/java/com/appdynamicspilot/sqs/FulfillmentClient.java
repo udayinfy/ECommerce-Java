@@ -22,9 +22,12 @@ import java.util.logging.Logger;
         CreateQueueResult  queue = super.getQueue();
         ReceiveMessageResult result = client.receiveMessage(new ReceiveMessageRequest(queue.getQueueUrl()));
         List <Message> messages  = result.getMessages();
-        for(Message message:messages) {
-            client.deleteMessage(new DeleteMessageRequest(getQueue().getQueueUrl(), message.getReceiptHandle()));
-            logger.info("Message Deleted:" + message.getReceiptHandle());
+        while (true) {
+            for (Message message : messages) {
+                client.deleteMessage(new DeleteMessageRequest(getQueue().getQueueUrl(), message.getReceiptHandle()));
+                logger.info("Message Deleted:" + message.getReceiptHandle());
+            }
+            try {Thread.sleep(3*1000);} catch(InterruptedException ie) {}
         }
 
     }

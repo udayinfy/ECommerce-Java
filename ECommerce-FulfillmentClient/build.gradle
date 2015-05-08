@@ -28,8 +28,9 @@ mainClassName = 'com.appdynamicspilot.sqs.FulfillmentClient';
 task uberjar(type: Jar, dependsOn: 'build') {
     from files(sourceSets.main.output.classesDir)
     from configurations.runtime.asFileTree.files.collect { zipTree(it) }
-
+    exclude 'META-INF/*.DSA', 'META-INF/*.RSA', 'META-INF/*.SF'
     manifest {
         attributes 'Main-Class': mainClassName
     }
+
 }
