@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.appdynamicspilot.action;
+/*package com.appdynamicspilot.action;
 
 public class MyThread extends Thread {
 
@@ -43,4 +43,4 @@ public class MyThread extends Thread {
             thread2.start();
         }
     }
-}
+}*/

@@ -67,7 +67,6 @@ public class CartAction2 extends ActionSupport implements Preparable, ServletRes
             return "LOGOUT";
         ItemService itemService = (ItemService) SpringContext.getBean("itemService");
         itemsList = itemService.getAllItems();
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>Received Item List >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         request.setAttribute("itemsList", itemsList);
         return "SUCCESS";
     }

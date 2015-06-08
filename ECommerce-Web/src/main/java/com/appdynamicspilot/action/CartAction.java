@@ -52,7 +52,9 @@ import org.tempuri.*;
 public class CartAction extends ActionSupport implements Preparable,
         ServletResponseAware, ServletRequestAware {
     private static final Logger log = Logger.getLogger(CartAction.class);
+    /*Cart persistence service to persist data to the database*/
     private CartService cartService;
+    /*Item persistence service*/
     private ItemService itemService;
     private String selectedItemId;
     private String xml;
@@ -61,6 +63,8 @@ public class CartAction extends ActionSupport implements Preparable,
     private CustomerMessageProducer customerMessageProducer;
     private HttpServletRequest request;
     private HttpServletResponse response;
+
+    /*List of items in the cart*/
     List<Cart> cartsList;
 
     private boolean checkMe;
@@ -89,7 +93,11 @@ public class CartAction extends ActionSupport implements Preparable,
         this.cartsList = cartsList;
     }
 
+    /*Adding selected items to the cart*/
     public String addToCart() {
+
+        log.info("In addToCart method, adding items to cart");
+
         User user = (User) ActionContext.getContext().getSession()
                 .get("USER");
         if (ArgumentUtils.isNull(user))
@@ -97,15 +105,24 @@ public class CartAction extends ActionSupport implements Preparable,
         //cartService.deleteCartItems(user.getId());
         if ("".equals(selectedItemId))
             return "FAILURE";
+
+        /*parsing the selectedItemId string to get the items string array*/
         if (selectedItemId.charAt(0) == ',')
             selectedItemId = selectedItemId.substring(1);
         String[] selectedItemIds = selectedItemId.split(",");
+
+        /*Path 1 for Bug - Slow BTs*/
+        //this String load is passed to ArgumentUtils to make a boolean check for sleep.
         String load = getServletRequest().getParameter("load");
-        log.debug("load >>>>>>>" + load);
+        log.debug("the load is: " + load);
+
+        //this parameter is processed to generate the delay/sleep time.
         String delay = getServletRequest().getParameter("delay");
-        log.debug("delay >>>>>>>>>>>>>" + delay);
+        log.debug("the amount of delay is: " + delay);
+
         String error = getServletRequest().getParameter("error");
-        log.debug("error param is >>>>>>>>>" + error);
+        log.debug("error param is: " + error);
+
         getServletRequest().getSession().setAttribute("error", error);
         boolean sleep = (!ArgumentUtils.isNullOrEmpty(load));
         int sleepTime = 0;
@@ -113,17 +130,18 @@ public class CartAction extends ActionSupport implements Preparable,
             try {
                 sleepTime = Integer.parseInt(delay);
             } catch (NumberFormatException e) {
+
                 // eat exception in case of delay is wrong!!!
             }
         }
-        log.debug("Sleep time is >>>>>>>" + sleepTime + ">>>>>>>>>>>>>> sleep="
+        log.debug("The sleep time is: " + sleepTime + " sleep="
                 + sleep);
         for (int i = 0; i < selectedItemIds.length; i++) {
             if (sleep) {
-                log.debug("Sleep time is>>>>" + i * sleepTime);
+                log.debug("Sleep time is: " + i * sleepTime);
                 try {
                     /**
-                     * Adding thread.sleep to demo strate slowBTs. for every
+                     * Adding thread.sleep to demo state slowBTs. for every
                      * transaction
                      */
                     Thread.sleep(i * sleepTime);
@@ -146,14 +164,15 @@ public class CartAction extends ActionSupport implements Preparable,
                 cart.setUser(user);
                 cartService.saveItemInCart(cart);
             }
-
         }
         List<Item> cartsList = cartService.getAllItemsByUser(user.getId());
+        log.info("the number of items in the cart are:" +cartsList.size());
         request.setAttribute("cartsList", cartsList);
         log.info("cartsList size" + cartsList.size());
         return "SUCCESS";
     }
 
+    /*Adding XML information for a cart item*/
     public String addToCartXML() {
         User user = (User) ActionContext.getContext().getSession()
                 .get("USER");
@@ -171,12 +190,15 @@ public class CartAction extends ActionSupport implements Preparable,
         return "sendItems";
     }
 
+    /*Sending items from the cart to complete purchase called upon clicking the buy now button*/
     public String sendItems() {
         log.info("sendItems check");
         String fakeAmount = (String) ActionContext.getContext().get("orderAmount");
 
         User user = (User) ActionContext.getContext().getSession()
                 .get("USER");
+
+        log.info("The current user is: " +user.getEmail());
 
         if (ArgumentUtils.isNull(user)) {
             return "LOGOUT";
@@ -187,15 +209,21 @@ public class CartAction extends ActionSupport implements Preparable,
         org.tempuri.ArrayOfOrderDetail arrayOfOrderDetail = new org.tempuri.ArrayOfOrderDetail();
         Cart cart = (Cart) ActionContext.getContext().getSession()
                 .get("CART");
+
+        log.info("Cart belongs to:" +cart.getUser() + " The number of items associated with the user" +cart.getUser() + "is: " +cart.getItems());
+
         List<Item> cartList = null;
-        if (fakeAmount!= null) {
+
+        if (fakeAmount != null) {
             cart.setAmount(Double.valueOf(fakeAmount));
         }
         if (cart != null) {
             cartList = cartService.getAllItemsByUser(user.getId());
+            log.info("The items associated with the user are: " +cartList.size());
             //trigger the mdic
             cart.getCartTotal();
-        } else {
+        }
+        else {
             cartList = Collections.EMPTY_LIST;
         }
         String orderIds = "";
@@ -213,7 +241,7 @@ public class CartAction extends ActionSupport implements Preparable,
                  */
                 String error = (String) getServletRequest().getSession()
                         .getAttribute("error");
-                log.debug("PARAM is >>>>>>>>>>>" + error);
+                log.debug("PARAM is: " + error);
                 if ("true".equalsIgnoreCase(error)) {
                     try {
                         callOrderService(cartService, item.getId(),
@@ -250,7 +278,7 @@ public class CartAction extends ActionSupport implements Preparable,
                 if (id == 0) {
                     outOfStock = 1;
                 }
-                FulfillmentOrder order = new FulfillmentOrder(item,user);
+                FulfillmentOrder order = new FulfillmentOrder(item, user);
                 fulfillmentProducer.sendFulfillment(order);
             } catch (Exception e) {
                 // TODO Auto-generated catch block
@@ -266,31 +294,39 @@ public class CartAction extends ActionSupport implements Preparable,
         }
 
         log.debug("ORDERS ARE " + orderIds);
-        if (!ArgumentUtils.isNullOrEmpty(orderIds) && outOfStock == 0) {
+        if (!ArgumentUtils.isNullOrEmpty(orderIds) && outOfStock == 0)
+        {
             orderIds = orderIds.substring(0, orderIds.length() - 2);
-            log.debug("**************** Request time(ms) in CartAction:sendItems :: "
+            log.debug("Request time(ms) in CartAction: sendItems"
                     + System.currentTimeMillis());
             messageProducer.sendMessageWithOrderId(orderIds, user.getEmail());
             messageProducer.sendTextMessageWithOrderId();
             customerMessageProducer.sendCustomerMesssage(user);
 
 
-            if (invoiceId == "") {
+            if (invoiceId == "")
+            {
                 request.setAttribute("msg", "Order ID(s) for your order(s) : "
                         + orderIds);
-            } else {
+            }
+            else
+            {
                 request.setAttribute("msg",
                         "Your Invoice ID for your order(s) " + orderIds + ": "
                                 + invoiceId);
             }
-        } else {
+        }
+        else
+        {
             request.setAttribute("msg",
                     "Order not created as one or more items in your cart were out of stock");
         }
+        //deleting the cart instance associated with the user.
         cartService.deleteCart(cart);
+        //creating an empty new cart instance and associating it with the user.
         cart = new Cart();
         cart.setUser(user);
-        ActionContext.getContext().getSession().put("CART",cart);
+        ActionContext.getContext().getSession().put("CART", cart);
         return "ENDPAGE";
     }
 
@@ -349,12 +385,13 @@ public class CartAction extends ActionSupport implements Preparable,
         return response;
     }
 
+    //Call OrderService Web Service (ECommerce-WS) to complete the order
     public void callOrderService(CartService cartService, Long itemId,
                                  String url) throws OrderException {
         User user = (User) ActionContext.getContext().getSession()
                 .get("USER");
         try {
-            log.debug(">>>>>>>>>.doing checkout with error Param<<<<<<<<<<<<<<<");
+            log.debug("doing checkout action with error Param");
             cartService.checkOut(itemId, cartService.getCartSize(user.getId()), url);
             // removing error flag
             getServletRequest().getSession().removeAttribute("error");
@@ -382,11 +419,13 @@ public class CartAction extends ActionSupport implements Preparable,
         this.fulfillmentProducer = fulfillmentProducer;
     }
 
+    //Removing all the items from the cart, either if the user logs out of the session or if the user completes the transaction
     public String removeAllItems() {
         Cart cart = (Cart) request.getSession().getAttribute("CART");
         User user = (User) request.getSession().getAttribute("USER");
-        List<Item> items = cart.getItems(); {
-            for (Item item:items) {
+        List<Item> items = cart.getItems();
+        {
+            for (Item item : items) {
                 cartService.deleteItemInCart(user.getEmail(), item.getId());
             }
         }

@@ -36,24 +36,28 @@ public class ItemPersistence extends BasePersistenceImpl {
     private static final Logger LOGGER = Logger.getLogger(ItemPersistence.class);
 
     /**
-     * Call to Oracle/mysql db to get all the items
+     * Call to mysql db to get all the items
      * Connects to Oracle in case of slow fire
      * @return List<Item>
      */
     @SuppressWarnings("unchecked")
     public List<Item> getAllItems() {
         List<Item> itemList = getEntityManager().createQuery("SELECT i FROM Item i ORDER BY i.id").getResultList();
-        //DEMO-367 Calling Oracle db in certain percentage
-        /* Commented out by Swetha
-        Can be removed later
-        if (shouldFireSlow()) {
-            LOGGER.info("Querying oracle db to get all the items");
-            OracleQueryExecutor oracleItems = (OracleQueryExecutor) SpringContext
-                    .getBean("oracleQueryExecutor");
-            oracleItems.executeOracleQuery();
-        }*/
-        return itemList;
-    }
+
+		//DEMO-367 Calling Oracle db in certain percentage
+		if (shouldFireSlow()) {
+			LOGGER.info("Querying oracle db");
+			if (Math.random() >= 0.7) {
+				LOGGER.error("Critical transaction Error, rolling back changes. Order execution aborted.");
+			}
+
+			OracleQueryExecutor oracleItems = (OracleQueryExecutor) SpringContext
+					.getBean("oracleQueryExecutor");
+			oracleItems.executeOracleQuery();
+		}
+
+		return itemList;
+	}
 
     /**
      * Gets Item by Id, looks through Item class
