@@ -28,76 +28,150 @@ import com.appdynamicspilot.webserviceclient.SoapUtils;
 
 
 public class CartService implements CartServiceInterface {
-	private static final Logger log = Logger.getLogger(CartService.class);
-	private CartPersistence cartPersistence;
-	private SoapUtils soapUtil;
-	private ItemPersistence itemPersistence;
-	
-	
-	public void setSoapUtil(SoapUtils soapUtil) {
-		this.soapUtil = soapUtil;
-	}
-	public List<Item> getAllCartItems(Long cartId){
-        return cartPersistence.getAllCartItems(cartId);
-	}
-	public void saveItemInCart(Cart cart) {
-		 cartPersistence.save(cart); 
-	}
-	public void deleteCartItems(Long userId){
-		cartPersistence.deleteAllCartItems(userId);
-	}
-	public void setCartPersistence(CartPersistence cartPersistence) {
-		this.cartPersistence = cartPersistence;
-	}
-	
-	public Long checkOut(Long itemId,Integer quantity) throws Exception{
-		try{
-			Item item=itemPersistence.getItemByID(itemId);
-			System.out.println("Checking out >>>>>>>>"+item.getTitle()+"<<<<<<<<<<<<<<<<<<<<<<<<<");
-			Long orderId=soapUtil.raisePO(itemId,quantity);
-			//	return SoapUtils.getOrderId(SoapUtils.postSoapMessage(SoapUtils.getSoapMessageForCheckOut(itemId,quantity),"http://localhost:8080/cart/services/OrderService?wsdl"));
-			return orderId;
-		}catch(Exception e){
-			throw e;
-		}
-	}
+    /**
+     * Logger for CartService class
+     */
+    private static final Logger log = Logger.getLogger(CartService.class);
 
-	/**
-	 * This API is for generating error at inventory server . CartAction.sendItem will specify the wrong wsdl url here
-	 * @param itemId
-	 * @param quantity
-	 * @param wsdlURL
-	 * @return
-	 * @throws Exception
-	 */
-	public Long checkOut(Long itemId,Integer quantity,String wsdlURL) throws Exception{
-		try{
-			Item item=itemPersistence.getItemByID(itemId);
-			System.out.println("Checking out >>>>>>>>"+item.getTitle()+"<<<<<<<<<<<<<<<<<<<<<<<<<");
-			Long orderId=soapUtil.raisePO(itemId,quantity,wsdlURL);
-			//	return SoapUtils.getOrderId(SoapUtils.postSoapMessage(SoapUtils.getSoapMessageForCheckOut(itemId,quantity),"http://localhost:8080/cart/services/OrderService?wsdl"));
-			return orderId;
-		}catch(Exception e){
-			throw e;
-		}
-	}
-	
-	public void deleteItemInCart(String username, Long id) {
-		cartPersistence.deleteItemInCart(username,id);
-	}
-	
-	public Integer getCartSize(Long userId){
-		return cartPersistence.getCartSize(userId);
-	}
-	public ItemPersistence getItemPersistence() {
-		return itemPersistence;
-	}
-	public void setItemPersistence(ItemPersistence itemPersistence) {
-		this.itemPersistence = itemPersistence;
-	}
+    /**
+     * Ref to CartPersistence class
+     */
+    private CartPersistence cartPersistence;
+
+    public void setCartPersistence(CartPersistence cartPersistence) {
+        this.cartPersistence = cartPersistence;
+    }
+
+    /**
+     * Ref to ItemPersistence class
+     */
+    private ItemPersistence itemPersistence;
+
+    public ItemPersistence getItemPersistence() {
+        return itemPersistence;
+    }
+
+    public void setItemPersistence(ItemPersistence itemPersistence) {
+        this.itemPersistence = itemPersistence;
+    }
+
+    /**
+     * Ref to SoapUtils class for Checkin out
+     */
+    private SoapUtils soapUtil;
+
+    public void setSoapUtil(SoapUtils soapUtil) {
+        this.soapUtil = soapUtil;
+    }
+
+    /**
+     * Inserts Cart and cart-Item to the corresponding tables
+     *
+     * @param cart object
+     */
+    public void saveItemInCart(Cart cart) {
+        cartPersistence.save(cart);
+    }
+
+    /**
+     * Updates cart and cart-item to the corresponding tables
+     *
+     * @param cart
+     */
+    public void updateItemInCart(Cart cart) {
+        cartPersistence.update(cart);
+    }
+
+    /**
+     * Get the cart based on user
+     *
+     * @param userId
+     * @return cart object
+     */
+    public Cart getCartByUser(Long userId) {
+        return cartPersistence.getCartByUser(userId);
+    }
+
+    /**
+     * Get all the items from cart based on user
+     *
+     * @param userId
+     * @return List of items
+     */
     public List<Item> getAllItemsByUser(Long userId) {
         return cartPersistence.getAllItemsByUser(userId);
     }
-    public void deleteCart(Cart cart) {cartPersistence.deleteCart(cart);}
-	
+
+    /**
+     * Deletes Items from cart
+     *
+     * @param username
+     */
+    public void deleteItemInCart(String username, Long id) {
+        cartPersistence.deleteItemInCart(username, id);
+    }
+
+    /**
+     * Deletes Items from cart v2
+     *
+     * @param username
+     * @param item     id
+     */
+    public Integer deleteItemInCartV2(String username, Long id) {
+        return cartPersistence.deleteItemInCartV2(username, id);
+    }
+
+    /**
+     * checks out each item in the cart by raising PO
+     *
+     * @param itemId
+     * @param quantity
+     * @return
+     * @throws Exception
+     */
+    public Long checkOut(Long itemId, Integer quantity) throws Exception {
+        try {
+            Long orderId = soapUtil.raisePO(itemId, quantity);
+            return orderId;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    /**
+     * Gets all the items from cart(Only from session)
+     * can be removed in v2 as the session has been removed.
+     *
+     * @param cartId
+     * @return List of items
+     */
+    public List<Item> getAllCartItems(Long cartId) {
+        return cartPersistence.getAllCartItems(cartId);
+    }
+
+    //Not used in rest
+    //This API is for generating error at inventory server . CartAction.sendItem will specify the wrong wsdl url here
+    public Long checkOut(Long itemId, Integer quantity, String wsdlURL) throws Exception {
+        try {
+            Long orderId = soapUtil.raisePO(itemId, quantity, wsdlURL);
+            return orderId;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    //Not used in rest
+    public void deleteCartItems(Long userId) {
+        cartPersistence.deleteAllCartItems(userId);
+    }
+
+    //Not used in rest
+    public void deleteCart(Cart cart) {
+        cartPersistence.deleteCart(cart);
+    }
+
+    //Can be removed as getCartSize has been moved to Cart model in v2
+    public Integer getCartSize(Long userId) {
+        return cartPersistence.getCartSize(userId);
+    }
 }

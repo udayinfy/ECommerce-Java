@@ -117,7 +117,7 @@
                                                             <s:hidden name="username" value="%{#session.USER.email}"/>
                                                             <table width="100%" border="0" cellspacing="0"
                                                                    cellpadding="0">
-                                                                <c:set var="items" value="${cartList.items}"/>
+                                                                <c:set var="items" value="${cartsList}"/>
                                                                 <c:forEach var="item" items="${items}">
                                                                     <tr>
                                                                         <td width="20%"><c:out value="${item.id}"/></td>

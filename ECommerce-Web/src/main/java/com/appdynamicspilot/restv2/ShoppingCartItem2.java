@@ -14,53 +14,50 @@
  * limitations under the License.
  */
 
-package com.appdynamicspilot.model;
+package com.appdynamicspilot.restv2;
 
-import org.apache.log4j.Logger;
-
-import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+
 import javax.xml.bind.annotation.XmlElement;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- * @author Ravichandra
- */
-@XmlRootElement(name = "product")
+@XmlRootElement(name = "cart-item")
 @XmlAccessorType(XmlAccessType.FIELD)
-@Entity
-@Table(name = "item")
-public class Item implements java.io.Serializable {
+public class ShoppingCartItem2 implements java.io.Serializable {
 
-    private static Logger log = Logger.getLogger(Item.class.getName());
-    private static final long serialVersionUID = 1L;
     @XmlElement
-    private Long id;
+    private String id;
+
     @XmlElement
     private String title;
+
     @XmlElement
     private String imagePath;
+
+    @XmlElement
+    private String itemId;
+
     @XmlElement
     private double price;
 
-    /**
-     * Getter and Setter of id
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long getId() {
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    /**
-     * Getter and Setter of title
-     */
-    @Column(name = "title", nullable = false)
     public String getTitle() {
         return title;
     }
@@ -69,10 +66,6 @@ public class Item implements java.io.Serializable {
         this.title = title;
     }
 
-    /**
-     * Getter and Setter of imagepath
-     */
-    @Column(name = "imagePath", nullable = true)
     public String getImagePath() {
         return imagePath;
     }
@@ -81,16 +74,13 @@ public class Item implements java.io.Serializable {
         this.imagePath = imagePath;
     }
 
-    /**
-     * Getter and Setter of price
-     */
-    @Column(name = "price")
-    public double getPrice() {
-        return price;
+    public String getItemId() {
+        return itemId;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
     }
+
+
 }
-

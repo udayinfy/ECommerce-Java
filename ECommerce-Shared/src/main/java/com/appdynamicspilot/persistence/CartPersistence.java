@@ -16,67 +16,129 @@
 
 package com.appdynamicspilot.persistence;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import com.appdynamicspilot.model.Cart;
+import com.appdynamicspilot.model.Item;
+import com.appdynamicspilot.util.SpringContext;
+import org.apache.log4j.Logger;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 import java.util.Collections;
 import java.util.List;
 
-import com.appdynamicspilot.util.SpringContext;
-import org.apache.log4j.Logger;
-
-import com.appdynamicspilot.model.Cart;
-import com.appdynamicspilot.model.Item;
-import com.appdynamicspilot.model.User;
-import javax.persistence.*;
-import com.appdynamicspilot.util.ArgumentUtils;
-
-import org.springframework.transaction.annotation.Transactional;
-
 public class CartPersistence extends BasePersistenceImpl {
-	/**
-	 * Logger for this class
-	 */
-	private static final Logger LOGGER = Logger.getLogger(CartPersistence.class);
+    /**
+     * Logger for this class
+     */
+    private static final Logger LOGGER = Logger.getLogger(CartPersistence.class);
 
-	public List<Item> getAllCartItems(Long cartId){
-        Cart cart = getEntityManager().find(Cart.class,cartId);
+    /**
+     * EntityManager instance
+     */
+    private EntityManager findEntityManger() {
+        EntityManagerHolder holder = (EntityManagerHolder) SpringContext.getBean("entityManagerHolder");
+        EntityManagerFactory emf = holder.getEntityManagerFactory();
+        return emf.createEntityManager();
+    }
+
+    /**
+     * Gets all the items from cart
+     *
+     * @param cartId
+     * @return List of items
+     */
+    public List<Item> getAllCartItems(Long cartId) {
+        Cart cart = getEntityManager().find(Cart.class, cartId);
         if (cart == null) {
             return Collections.EMPTY_LIST;
         }
         return cart.getItems();
-	}
+    }
 
-	@Transactional
-    public void deleteAllCartItems(Long userId){
-        EntityManager em = getEntityManager();
-        EntityTransaction  txn = em.getTransaction();
-        txn.begin();
-        Query q = em.createQuery("DELETE FROM Cart c where c.user.id=:id");
-        q.setParameter("id", userId);
-        q.executeUpdate();
-        txn.commit();
-	}
-
-	
-	public Integer getCartSize(Long userId){
-        List<Item> list = getAllItemsByUser(userId);
-        return list.size();
-	}
-
+    /**
+     * Get all the items from cart based on user
+     *
+     * @param userId
+     * @return List of items
+     */
     public List<Item> getAllItemsByUser(Long userId) {
         Query q = getEntityManager().createQuery("SELECT c FROM Cart c where c.user.id = :userid");
-        q.setParameter("userid",userId);
+        q.setParameter("userid", userId);
         List<Cart> carts = q.getResultList();
         if ((carts == null) || (carts.size() == 0)) {
             return Collections.EMPTY_LIST;
         }
 
-        Cart cart = (Cart)  carts.get(0);
-       return cart.getItems();
+        Cart cart = carts.get(0);
+        return cart.getItems();
     }
 
+    /**
+     * Get the cart based on user
+     *
+     * @param userId
+     * @return cart object
+     */
+    public Cart getCartByUser(Long userId) {
+        Query q = getEntityManager().createQuery("SELECT c FROM Cart c where c.user.id = :userid");
+        q.setParameter("userid", userId);
+        List<Cart> carts = q.getResultList();
+        if ((carts == null) || (carts.size() == 0)) {
+            return null;
+        }
+        return carts.get(0);
+    }
+
+    /**
+     * Deletes Items from cart
+     *
+     * @param username
+     * @param item     id
+     */
+    public void deleteItemInCart(String username, Long id) {
+        Query q = getEntityManager().createQuery("SELECT c FROM Cart c where c.user.email = :userid");
+        q.setParameter("userid", username);
+        Cart c = (Cart) q.getSingleResult();
+        Item i = getEntityManager().find(Item.class, id);
+        c.removeItem(i);
+        update(c);
+    }
+
+    /**
+     * Deletes Items from cart - v2
+     *
+     * @param username
+     * @param item     id
+     */
+    public Integer deleteItemInCartV2(String username, Long id) {
+        Query q = getEntityManager().createQuery("SELECT c FROM Cart c where c.user.email = :userid");
+        q.setParameter("userid", username);
+        if (q.getResultList().size() > 0) {
+            Cart c = (Cart) q.getSingleResult();
+            Item i = getEntityManager().find(Item.class, id);
+            c.removeItem(i);
+            update(c);
+            return 0;
+        }
+        return 1;
+    }
+
+    //Not used in rest
+    @Transactional
+    public void deleteAllCartItems(Long userId) {
+        EntityManager em = getEntityManager();
+        EntityTransaction txn = em.getTransaction();
+        txn.begin();
+        Query q = em.createQuery("DELETE FROM Cart c where c.user.id=:id");
+        q.setParameter("id", userId);
+        q.executeUpdate();
+        txn.commit();
+    }
+
+    //Not used in rest
     public void deleteCart(Cart cart) {
         if (getEntityManager() == null) {
             setEntityManager(findEntityManger());
@@ -92,18 +154,10 @@ public class CartPersistence extends BasePersistenceImpl {
         }
     }
 
-    private EntityManager findEntityManger() {
-        EntityManagerHolder holder = (EntityManagerHolder) SpringContext.getBean("entityManagerHolder");
-        EntityManagerFactory emf = holder.getEntityManagerFactory();
-        return emf.createEntityManager();
+    //Can be removed as getCartSize has been moved to Cart model in v2
+    public Integer getCartSize(Long userId) {
+        List<Item> list = getAllItemsByUser(userId);
+        return list.size();
     }
 
-    public void deleteItemInCart(String username, Long id) {
-        Query q = getEntityManager().createQuery("SELECT c FROM Cart c where c.user.email = :userid");
-        q.setParameter("userid",username);
-        Cart c = (Cart)q.getSingleResult();
-        Item i = getEntityManager().find(Item.class, id);
-        c.removeItem(i);
-        update(c);
-    }
 }

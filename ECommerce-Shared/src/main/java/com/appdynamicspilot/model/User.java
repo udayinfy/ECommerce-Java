@@ -17,78 +17,99 @@
 package com.appdynamicspilot.model;
 
 import org.apache.log4j.Logger;
+
 import javax.persistence.*;
 
 /**
  * @author Vikash
-
  */
 @Entity
-@Table(name="user")
-
+@Table(name = "user")
 public class User implements java.io.Serializable {
-	public enum CUSTOMER_TYPE  {DIAMOND,PLATINUM,GOLD,SILVER,BRONZE};
-	private static Logger log = Logger.getLogger(User.class.getName());
-	private static final long serialVersionUID = 1L;
-	private Long id  = null;
-	private String email = null;
-	private String password= null;
-	private String customerName = null;
-	private CUSTOMER_TYPE customerType = null;
-	private String cityName = null;
+    public enum CUSTOMER_TYPE {DIAMOND, PLATINUM, GOLD, SILVER, BRONZE}
 
-	@Column(name="customer_name")
-	public String getCustomerName() {
-		return customerName;
-	}
+    ;
+    private static Logger log = Logger.getLogger(User.class.getName());
+    private static final long serialVersionUID = 1L;
+    private Long id = null;
+    private String email = null;
+    private String password = null;
+    private String customerName = null;
+    private CUSTOMER_TYPE customerType = null;
+    private String cityName = null;
 
-	public void setCustomerName(String customerName) {
-		this.customerName = customerName;
-	}
+    /**
+     * Getter and Setter of customerName
+     */
+    @Column(name = "customer_name")
+    public String getCustomerName() {
+        return customerName;
+    }
 
-	@Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY)
-	public Long getId() {
-		return id;
-	}
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    /**
+     * Getter and Setter of Id
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long getId() {
+        return id;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
 
-    @Column(name="email",nullable=false,length=100)
-	public String getEmail() {
-		return email;
-	}
+    /**
+     * Getter and Setter of email
+     */
+    @Column(name = "email", nullable = false, length = 100)
+    public String getEmail() {
+        return email;
+    }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-    @Column(name="password",nullable=false,length=32)
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    /**
+     * Getter and Setter of password
+     */
+    @Column(name = "password", nullable = false, length = 32)
+    public String getPassword() {
+        return password;
+    }
 
-	@Column(name="customer_type")
-	@Enumerated(EnumType.STRING)
-	public CUSTOMER_TYPE getCustomerType() {
-		return this.customerType;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public void setCustomerType(CUSTOMER_TYPE customerType) {
-		this.customerType = customerType;
-	}
+    /**
+     * Getter and Setter of customerType
+     */
+    @Column(name = "customer_type")
+    @Enumerated(EnumType.STRING)
+    public CUSTOMER_TYPE getCustomerType() {
+        return this.customerType;
+    }
 
-	@Column(name="city_name")
-	public String getCityName() {
-		return cityName;
-	}
+    public void setCustomerType(CUSTOMER_TYPE customerType) {
+        this.customerType = customerType;
+    }
 
-	public void setCityName(String cityName) {
-		this.cityName = cityName;
-	}
+    /**
+     * Getter and Setter of CityName
+     */
+    @Column(name = "city_name")
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
 }
 

@@ -150,6 +150,7 @@ public class CartAction extends ActionSupport implements Preparable,
         }
         List<Item> cartsList = cartService.getAllItemsByUser(user.getId());
         request.setAttribute("cartsList", cartsList);
+        log.info("cartsList size" + cartsList.size());
         return "SUCCESS";
     }
 
@@ -167,10 +168,11 @@ public class CartAction extends ActionSupport implements Preparable,
         cu.saveCartItems(xml);
         List<Item> cartsList = cartService.getAllItemsByUser(user.getId());
         request.setAttribute("cartsList", cartsList);
-        return "SUCCESS";
+        return "sendItems";
     }
 
     public String sendItems() {
+        log.info("sendItems check");
         String fakeAmount = (String) ActionContext.getContext().get("orderAmount");
 
         User user = (User) ActionContext.getContext().getSession()

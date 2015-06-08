@@ -24,15 +24,37 @@ import com.appdynamicspilot.persistence.CartPersistence;
 import com.appdynamicspilot.webserviceclient.SoapUtils;
 
 public interface CartServiceInterface {
-	
-	void setSoapUtil(SoapUtils soapUtil) ;
-	List<Item> getAllCartItems(Long cartId);
-	void saveItemInCart(Cart cart) ;
-	void deleteCartItems(Long userId);
-	void setCartPersistence(CartPersistence cartPersistence);
-	Long checkOut(Long itemId,Integer quantity) throws Exception;
-	void deleteItemInCart(String username,Long id);
-	Integer getCartSize(Long userId);
+
+    void setSoapUtil(SoapUtils soapUtil);
+
+    void setCartPersistence(CartPersistence cartPersistence);
+
+    void saveItemInCart(Cart cart);
+
+    void updateItemInCart(Cart cart);
+
+    Cart getCartByUser(Long userId);
+
     List<Item> getAllItemsByUser(Long userId);
+
+    //Rest older version
+    void deleteItemInCart(String username, Long id);
+
+    //Rest v2
+    Integer deleteItemInCartV2(String username, Long id);
+
+    Long checkOut(Long itemId, Integer quantity) throws Exception;
+
+    //Not used in rest
     void deleteCart(Cart cart);
+
+    //Not used in rest
+    void deleteCartItems(Long userId);
+
+    //Can be removed in v2 as the session has been removed.
+    List<Item> getAllCartItems(Long cartId);
+
+    //Can be removed as getCartSize has been moved to Cart model in v2
+    Integer getCartSize(Long userId);
+
 }
