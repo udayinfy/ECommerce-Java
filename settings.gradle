@@ -1,4 +1,5 @@
 rootProject.name = "ECommerce"
+include "ECommerce-FulfillmentClient"
 include "ECommerce-Web"
 include "ECommerce-JMS"
 include "ECommerce-WS"

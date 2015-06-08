@@ -50,6 +50,8 @@ import com.appdynamicspilot.model.User;
 import com.appdynamicspilot.service.CartService;
 import com.appdynamicspilot.util.SpringContext;
 
+import javax.naming.InitialContext;
+
 import com.appdynamics.apm.appagent.api.*;
 
 @Path("/cart")
@@ -285,6 +287,11 @@ public class Carts {
     }
 
     private DataSource getOracleDataSource() {
-        return (DataSource) SpringContext.getBean("oraDataSource");
+        try {
+            return (DataSource) new InitialContext().lookup("java:/comp/env/jdbc/OracleECommerceDB");
+        } catch (Exception ex) {
+            log.fatal(ex);
+        }
+        return null;
     }
 }
