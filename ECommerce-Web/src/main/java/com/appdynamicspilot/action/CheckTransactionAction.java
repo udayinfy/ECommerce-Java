@@ -31,12 +31,15 @@ import com.appdynamicspilot.service.CartService;
 import com.appdynamicspilot.service.UserService;
 import com.appdynamicspilot.util.SpringContext;
 import com.appdynamicspilot.webserviceclient.SoapUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CheckTransactionAction extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    private static final Logger logger = LoggerFactory.getLogger(CheckTransactionAction.class);
 
     public void init(ServletConfig config) throws ServletException {
-        System.out.println("init");
+        logger.info("init");
     }
 
     private SoapUtils soapUtil;
@@ -55,26 +58,25 @@ public class CheckTransactionAction extends HttpServlet {
         CartService cartService = (CartService) SpringContext.getBean("cartService");
         cartService.getAllItemsByUser(user.getId());
 
-        System.out.println("<<<<<<<<<<<<<<PASSWORD FOR RAVI IS >>>>>>>>>>>" + user.getPassword());
-        System.out.println("<<<<<<<<<<<<<<INSIDE JMS TRANSACTIONS>>>>>>>>>>>");
+        logger.info("The password for this user is " + user.getPassword());
+        logger.info("Inside JMS transactions");
 
         //       MessageProducer messageProducer=(MessageProducer)SpringContext.getBean("messageProducer");
         //       messageProducer.sendTextMessageWithOrderId();
-        System.out.println("<<<<<<<<<<<<<<CALLING AXIS STUB>>>>>>>>>>>");
-        System.out.println("Making ws2  call ");
+        logger.info("Calling Axis Stub");
+        logger.info("Making Web Services WS2 Call");
+
 
         soapUtil = (SoapUtils) SpringContext.getBean("soapUtil");
         Long orderId = soapUtil.raiseJMSPO();
         //StockQuoteServiceSoapBindingStub stub=new StockQuoteServiceSoapBindingStub(new URL(soapUtil.getAxis14Url()),null);
-
-        //System.out.println("Making ws1  call ");
 
         PrintWriter out = response.getWriter();
         out.println("Request Type : " + request.getMethod());
         out.println("Hello " + request.getParameter("firstName") + " " + request.getParameter("lastName") + ". Roses are red.");
         out.print("Violets are blue.");
         //out.print("Web Services are fetching  " +stub.getQuote("XXX") +" for you");
-        System.out.println("<<<<<<<<<<<<<<SENT MESSAGE>>>>>>>>>>>");
+        logger.info("Sent Message");
 
         out.print("\nWS Axis2 fetched : " + orderId + " ");
         //   out.print("\nWS Axis1.4 fetched : "+stub.getQuote("XXX"));

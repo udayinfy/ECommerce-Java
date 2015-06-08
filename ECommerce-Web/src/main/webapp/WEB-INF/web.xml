@@ -34,6 +34,7 @@
         <url-pattern>/rest/*</url-pattern>
     </servlet-mapping>
 
+    <!-- Class not found at the specified package -->
     <filter>
         <filter-name>emFilter</filter-name>
         <filter-class>com.appdynamicspilot.servlet.EntityManagerFilter</filter-class>
@@ -56,6 +57,7 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <!--Found no usages through out the application, no BTs/drill down use this Servlets -->
     <servlet>
         <servlet-name>CrossApp</servlet-name>
         <servlet-class>com.appdynamicspilot.servlet.CrossAppServlet</servlet-class>
@@ -77,6 +79,7 @@
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
+    <!--Do not see usages of the CarSessionListener anywhere in the code -->
     <listener>
         <listener-class>com.appdynamicspilot.servlet.CartSessionListener</listener-class>
     </listener>

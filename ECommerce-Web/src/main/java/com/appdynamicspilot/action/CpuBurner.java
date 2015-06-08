@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package com.appdynamicspilot.action;
+/*package com.appdynamicspilot.action;
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
- */
+ *
 
 import java.util.Random;
-import java.util.UUID;
+/*import java.util.UUID;
 
 /**
  * @author jayesh
- */
+ *
 public class CpuBurner {
     public static void burnCpu() {
         Random random = new Random();
@@ -54,3 +54,4 @@ public class CpuBurner {
     }
 
 }
+*/
