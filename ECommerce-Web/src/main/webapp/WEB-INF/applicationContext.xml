@@ -82,12 +82,6 @@
         </property>
     </bean>
 
-   <bean id="dbProvider" class="com.appdynamicspilot.persistence.BasePersistenceImpl">
-       <property name="entityManagerFactory">
-           <ref bean="entityManagerFactory" />
-       </property>
-   </bean>
-
    <bean id="oracleQueryExecutor" class="com.appdynamicspilot.oracle.jdbc.OracleStatementExecutor">
        <property name="oracleQueryString" value="${oracle.queryString}"></property>
        <property name="dataSource" ref="oraDataSource"/>

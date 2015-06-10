@@ -12,8 +12,10 @@
         <res-type>javax.sql.DataSource</res-type>
         <res-auth>Container</res-auth>
     </resource-ref>
+
     <servlet>
         <servlet-name>Jersey-Filter</servlet-name>
+
         <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
         <init-param>
             <param-name>jersey.config.server.provider.classnames</param-name>
@@ -28,17 +30,12 @@
                 com.appdynamicspilot.restv2.Items2
             </param-value>
         </init-param>
-        <init-param>
-            <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
-            <param-value>true</param-value>
-        </init-param>
     </servlet>
     <servlet-mapping>
         <servlet-name>Jersey-Filter</servlet-name>
         <url-pattern>/rest/*</url-pattern>
     </servlet-mapping>
 
-    <!-- Class not found at the specified package -->
     <filter>
         <filter-name>emFilter</filter-name>
         <filter-class>com.appdynamicspilot.servlet.EntityManagerFilter</filter-class>
@@ -61,7 +58,6 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-    <!--Found no usages through out the application, no BTs/drill down use this Servlets -->
     <servlet>
         <servlet-name>CrossApp</servlet-name>
         <servlet-class>com.appdynamicspilot.servlet.CrossAppServlet</servlet-class>
@@ -83,7 +79,6 @@
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
-    <!--Do not see usages of the CarSessionListener anywhere in the code -->
     <listener>
         <listener-class>com.appdynamicspilot.servlet.CartSessionListener</listener-class>
     </listener>
@@ -106,7 +101,7 @@
         <servlet-name>Transact</servlet-name>
         <url-pattern>/start.do</url-pattern>
     </servlet-mapping>
-    
+
     <servlet>
         <servlet-name>DeadLock</servlet-name>
         <servlet-class>com.appdynamicspilot.servlet.DeadLockServlet</servlet-class>
