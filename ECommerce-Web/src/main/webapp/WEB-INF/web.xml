@@ -25,7 +25,9 @@
                 com.appdynamicspilot.rest.Ping,
                 com.appdynamicspilot.rest.CatalogRequest,
                 com.appdynamicspilot.rest.UserLogin,
-                com.appdynamicspilot.rest.Fulfillment
+                com.appdynamicspilot.rest.Fulfillment,
+                com.appdynamicspilot.restv2.Carts2,
+                com.appdynamicspilot.restv2.Items2
             </param-value>
         </init-param>
     </servlet>
@@ -99,7 +101,7 @@
         <servlet-name>Transact</servlet-name>
         <url-pattern>/start.do</url-pattern>
     </servlet-mapping>
-    
+
     <servlet>
         <servlet-name>DeadLock</servlet-name>
         <servlet-class>com.appdynamicspilot.servlet.DeadLockServlet</servlet-class>

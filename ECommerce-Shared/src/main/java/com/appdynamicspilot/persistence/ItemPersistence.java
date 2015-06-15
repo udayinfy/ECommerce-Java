@@ -26,18 +26,24 @@ import com.appdynamicspilot.model.Item;
 import com.appdynamicspilot.oracle.jdbc.OracleQueryExecutor;
 import com.appdynamicspilot.util.ArgumentUtils;
 import com.appdynamicspilot.util.SpringContext;
+
 import javax.persistence.*;
 
 public class ItemPersistence extends BasePersistenceImpl {
-	/**
-	 * Logger for this class
-	 */
-	private static final Logger LOGGER = Logger.getLogger(ItemPersistence.class);
+    /**
+     * Logger for this class
+     */
+    private static final Logger LOGGER = Logger.getLogger(ItemPersistence.class);
 
-
-	@SuppressWarnings("unchecked")
-	public List<Item> getAllItems() {
+    /**
+     * Call to mysql db to get all the items
+     * Connects to Oracle in case of slow fire
+     * @return List<Item>
+     */
+    @SuppressWarnings("unchecked")
+    public List<Item> getAllItems() {
         List<Item> itemList = getEntityManager().createQuery("SELECT i FROM Item i ORDER BY i.id").getResultList();
+
 		//DEMO-367 Calling Oracle db in certain percentage
 		if (shouldFireSlow()) {
 			LOGGER.info("Querying oracle db");
@@ -53,19 +59,25 @@ public class ItemPersistence extends BasePersistenceImpl {
 		return itemList;
 	}
 
-
+    /**
+     * Gets Item by Id, looks through Item class
+     * @param id
+     * @return Item
+     */
     public Item getItemByID(Long id) {
-        return getEntityManager().find(Item.class,id);
-	}
+        return getEntityManager().find(Item.class, id);
+    }
 
-	public Item getItemByName(String name) {
-//		List<Item> itemList = getSession().createCriteria(Item.class).add(Restrictions.eq("title", name)).list();
+    /**
+     * Call to mysql db to get item by name
+     * @param Item name
+     * @return Item
+     */
+    public Item getItemByName(String name) {
         Query q = getEntityManager().createQuery("SELECT i FROM Item i WHERE item i.title=:title");
-        q.setParameter("title",name);
-
+        q.setParameter("title", name);
         List<Item> itemList = (List<Item>) q.getResultList();
-
-		return (ArgumentUtils.isNullOrEmpty(itemList) ? null : itemList.get(0));
-	}
+        return (ArgumentUtils.isNullOrEmpty(itemList) ? null : itemList.get(0));
+    }
 
 }

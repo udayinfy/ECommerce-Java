@@ -254,7 +254,7 @@ public class Carts {
             for (Item item : items) {
                 Long orderId = getCartService().checkOut(item.getId(), 1);
                 if (item.getId() != 0) {
-                    orderIds = ", " + orderIds;
+                    orderIds = ", " + orderId;
                 }
                 if (orderId == 0) {
                     outOfStock = true;

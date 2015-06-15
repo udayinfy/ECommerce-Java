@@ -109,22 +109,24 @@
                                                 </div>
 
                                             </div>
+                                            
                                             <div class="selcetedItemBg">
                                                 <div class="Selectc">
                                                     <div class="Selecttext">
                                                         <s:form name="itemsForm" action="ViewCart!sendItems.action"
                                                                 theme="simple">
                                                             <s:hidden name="username" value="%{#session.USER.email}"/>
+
                                                             <table width="100%" border="0" cellspacing="0"
                                                                    cellpadding="0">
-                                                                <c:set var="items" value="${cartList.items}"/>
-                                                                <c:forEach var="item" items="${items}">
+                                                                <c:forEach items="${cartsList}" var="item">
                                                                     <tr>
-                                                                        <td width="20%"><c:out value="${item.id}"/></td>
+                                                                        <td width="22%"><c:out value="${item.id}"/></td>
                                                                         <td width="58%"><c:out
                                                                                 value="${item.title}"/></td>
-                                                                        <td width="22%"><c:out
+                                                                        <td width="20%"><c:out
                                                                                 value="${item.price}"/></td>
+
                                                                     </tr>
                                                                 </c:forEach>
 
