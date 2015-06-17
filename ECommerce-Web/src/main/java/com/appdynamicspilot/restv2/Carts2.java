@@ -16,6 +16,7 @@
 
 package com.appdynamicspilot.restv2;
 
+import com.appdynamicspilot.faultinjection.FaultInjectionFactory;
 import com.appdynamicspilot.jms.MessageProducer;
 import com.appdynamicspilot.model.Cart;
 import com.appdynamicspilot.model.Item;
@@ -84,6 +85,10 @@ public class Carts2 {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String saveItemInCart(@Context HttpServletRequest req, @PathParam("id") Long id) throws Exception {
+
+        FaultInjectionFactory fiFactory = new FaultInjectionFactory();
+        log.info(fiFactory.getFaultInjection("server").injectFault());
+
         Gson gsonSaveItemsToCart = new Gson();
         CartResponse response = new CartResponse();
         try {
