@@ -87,13 +87,36 @@ public class Carts2 {
     public String saveItemInCart(@Context HttpServletRequest req, @PathParam("id") Long id) throws Exception {
 
         FaultInjectionFactory fiFactory = new FaultInjectionFactory();
-        log.info(fiFactory.getFaultInjection("server").injectFault());
 
         Gson gsonSaveItemsToCart = new Gson();
         CartResponse response = new CartResponse();
         try {
             Item item = getCartService().getItemPersistence().getItemByID(id);
             User user = (User) req.getSession(true).getAttribute("USER");
+
+            /**
+             *  Adding some more variables to accept time range and fault type.
+             *  Since we already have the user name form the session object.
+             */
+
+            //String faultType = (String) req.getSession(true).getAttribute("FAULTNAME");
+            String faultType = "server"; //Temporarily starting with server fault injection only. Will read other faults as they are added iteratively
+            if(user == null){
+
+                log.info("User == null");
+
+                //need to perform this check for login so that the fault is injected against the user who requests it.
+                /*if(user.getEmail() != req.getHeader("USERNAME")){
+                    log.error("Sorry cannot inject fault for this user as this time slot is not assigned");
+                }*/
+
+                    //injecting fault only if the user is the user logged in. And logging faultResponse.
+                    String faultResponse = fiFactory.getFaultInjection(faultType).injectFault();
+                    log.info("Fault injected and metrics are: " +faultResponse);
+            }
+
+
+
             if (user == null) {
                 String username = req.getHeader("USERNAME");
                 user = getUserService().getMemberByLoginName(username);
@@ -109,6 +132,7 @@ public class Carts2 {
                 cart.addItem(item);
                 getCartService().updateItemInCart(cart);
             }
+
             response.setCartSize(String.valueOf(cart.getCartSize()));
             response.setCartTotal(cart.getCartTotal());
         } catch (Exception e) {
