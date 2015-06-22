@@ -16,6 +16,7 @@
 
 package com.appdynamicspilot.restv2;
 
+import com.appdynamicspilot.faultinjection.FaultInjection;
 import com.appdynamicspilot.faultinjection.FaultInjectionFactory;
 import com.appdynamicspilot.jms.MessageProducer;
 import com.appdynamicspilot.model.Cart;
@@ -42,7 +43,6 @@ import java.util.List;
 @Path("/json/cart")
 public class Carts2 {
     private static final Logger log = Logger.getLogger(Carts2.class.getName());
-
     // Not used in rest
     @Resource(name = "OrderQueue")
     private Queue orderQueue;
@@ -98,6 +98,10 @@ public class Carts2 {
     public String saveItemInCart(@Context HttpServletRequest req, @PathParam("id") Long id) throws Exception {
 
         FaultInjectionFactory fiFactory = new FaultInjectionFactory();
+
+        //parameters for memory leak injection
+       // this.objectCount = NumberUtils((req.getSession(true).getAttribute("count"), 0));
+       // this.objectSize = NumberUtils((req.getSession(true).getAttribute("size"), 0));
 
         Gson gsonSaveItemsToCart = new Gson();
         CartResponse response = new CartResponse();
@@ -180,7 +184,7 @@ public class Carts2 {
      * Deletes the item from mysqsl tables "cart" & "cart-item" as well
      *
      * @param req
-     * @param item id
+     * @param id
      * @return plain text
      * @throws Exception
      */
