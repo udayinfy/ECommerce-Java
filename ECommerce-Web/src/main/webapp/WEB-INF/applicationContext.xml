@@ -126,6 +126,11 @@
           class="com.appdynamicspilot.persistence.CartPersistence" parent="dbProvider">
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean>
+
+    <bean id="faultPersistence"
+          class="com.appdynamicspilot.persistence.FaultPersistence" parent="dbProvider">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
 		
 	<bean id="userServiceTarget"
 		class="com.appdynamicspilot.service.UserService">
@@ -181,6 +186,11 @@
     <property name="itemPersistence" ref="itemPersistence"/>
     <property name="soapUtil" ref="soapUtil"/>
     <property name="cartPersistence" ref="cartPersistence"/>
+    </bean>
+
+    <bean id="faultService"
+          class="com.appdynamicspilot.service.FaultService">
+        <property name="faultPersistence" ref="faultPersistence"/>
     </bean>
 
     <!--<bean id="cartService"-->
