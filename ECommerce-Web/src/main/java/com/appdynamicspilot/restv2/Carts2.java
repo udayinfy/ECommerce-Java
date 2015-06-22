@@ -16,6 +16,7 @@
 
 package com.appdynamicspilot.restv2;
 
+import com.appdynamicspilot.faultinjection.FaultInjection;
 import com.appdynamicspilot.faultinjection.FaultInjectionFactory;
 import com.appdynamicspilot.jms.MessageProducer;
 import com.appdynamicspilot.model.Cart;
@@ -30,7 +31,6 @@ import org.apache.log4j.Logger;
 import javax.annotation.Resource;
 import javax.jms.Queue;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -40,7 +40,6 @@ import java.util.List;
 @Path("/json/cart")
 public class Carts2 {
     private static final Logger log = Logger.getLogger(Carts2.class.getName());
-
     // Not used in rest
     @Resource(name = "OrderQueue")
     private Queue orderQueue;
@@ -88,6 +87,10 @@ public class Carts2 {
 
         FaultInjectionFactory fiFactory = new FaultInjectionFactory();
 
+        //parameters for memory leak injection
+       // this.objectCount = NumberUtils((req.getSession(true).getAttribute("count"), 0));
+       // this.objectSize = NumberUtils((req.getSession(true).getAttribute("size"), 0));
+
         Gson gsonSaveItemsToCart = new Gson();
         CartResponse response = new CartResponse();
         try {
@@ -104,15 +107,10 @@ public class Carts2 {
             if(user == null){
 
                 log.info("User == null");
-
-                //need to perform this check for login so that the fault is injected against the user who requests it.
-                /*if(user.getEmail() != req.getHeader("USERNAME")){
-                    log.error("Sorry cannot inject fault for this user as this time slot is not assigned");
-                }*/
-
-                    //injecting fault only if the user is the user logged in. And logging faultResponse.
-                    String faultResponse = fiFactory.getFaultInjection(faultType).injectFault();
-                    log.info("Fault injected and metrics are: " +faultResponse);
+                //injecting fault only if the user is the user logged in. And logging faultResponse.
+                FaultInjection fi = fiFactory.getFaultInjection("server");
+                String faultResponse = fi.injectFault();
+                log.info("Fault injected and metrics are: " +faultResponse);
             }
 
 
@@ -180,7 +178,7 @@ public class Carts2 {
      * Deletes the item from mysqsl tables "cart" & "cart-item" as well
      *
      * @param req
-     * @param item id
+     * @param id
      * @return plain text
      * @throws Exception
      */
