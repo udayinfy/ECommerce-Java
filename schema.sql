@@ -125,7 +125,7 @@ INSERT INTO `user` VALUES
 (8,'jake.gyllenhaal@foobar.com','southpaw','Jake Gyllenhaal','SILVER','San Francisco'),
 (9,'steph.curry@foobar.com','winner2015','Stephen Curry','SILVER','San Francisco'),
 (10,'sachin.tendulkar@foobar.com','godofcricket','Sachin Tendulkar','SILVER','San Francisco'),
-(11,'kobe.bryant@foobar.com','allstars','Ariel Smollar','SILVER','San Francisco'),
+(11,'kobe.bryant@foobar.com','allstars','Kobe Bryant','SILVER','San Francisco'),
 (12,'lebron.james@foobar.com', 'gocavs', 'Lebron James', 'PLATINUM', 'Cleveland'),
 (13,'michael.schumacher@foobar.com','circuitgod','Michael Schumacher','SILVER','Bangalore'),
 (14,'ma.lin@foobar.com','pingpong','Ma Lin','SILVER','San Francisco'),
