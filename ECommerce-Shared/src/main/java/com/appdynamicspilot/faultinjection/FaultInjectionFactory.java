@@ -6,6 +6,7 @@ package com.appdynamicspilot.faultinjection;
 public class FaultInjectionFactory {
     
     public FaultInjection getFaultInjection(String faultType){
+
     	if(faultType.equalsIgnoreCase("server")){
     		return new ServerFaultInjection();
     	}
