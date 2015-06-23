@@ -20,12 +20,15 @@ import com.appdynamicspilot.faultinjection.FaultInjection;
 import com.appdynamicspilot.faultinjection.FaultInjectionFactory;
 import com.appdynamicspilot.jms.MessageProducer;
 import com.appdynamicspilot.model.Cart;
+import com.appdynamicspilot.model.Fault;
 import com.appdynamicspilot.model.Item;
 import com.appdynamicspilot.model.User;
 import com.appdynamicspilot.service.CartService;
+import com.appdynamicspilot.service.FaultService;
 import com.appdynamicspilot.service.UserService;
 import com.appdynamicspilot.util.SpringContext;
 import com.google.gson.Gson;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import javax.annotation.Resource;
@@ -72,6 +75,15 @@ public class Carts2 {
     }
 
     /**
+     * Gets FaultService bean
+     *
+     * @return FaultService
+     */
+    public FaultService getFIBugService() {
+        return (FaultService) SpringContext.getBean("faultService");
+    }
+
+    /**
      * Saves Item to cart
      * Creates a session and inserts records to mysql tables "cart" & "cart-item" as well
      *
@@ -94,31 +106,25 @@ public class Carts2 {
         Gson gsonSaveItemsToCart = new Gson();
         CartResponse response = new CartResponse();
         try {
+            String username = req.getHeader("USERNAME");
             Item item = getCartService().getItemPersistence().getItemByID(id);
             User user = (User) req.getSession(true).getAttribute("USER");
 
-            /**
-             *  Adding some more variables to accept time range and fault type.
-             *  Since we already have the user name form the session object.
-             */
-
-            //String faultType = (String) req.getSession(true).getAttribute("FAULTNAME");
-            String faultType = "server"; //Temporarily starting with server fault injection only. Will read other faults as they are added iteratively
-            if(user == null){
-
-                log.info("User == null");
-                //injecting fault only if the user is the user logged in. And logging faultResponse.
-                FaultInjection fi = fiFactory.getFaultInjection("server");
-                String faultResponse = fi.injectFault();
-                log.info("Fault injected and metrics are: " +faultResponse);
-            }
-
-
-
             if (user == null) {
-                String username = req.getHeader("USERNAME");
                 user = getUserService().getMemberByLoginName(username);
             }
+
+            /**
+             *  Reading time range, user name and fault type.
+             *  Applicable only for Fault Injection
+             */
+            if(!StringUtils.isBlank(username)){
+                List<Fault> lsFault = getFIBugService().getallbugsbyuser(username);
+                for(Fault fault : lsFault){
+                    log.info(fault.getUsername() + "," + fault.getBugname());
+                }
+            }
+
             Cart cart = getCartService().getCartByUser(user.getId());
             if (cart == null) {
                 cart = new Cart();
@@ -191,11 +197,11 @@ public class Carts2 {
             if (username != null) {
                 Integer iReturnValue = getCartService().deleteItemInCartV2(username, id);
                 log.info("iReturnValue" + iReturnValue);
-                if( iReturnValue == 0)
+                if (iReturnValue == 0)
                     return "Deleted item id " + id + " Successfully.";
-                else if( iReturnValue == 2)
+                else if (iReturnValue == 2)
                     return "There is no item id " + id + " in the cart.";
-                else if(iReturnValue == 1)
+                else if (iReturnValue == 1)
                     return "Cart is empty.";
             }
         } catch (Exception e) {
@@ -216,50 +222,90 @@ public class Carts2 {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String checkout(@Context HttpServletRequest req) throws Exception {
-            User user = (User) req.getSession(true).getAttribute("USER");
-            if (user == null) {
-                String username = req.getHeader("USERNAME");
-                if (username == null) {
-                    return "User not logged in. Nothing to checkout.";
-                } else {
-                    user = getUserService().getMemberByLoginName(username);
-                }
+        User user = (User) req.getSession(true).getAttribute("USER");
+        if (user == null) {
+            String username = req.getHeader("USERNAME");
+            if (username == null) {
+                return "User not logged in. Nothing to checkout.";
+            } else {
+                user = getUserService().getMemberByLoginName(username);
             }
-            Cart cart = getCartService().getCartByUser(user.getId());
-            if (cart == null) {
-                return "Nothing In cart to checkout.";
+        }
+        Cart cart = getCartService().getCartByUser(user.getId());
+        if (cart == null) {
+            return "Nothing In cart to checkout.";
+        }
+
+        List<Item> items = cart.getItems();
+        List<Long> orderIdList = new ArrayList<Long>();
+        String orderIds = "";
+        boolean outOfStock = false;
+        try {
+            for (Item item : items) {
+                Long orderId = getCartService().checkOut(item.getId(), 1);
+                if (item.getId() != 0) {
+                    orderIds = ", " + orderId;
+                }
+                if (orderId == 0) {
+                    outOfStock = true;
+                }
+                orderIdList.add(orderId);
+            }
+            log.info("orderIds : " + orderIds);
+            if (orderIdList.size() > 0 && !outOfStock) {
+                getMessageProducer().sendMessageWithOrderId(orderIds, user.getEmail());
+                getMessageProducer().sendTextMessageWithOrderId();
+                return "Total amount is $" + cart.getCartTotal() + " Order ID(s) for your order(s) : " + orderIds;
+            } else {
+                if (getMessageProducer() != null) {
+                    getMessageProducer().sendMessageWithOrderId(orderIds, user.getEmail());
+                }
+                return "Order not created as one or more items in your cart were out of stock. Total was $" + cart.getCartTotal();
+            }
+        } catch (Exception ex) {
+            log.error(ex);
+        }
+        return "Error Processing Checkout";
+    }
+
+    //Used in Fault Injection to store the faultinfo - user, bug name , Time Frame
+    @Path("/savefaults")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String SaveBugsForFaultInjection(List<Fault> lsfault) throws Exception {
+        String returnMessage = "";
+        try {
+            if (lsfault != null && lsfault.size() > 0) {
+                for(Fault fault : lsfault) {
+                    getFIBugService().SaveFIBugs(fault);
+                }
+                returnMessage = "Fault(s) injected successfully";
+            } else{
+                returnMessage = "No Fault received";
             }
 
-            List<Item> items = cart.getItems();
-            List<Long> orderIdList = new ArrayList<Long>();
-            String orderIds = "";
-            boolean outOfStock = false;
-            try {
-                for (Item item : items) {
-                    Long orderId = getCartService().checkOut(item.getId(), 1);
-                    if (item.getId() != 0) {
-                        orderIds = ", " + orderId;
-                    }
-                    if (orderId == 0) {
-                        outOfStock = true;
-                    }
-                    orderIdList.add(orderId);
-                }
-                log.info("orderIds : " + orderIds);
-                if (orderIdList.size() > 0 && !outOfStock) {
-                    getMessageProducer().sendMessageWithOrderId(orderIds, user.getEmail());
-                    getMessageProducer().sendTextMessageWithOrderId();
-                    return "Total amount is $" + cart.getCartTotal() + " Order ID(s) for your order(s) : " + orderIds;
-                } else {
-                    if (getMessageProducer() != null) {
-                        getMessageProducer().sendMessageWithOrderId(orderIds, user.getEmail());
-                    }
-                    return "Order not created as one or more items in your cart were out of stock. Total was $" + cart.getCartTotal();
-                }
-            } catch (Exception ex) {
-                log.error(ex);
+        } catch (Exception ex) {
+            log.error(ex);
+        }
+        return returnMessage;
+    }
+
+    //Used in Fault Injection to store the faultinfo - user, bug name , Time Frame
+    @Path("/readfaults")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Fault> ReadBugsForFaultInjection(@Context HttpServletRequest req) throws Exception {
+        String username = req.getHeader("USERNAME");
+        List<Fault> lsFault = new ArrayList<Fault>();
+        try {
+            if(!StringUtils.isBlank(username)){
+                lsFault = getFIBugService().getallbugsbyuser(username);
             }
-            return "Error Processing Checkout";
+        } catch (Exception ex) {
+            log.error(ex);
+        }
+        return lsFault;
     }
 
     //Not used in rest
