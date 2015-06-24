@@ -115,7 +115,7 @@ CREATE TABLE `user` (
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 LOCK TABLES `user` WRITE;
 INSERT INTO `user` VALUES 
-(1,'amitabhbachchan@foobar.com','bollywoodbachchan','Amitabh Bachchan','GOLD','San Francisco'),
+(1,'amitabhbachchan@foobar.com','appdynamics','Amitabh Bachchan','GOLD','San Francisco'),
 (2,'christopher.lee@foobar.com','hollywoodlee','Christopher Lee','PLATINUM','Paris'),
 (3,'emilia.clarke@foobar.com','gameofthrones', 'Emilia Clarke', 'SILVER','San Francisco'),
 (4,'tom.hardy@foobar.com','jokerhardy','Tom Hardy','DIAMOND','Bangalore'),
@@ -149,7 +149,7 @@ INSERT INTO `user` VALUES
 (32, 'larry.ellison@foobar.com', 'oraclelarry', 'Larry Ellison', 'PLATINUM', 'Redwood City'),
 (33, 'jyoti.bansal@foobar.com', 'AppDynamics', 'Jyoti Bansal', 'PLATINUM', 'San Francisco'),
 (34, 'satya.nadella@foobar.com', 'SatyaMicrosoft', 'Satya Nadella', 'GOLD', 'Seattle'),
-(35, 'Solomon@foobar.com', 'DockerSolomon', 'Solomon', 'SILVER', 'San Francisco');
+(35, 'solomon@foobar.com', 'DockerSolomon', 'Solomon', 'SILVER', 'San Francisco');
 
 UNLOCK TABLES;
 
