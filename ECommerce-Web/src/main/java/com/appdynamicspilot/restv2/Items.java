@@ -31,7 +31,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 @Path("/json/items")
-public class Items2 {
+public class Items {
     private static final Logger LOGGER = Logger.getLogger(BasePersistenceImpl.class);
 
     public ItemService getItemService() {

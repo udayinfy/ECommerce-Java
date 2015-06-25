@@ -11,5 +11,5 @@ public interface FaultServiceInterface {
 
     void saveFIBugs(Fault fibugs);
 
-    List<Fault> getallbugsbyuser(String username);
+    List<Fault> getAllBugsByUser(String username);
 }

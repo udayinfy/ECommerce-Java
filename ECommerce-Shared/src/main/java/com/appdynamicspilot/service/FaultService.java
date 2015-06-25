@@ -32,7 +32,7 @@ public class FaultService implements FaultServiceInterface {
         faultPersistence.save(fault);
     }
 
-    public List<Fault> getallbugsbyuser(String username) {
+    public List<Fault> getAllBugsByUser(String username) {
         return faultPersistence.getallbugsbyuser(username);
     }
 }

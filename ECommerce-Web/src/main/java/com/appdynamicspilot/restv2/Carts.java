@@ -38,15 +38,18 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 @Path("/json/cart")
-public class Carts2 {
-    private static final Logger log = Logger.getLogger(Carts2.class.getName());
+public class Carts {
+    private static final Logger log = Logger.getLogger(Carts.class.getName());
     // Not used in rest
     @Resource(name = "OrderQueue")
     private Queue orderQueue;
     private MessageProducer messageProducer;
+
 
     public MessageProducer getMessageProducer() {
         return (MessageProducer) SpringContext.getBean("messageProducer");
@@ -99,9 +102,7 @@ public class Carts2 {
 
         FaultInjectionFactory fiFactory = new FaultInjectionFactory();
         FaultInjection fi = null;
-        //parameters for memory leak injection
-        // this.objectCount = NumberUtils((req.getSession(true).getAttribute("count"), 0));
-        // this.objectSize = NumberUtils((req.getSession(true).getAttribute("size"), 0));
+
 
         Gson gsonSaveItemsToCart = new Gson();
         CartResponse response = new CartResponse();
@@ -119,13 +120,17 @@ public class Carts2 {
              *  Applicable only for Fault Injection
              */
             if(!StringUtils.isBlank(username)){
-                List<Fault> lsFault = getFIBugService().getallbugsbyuser(username);
+                List<Fault> lsFault = getFIBugService().getAllBugsByUser(username);
                 for(Fault fault : lsFault){
-                    log.info(fault.getUsername() + "," + fault.getBugname());
-                    //Injecting fault irrespective of time for now. TODO: Add code for time frame.
-                    log.info(fault.getTimeframe());
-                    fi = fiFactory.getFaultInjection(fault.getBugname());
-                    fi.injectFault();
+                    log.info(fault.getUsername() + ", " + fault.getBugname() + ", " + fault.getTimeframe());
+
+                    //Creating Fault injection object parsing the bugName removing spaces.
+                    fi = fiFactory.getFaultInjection(fault.getBugname().replace(" ", ""));
+
+                    //Parsing time frame and calling the inject fault method based on time and user.
+                    if(username == fault.getUsername())
+                        if(checkTime(fault.getTimeframe()));
+                            fi.injectFault();
                     }
             }
             Cart cart = getCartService().getCartByUser(user.getId());
@@ -149,6 +154,23 @@ public class Carts2 {
     }
 
     /**
+     * Helper for time frame parser and comparison
+     * @param timeFrame
+     * @return
+     * @throws Exception
+     */
+    private boolean checkTime(String timeFrame){
+        Calendar systemTime = new GregorianCalendar();
+        String startTime = timeFrame.substring(0, 5);
+        String[] parsedTime = startTime.split(":");
+
+        if(systemTime.get(Calendar.HOUR_OF_DAY) == Integer.parseInt(parsedTime[0]) && systemTime.get(Calendar.MINUTE) == Integer.parseInt(parsedTime[1])){
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Gets all the items from cart
      * Either by Cart Session or from mysql table "cart" using user id
      *
@@ -161,13 +183,13 @@ public class Carts2 {
     @Produces(MediaType.APPLICATION_JSON)
     public String getAllItems(@Context HttpServletRequest req) throws Exception {
         Gson gsonGetAllItems = new Gson();
-        ShoppingCart2 shoppingCart = new ShoppingCart2();
+        ShoppingCart shoppingCart = new ShoppingCart();
         try {
             String username = req.getHeader("USERNAME");
             User user = getUserService().getMemberByLoginName(username);
             List<Item> cartItems = getCartService().getAllItemsByUser(user.getId());
             for (Item cartEntry : cartItems) {
-                ShoppingCartItem2 item = new ShoppingCartItem2();
+                ShoppingCartItem item = new ShoppingCartItem();
                 item.setId(String.valueOf(cartEntry.getId()));
                 item.setImagePath(cartEntry.getImagePath());
                 item.setTitle(cartEntry.getTitle());
@@ -303,7 +325,7 @@ public class Carts2 {
         List<Fault> lsFault = new ArrayList<Fault>();
         try {
             if(!StringUtils.isBlank(username)){
-                lsFault = getFIBugService().getallbugsbyuser(username);
+                lsFault = getFIBugService().getAllBugsByUser(username);
             }
         } catch (Exception ex) {
             log.error(ex);
