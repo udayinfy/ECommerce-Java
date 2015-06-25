@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface FaultServiceInterface {
 
-    void SaveFIBugs(Fault fibugs);
+    void saveFIBugs(Fault fibugs);
 
     List<Fault> getallbugsbyuser(String username);
 }

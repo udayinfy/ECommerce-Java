@@ -28,7 +28,7 @@ public class FaultService implements FaultServiceInterface {
      *
      * @param fault object
      */
-    public void SaveFIBugs(Fault fault) {
+    public void saveFIBugs(Fault fault) {
         faultPersistence.save(fault);
     }
 

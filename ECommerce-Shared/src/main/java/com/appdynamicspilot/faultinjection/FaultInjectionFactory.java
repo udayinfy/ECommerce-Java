@@ -7,9 +7,12 @@ public class FaultInjectionFactory {
     
     public FaultInjection getFaultInjection(String faultType){
 
-    	if(faultType.equalsIgnoreCase("server")){
-    		return new ServerFaultInjection();
+    	if(faultType.equalsIgnoreCase("memoryleak")){
+    		return new MemoryLeakInjection();
     	}
+		if(faultType.equalsIgnoreCase("cpuburner")){
+			return new CPUBurnerInjection();
+		}
     	return null;
     }
 }

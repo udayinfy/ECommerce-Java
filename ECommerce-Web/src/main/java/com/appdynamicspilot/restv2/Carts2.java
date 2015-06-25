@@ -98,10 +98,10 @@ public class Carts2 {
     public String saveItemInCart(@Context HttpServletRequest req, @PathParam("id") Long id) throws Exception {
 
         FaultInjectionFactory fiFactory = new FaultInjectionFactory();
-
+        FaultInjection fi = null;
         //parameters for memory leak injection
-       // this.objectCount = NumberUtils((req.getSession(true).getAttribute("count"), 0));
-       // this.objectSize = NumberUtils((req.getSession(true).getAttribute("size"), 0));
+        // this.objectCount = NumberUtils((req.getSession(true).getAttribute("count"), 0));
+        // this.objectSize = NumberUtils((req.getSession(true).getAttribute("size"), 0));
 
         Gson gsonSaveItemsToCart = new Gson();
         CartResponse response = new CartResponse();
@@ -122,9 +122,12 @@ public class Carts2 {
                 List<Fault> lsFault = getFIBugService().getallbugsbyuser(username);
                 for(Fault fault : lsFault){
                     log.info(fault.getUsername() + "," + fault.getBugname());
-                }
+                    //Injecting fault irrespective of time for now. TODO: Add code for time frame.
+                    log.info(fault.getTimeframe());
+                    fi = fiFactory.getFaultInjection(fault.getBugname());
+                    fi.injectFault();
+                    }
             }
-
             Cart cart = getCartService().getCartByUser(user.getId());
             if (cart == null) {
                 cart = new Cart();
@@ -136,10 +139,10 @@ public class Carts2 {
                 cart.addItem(item);
                 getCartService().updateItemInCart(cart);
             }
-
             response.setCartSize(String.valueOf(cart.getCartSize()));
             response.setCartTotal(cart.getCartTotal());
-        } catch (Exception e) {
+
+        }catch (Exception e) {
             log.error(e);
         }
         return gsonSaveItemsToCart.toJson(response);
@@ -273,12 +276,12 @@ public class Carts2 {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public String SaveBugsForFaultInjection(List<Fault> lsfault) throws Exception {
+    public String saveBugsForFaultInjection(List<Fault> lsfault) throws Exception {
         String returnMessage = "";
         try {
             if (lsfault != null && lsfault.size() > 0) {
                 for(Fault fault : lsfault) {
-                    getFIBugService().SaveFIBugs(fault);
+                    getFIBugService().saveFIBugs(fault);
                 }
                 returnMessage = "Fault(s) injected successfully";
             } else{
@@ -295,7 +298,7 @@ public class Carts2 {
     @Path("/readfaults")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Fault> ReadBugsForFaultInjection(@Context HttpServletRequest req) throws Exception {
+    public List<Fault> readBugsForFaultInjection(@Context HttpServletRequest req) throws Exception {
         String username = req.getHeader("USERNAME");
         List<Fault> lsFault = new ArrayList<Fault>();
         try {
