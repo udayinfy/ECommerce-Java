@@ -55,6 +55,25 @@ public class customerSurvey {
         }
 
         String url = prop.getProperty("jms.url");
+        String duration = prop.getProperty("duration");
+        boolean runForever = false;
+        int runDuration = 1;
+
+        if (duration.trim().equalsIgnoreCase("forever")) {
+            runForever = true;
+        }
+        else {
+            if (duration.trim().matches("^[1-9]\\d*$")) {
+                try {
+                    runDuration = Integer.parseInt(duration.trim());
+                } catch (NumberFormatException e) {
+                    System.err.println("Duration is invalid: " + duration.trim() + " " + e.toString());
+                    runDuration = 1;
+                }
+            }
+        }
+        System.out.println("Properties duration: " + duration.trim() + " runDuration = " + runDuration + " Forever = " + runForever);
+
         ConnectionFactory factory = new ActiveMQConnectionFactory(url);
         Connection connection = null;
 
@@ -67,7 +86,9 @@ public class customerSurvey {
             JMSMessageListener listener = new JMSMessageListener();
             consumer.setMessageListener(listener);
             connection.start();
-            Thread.sleep(60 * 1000);
+            do {
+                Thread.sleep(runDuration * 60 * 1000);
+            } while (runForever);
         }
         catch (JMSException | InterruptedException e) {
             if (e instanceof JMSException)
