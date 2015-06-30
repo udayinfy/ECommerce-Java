@@ -35,6 +35,7 @@ import javax.annotation.Resource;
 import javax.jms.Queue;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
+import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
@@ -100,10 +101,6 @@ public class Carts {
     @Produces(MediaType.APPLICATION_JSON)
     public String saveItemInCart(@Context HttpServletRequest req, @PathParam("id") Long id) throws Exception {
 
-        FaultInjectionFactory fiFactory = new FaultInjectionFactory();
-        FaultInjection fi = null;
-
-
         Gson gsonSaveItemsToCart = new Gson();
         CartResponse response = new CartResponse();
         try {
@@ -120,18 +117,14 @@ public class Carts {
              *  Applicable only for Fault Injection
              */
             if(!StringUtils.isBlank(username)){
-                List<Fault> lsFault = getFIBugService().getAllBugsByUser(username);
-                for(Fault fault : lsFault){
-                    log.info(fault.getUsername() + ", " + fault.getBugname() + ", " + fault.getTimeframe());
-
-                    //Creating Fault injection object parsing the bugName removing spaces.
-                    fi = fiFactory.getFaultInjection(fault.getBugname().replace(" ", ""));
-
-                    //Parsing time frame and calling the inject fault method based on time and user.
-                    if(username == fault.getUsername())
-                        if(checkTime(fault.getTimeframe()));
-                            fi.injectFault();
-                    }
+                List<Fault> lsFaultFromCache =  (List<Fault>) CacheManager.getInstance().get(username + "faultCache");
+                if(lsFaultFromCache != null && lsFaultFromCache.size() > 0){
+                    injectFault(username,lsFaultFromCache);
+                }
+                else {
+                    List<Fault> lsFault = getFIBugService().getAllBugsByUser(username);
+                    injectFault(username,lsFault);
+                }
             }
             Cart cart = getCartService().getCartByUser(user.getId());
             if (cart == null) {
@@ -151,6 +144,27 @@ public class Carts {
             log.error(e);
         }
         return gsonSaveItemsToCart.toJson(response);
+    }
+
+    /**
+     * Injects Faults
+     * @param username
+     * @param lsFault - List of faults available
+     */
+    private void injectFault(String username, List<Fault> lsFault){
+        FaultInjectionFactory fiFactory = new FaultInjectionFactory();
+        FaultInjection fi = null;
+        for(Fault fault : lsFault){
+
+            //Creating Fault injection object parsing the bugName removing spaces.
+            fi = fiFactory.getFaultInjection(fault.getBugname().replace(" ", ""));
+
+            //Parsing time frame and calling the inject fault method based on time and user.
+            if(username == fault.getUsername()) {
+                if (checkTime(fault.getTimeframe())) ;
+                fi.injectFault();
+            }
+        }
     }
 
     /**
@@ -298,12 +312,27 @@ public class Carts {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public String saveBugsForFaultInjection(List<Fault> lsfault) throws Exception {
+    public String saveBugsForFaultInjection(List<Fault> lsFault) throws Exception {
         String returnMessage = "";
+        String userName = "";
         try {
-            if (lsfault != null && lsfault.size() > 0) {
-                for(Fault fault : lsfault) {
+            if (lsFault != null && lsFault.size() > 0) {
+                for(Fault fault : lsFault) {
+                    userName = fault.getUsername();
                     getFIBugService().saveFIBugs(fault);
+                }
+
+                //Check if cache already exists
+                List<Fault> lsFaultFromCache =  (List<Fault>) CacheManager.getInstance().get(userName + "faultCache");
+                if(lsFaultFromCache != null && lsFaultFromCache.size() > 0){
+                    //If yes, get the existing list and add it to the newly created list
+                    for(Fault fault : lsFault) {
+                        lsFaultFromCache.add(fault);
+                    }
+                    CacheManager.getInstance().put(userName + "faultCache", lsFaultFromCache);
+                }
+                else {
+                    CacheManager.getInstance().put(userName + "faultCache", lsFault);
                 }
                 returnMessage = "Fault(s) injected successfully";
             } else{
