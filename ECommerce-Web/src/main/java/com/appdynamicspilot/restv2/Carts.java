@@ -38,10 +38,9 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Path("/json/cart")
 public class Carts {
@@ -174,12 +173,29 @@ public class Carts {
      * @throws Exception
      */
     private boolean checkTime(String timeFrame){
-        Calendar systemTime = new GregorianCalendar();
-        String startTime = timeFrame.substring(0, 5);
-        String[] parsedTime = startTime.split(":");
+        //Variables used for comparison with current date in the parsed format.
+        Date parsedStartTime = null, parsedEndTime = null, parsedCurrentTime = null;
+        Calendar cal = new GregorianCalendar();
 
-        if(systemTime.get(Calendar.HOUR_OF_DAY) == Integer.parseInt(parsedTime[0]) && systemTime.get(Calendar.MINUTE) == Integer.parseInt(parsedTime[1])){
-            return true;
+        //Parsing the date according to Hours, Minutes set on the UI and setting the Locale to US.
+        SimpleDateFormat parser = new SimpleDateFormat("HH:mm", Locale.US);
+
+        String startTimeString = timeFrame.substring(0, 5);
+        String endTimeString = timeFrame.substring(8);
+
+        String currentTime = cal.get(Calendar.HOUR_OF_DAY)+ ":" +cal.get(Calendar.MINUTE);
+
+
+        try {
+            parsedStartTime= parser.parse(startTimeString);
+            parsedEndTime = parser.parse(endTimeString);
+            parsedCurrentTime = parser.parse(currentTime);
+            //returns only if the time is within the time range selected on the UI.
+            if(parsedCurrentTime.after(parsedStartTime) && parsedCurrentTime.before(parsedEndTime)){
+                return true;
+            }
+        } catch (ParseException e) {
+            log.error(e);
         }
         return false;
     }
@@ -329,6 +345,7 @@ public class Carts {
                     for(Fault fault : lsFault) {
                         lsFaultFromCache.add(fault);
                     }
+
                     CacheManager.getInstance().put(userName + "faultCache", lsFaultFromCache);
                 }
                 else {
