@@ -21,6 +21,7 @@ public class CPUBurnerInjection implements FaultInjection {
         long startTime = System.currentTimeMillis();
         causeCPUBurn(10);
         long endTime = System.currentTimeMillis();
+        log.info(" caused CPU Burn for " + (endTime - startTime));
         return " caused CPU Burn for " + (endTime - startTime);
     }
 
@@ -57,16 +58,5 @@ public class CPUBurnerInjection implements FaultInjection {
                         new Random().nextDouble())));
         String s2 = new String(Double.toString(d));
         return s1 + s2;
-    }
-
-
-    @Override
-    public String injectFault(List<String> params) {
-        return null;
-    }
-
-    @Override
-    public void test() {
-
     }
 }

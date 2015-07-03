@@ -1,5 +1,7 @@
 package com.appdynamicspilot.faultinjection;
 
+import org.apache.log4j.Logger;
+
 /**
  * Created by shiv.loka on 6/12/15.
  */

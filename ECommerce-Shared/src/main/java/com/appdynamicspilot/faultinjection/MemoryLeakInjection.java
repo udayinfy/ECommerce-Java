@@ -29,30 +29,16 @@ public class MemoryLeakInjection implements FaultInjection {
 
     @Override
     public String injectFault() {
-
-        Random random = new Random();
-
         /*this block is used to cause memory leak on the server*/
-
         causeMemoryLeak(OBJECT_COUNT, OBJECT_SIZE_IN_BYTES);
-
+        log.info("Caused memory leak on the server");
         return "Caused memory leak on the server";
-    }
-
-    @Override
-    public String injectFault(List<String> params) {
-        return null;
-    }
-
-    @Override
-    public void test() {
-
     }
 
     /**
      * Causes memory leak on the server
      */
-    public void causeMemoryLeak(int objectCount, int objectSizeInByte) {
+    private void causeMemoryLeak(int objectCount, int objectSizeInByte) {
         if (objectCount <= 0) {
             throw new IllegalArgumentException("Invalid objectCount");
         }
@@ -125,6 +111,4 @@ public class MemoryLeakInjection implements FaultInjection {
         }
         this.clearPercent.set(clearPercent);
     }
-
-
 }
