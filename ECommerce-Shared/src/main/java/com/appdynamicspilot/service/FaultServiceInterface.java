@@ -9,7 +9,9 @@ import java.util.List;
  */
 public interface FaultServiceInterface {
 
-    void saveFIBugs(Fault fibugs);
+    void saveFaults(Fault fault);
 
-    List<Fault> getAllBugsByUser(String username);
+    List<Fault> getAllFaultsByUser(String userName);
+
+    int deleteFaults(String userName, String faultName);
 }

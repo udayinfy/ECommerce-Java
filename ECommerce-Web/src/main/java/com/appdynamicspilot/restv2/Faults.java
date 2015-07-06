@@ -22,6 +22,7 @@ public class Faults {
 
     private static final Logger log = Logger.getLogger(Faults.class.getName());
     FaultUtils faultUtils = new FaultUtils();
+
     /**
      * Gets FaultService bean
      *
@@ -36,14 +37,14 @@ public class Faults {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public String saveBugsForFaultInjection(List<Fault> lsFault) throws Exception {
+    public String saveFaults(List<Fault> lsFault) throws Exception {
         String returnMessage = "";
         String userName = "";
         try {
             if (lsFault != null && lsFault.size() > 0) {
                 for (Fault fault : lsFault) {
                     userName = fault.getUsername();
-                    getFIBugService().saveFIBugs(fault);
+                    getFIBugService().saveFaults(fault);
                 }
                 faultUtils.saveCaching(userName, lsFault);
                 returnMessage = "Fault(s) injected successfully";
@@ -62,11 +63,11 @@ public class Faults {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public String injectBugsForFaultInjection(List<Fault> lsFault) throws Exception {
+    public String injectFaults(List<Fault> lsFault) throws Exception {
         String returnMessage = "";
         try {
             if (lsFault != null && lsFault.size() > 0) {
-                faultUtils.injectFault(lsFault,true);
+                faultUtils.injectFault(lsFault, true);
                 returnMessage = "Fault(s) injected successfully";
             } else {
                 returnMessage = "No Fault received";
@@ -82,12 +83,12 @@ public class Faults {
     @Path("/readfaults")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Fault> readBugsForFaultInjection(@Context HttpServletRequest req) throws Exception {
-        String username = req.getHeader("USERNAME");
+    public List<Fault> readFaults(@Context HttpServletRequest req) throws Exception {
+        String userName = req.getHeader("USERNAME");
         List<Fault> lsFault = new ArrayList<Fault>();
         try {
-            if (!StringUtils.isBlank(username)) {
-                lsFault = getFIBugService().getAllBugsByUser(username);
+            if (!StringUtils.isBlank(userName)) {
+                lsFault = getFIBugService().getAllFaultsByUser(userName);
             }
         } catch (Exception ex) {
             log.error(ex);
@@ -95,6 +96,20 @@ public class Faults {
         return lsFault;
     }
 
-
+    @Path("/stopfaults")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public int stopFaults(@Context HttpServletRequest req) throws Exception {
+        String userName = req.getHeader("USERNAME");
+        String faultName = req.getHeader("FAULTNAME");
+        int deletedRows = 0;
+        try {
+            faultUtils.deleteCaching(userName,faultName);
+            deletedRows = getFIBugService().deleteFaults(userName, faultName);
+        } catch (Exception ex) {
+            log.error(ex);
+        }
+        return deletedRows;
+    }
 
 }

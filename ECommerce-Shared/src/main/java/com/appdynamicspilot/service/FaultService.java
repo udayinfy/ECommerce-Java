@@ -28,11 +28,13 @@ public class FaultService implements FaultServiceInterface {
      *
      * @param fault object
      */
-    public void saveFIBugs(Fault fault) {
+    public void saveFaults(Fault fault) {
         faultPersistence.save(fault);
     }
 
-    public List<Fault> getAllBugsByUser(String username) {
-        return faultPersistence.getallbugsbyuser(username);
+    public List<Fault> getAllFaultsByUser(String userName) {
+        return faultPersistence.getAllFaultsByUser(userName);
     }
+
+    public int deleteFaults(String userName, String faultName) { return faultPersistence.deleteFaults(userName,faultName);}
 }

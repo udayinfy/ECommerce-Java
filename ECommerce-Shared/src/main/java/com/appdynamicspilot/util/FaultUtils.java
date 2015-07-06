@@ -27,7 +27,7 @@ public class FaultUtils {
             //Parsing time frame and calling the inject fault method based on time and user.
             if (!injectNow && checkTime(fault.getTimeframe())) {
                 instantiateFault(fault);
-            } else if(injectNow){
+            } else if (injectNow) {
                 instantiateFault(fault);
             }
         }
@@ -70,6 +70,7 @@ public class FaultUtils {
 
     /**
      * Instantiate the fault
+     *
      * @param fault
      */
     private void instantiateFault(Fault fault) {
@@ -83,10 +84,11 @@ public class FaultUtils {
 
     /**
      * Save Caching
+     *
      * @param userName
      * @param lsFault
      */
-    public void saveCaching(String userName, List<Fault> lsFault){
+    public void saveCaching(String userName, List<Fault> lsFault) {
         //Check if cache already exists
         List<Fault> lsFaultFromCache = (List<Fault>) CacheManager.getInstance().get(userName + "faultCache");
         if (lsFaultFromCache != null && lsFaultFromCache.size() > 0) {
@@ -94,20 +96,41 @@ public class FaultUtils {
             for (Fault fault : lsFault) {
                 lsFaultFromCache.add(fault);
             }
-
+            CacheManager.getInstance().clear(userName + "faultCache");
             CacheManager.getInstance().put(userName + "faultCache", lsFaultFromCache);
         } else {
+            CacheManager.getInstance().clear(userName + "faultCache");
             CacheManager.getInstance().put(userName + "faultCache", lsFault);
         }
     }
 
     /**
      * Read Caching
+     *
      * @param userName
      * @return
      */
-    public List<Fault> readCaching(String userName){
+    public List<Fault> readCaching(String userName) {
         return (List<Fault>) CacheManager.getInstance().get(userName + "faultCache");
+    }
+
+    /**
+     * Delete Caching
+     *
+     * @param userName
+     * @param faultName
+     */
+    public void deleteCaching(String userName, String faultName) {
+        List<Fault> lsFaultFromCache = (List<Fault>) CacheManager.getInstance().get(userName + "faultCache");
+        if (lsFaultFromCache != null && lsFaultFromCache.size() > 0) {
+            for (Fault fault : lsFaultFromCache) {
+                if (fault.getUsername().trim().equalsIgnoreCase(userName.trim()) && fault.getBugname().trim().equalsIgnoreCase(faultName.trim())) {
+                    lsFaultFromCache.remove(fault);
+                }
+            }
+            CacheManager.getInstance().clear(userName + "faultCache");
+            CacheManager.getInstance().put(userName + "faultCache", lsFaultFromCache);
+        }
     }
 
 }
