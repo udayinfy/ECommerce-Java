@@ -104,8 +104,8 @@ public class Faults {
         String faultName = req.getHeader("FAULTNAME");
         int deletedRows = 0;
         try {
-            faultUtils.deleteCaching(userName,faultName);
             deletedRows = getFIBugService().deleteFaults(userName, faultName);
+            faultUtils.deleteCaching(userName,faultName);
         } catch (Exception ex) {
             log.error(ex);
         }

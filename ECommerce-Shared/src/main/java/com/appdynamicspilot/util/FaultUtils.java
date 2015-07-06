@@ -123,9 +123,10 @@ public class FaultUtils {
     public void deleteCaching(String userName, String faultName) {
         List<Fault> lsFaultFromCache = (List<Fault>) CacheManager.getInstance().get(userName + "faultCache");
         if (lsFaultFromCache != null && lsFaultFromCache.size() > 0) {
-            for (Fault fault : lsFaultFromCache) {
-                if (fault.getUsername().trim().equalsIgnoreCase(userName.trim()) && fault.getBugname().trim().equalsIgnoreCase(faultName.trim())) {
-                    lsFaultFromCache.remove(fault);
+
+            for(int i=0; i<lsFaultFromCache.size(); i++) {
+                if (lsFaultFromCache.get(i).getUsername().equals(userName.trim()) && lsFaultFromCache.get(i).getBugname().equals(faultName.trim())) {
+                    lsFaultFromCache.remove(i);
                 }
             }
             CacheManager.getInstance().clear(userName + "faultCache");
