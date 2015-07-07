@@ -260,6 +260,8 @@ public class Carts {
             if (orderIdList.size() > 0 && !outOfStock) {
                 getMessageProducer().sendMessageWithOrderId(orderIds, user.getEmail());
                 getMessageProducer().sendTextMessageWithOrderId();
+                //Removing items from cart, if success
+                getCartService().deleteCartItems(user.getId());
                 return "Total amount is $" + cart.getCartTotal() + " Order ID(s) for your order(s) : " + orderIds;
             } else {
                 if (getMessageProducer() != null) {
