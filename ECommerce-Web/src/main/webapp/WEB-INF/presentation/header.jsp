@@ -1,5 +1,13 @@
 <%@ taglib uri="/struts-tags" prefix="s" %>
+<script>
+    window.onload = function() {
+        if (ADRUM)  {
+            ADRUM.command ("addUserData", "username", "${user.email}");
+            ADRUM.command ("addUserData", "sessionId", "<%= session.getId() %>");
+        }
 
+    }
+</script>
 <div class="mainContainer">
     <div class="innerContainer">
         <div class="header">
