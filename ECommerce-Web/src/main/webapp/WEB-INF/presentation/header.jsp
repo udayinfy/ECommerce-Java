@@ -2,7 +2,7 @@
 <script>
     window.onload = function() {
         if (ADRUM)  {
-            ADRUM.command ("addUserData", "username", "${user.email}");
+            ADRUM.command ("addUserData", "username", "${session.USER.email}");
             ADRUM.command ("addUserData", "sessionId", "<%= session.getId() %>");
         }
 
@@ -14,7 +14,7 @@
             <s:if test="#session.USER != null">
                 <span style="color:#FFFFFF;text-align:right;width:100%;float:left;cursor:pointer;text-decoration:underline;font-size:12px;"
                       onclick="logout();">Logout</span>
-
+                                                                         5``
             </s:if>
             <div class="logo"><img src="images/acmeonline.jpg"/></div>
 

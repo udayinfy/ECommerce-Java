@@ -27,7 +27,7 @@ import java.util.logging.Logger;
                 client.deleteMessage(new DeleteMessageRequest(getQueue().getQueueUrl(), message.getReceiptHandle()));
                 logger.info("Message Deleted:" + message.getReceiptHandle());
             }
-            try {Thread.sleep(3*1000);} catch(InterruptedException ie) {}
+            try {Thread.sleep(1*1000);} catch(InterruptedException ie) {}
         }
 
     }
