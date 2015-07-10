@@ -38,6 +38,7 @@ public class OracleStatementExecutor extends OracleQueryExecutor {
         } catch (SQLException sqle) {
             logger.error("This may be ignored in case of Oracle is not setup");
             logger.error(sqle.getMessage());
+            logger.error(sqle.getStackTrace());
         }  finally {
             if (connection != null) {try{connection.close();}catch (SQLException sqle) {}}
             if (stmt != null) {try{stmt.close();}catch (SQLException sqle) {}}
