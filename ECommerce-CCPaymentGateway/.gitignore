@@ -1,0 +1,21 @@
+.idea/**
+.gradle/**
+/**.class
+build/**
+
+**/*.iml
+**/*.iws
+**/*.ipr
+
+# Gradle
+build/
+.gradle/
+gradle/
+
+# Mac
+.DS_Store
+
+# Maven
+log/
+target/
+
