@@ -22,6 +22,8 @@ import com.appdynamicspilot.model.User;
 import com.appdynamicspilot.persistence.UserPersistence;
 import com.appdynamicspilot.util.MD5;
 
+import java.util.List;
+
 
 public class UserService {
 	private static final Logger log = Logger.getLogger(UserService.class);
@@ -37,6 +39,10 @@ public class UserService {
 
 	public User getMemberByLoginName(String email) {
 		return userPersistence.getMemberByEmail(email);
+	}
+
+	public List<User> getAllUser() {
+		return userPersistence.getAllUser();
 	}
 
 	public UserPersistence getUserPersistence() {

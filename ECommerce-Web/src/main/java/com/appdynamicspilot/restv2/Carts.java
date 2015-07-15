@@ -29,7 +29,6 @@ import org.apache.log4j.Logger;
 import javax.annotation.Resource;
 import javax.jms.Queue;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -37,8 +36,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Path("/json/cart")
-public class Carts2 {
-    private static final Logger log = Logger.getLogger(Carts2.class.getName());
+public class Carts {
+    private static final Logger log = Logger.getLogger(Carts.class.getName());
 
     // Not used in rest
     @Resource(name = "OrderQueue")
@@ -125,13 +124,13 @@ public class Carts2 {
     @Produces(MediaType.APPLICATION_JSON)
     public String getAllItems(@Context HttpServletRequest req) throws Exception {
         Gson gsonGetAllItems = new Gson();
-        ShoppingCart2 shoppingCart = new ShoppingCart2();
+        ShoppingCart shoppingCart = new ShoppingCart();
         try {
             String username = req.getHeader("USERNAME");
             User user = getUserService().getMemberByLoginName(username);
             List<Item> cartItems = getCartService().getAllItemsByUser(user.getId());
             for (Item cartEntry : cartItems) {
-                ShoppingCartItem2 item = new ShoppingCartItem2();
+                ShoppingCartItem item = new ShoppingCartItem();
                 item.setId(String.valueOf(cartEntry.getId()));
                 item.setImagePath(cartEntry.getImagePath());
                 item.setTitle(cartEntry.getTitle());

@@ -31,10 +31,25 @@ public class UserPersistence extends BasePersistenceImpl {
      */
     private static final Logger LOGGER = Logger.getLogger(UserPersistence.class);
 
+    /**
+     * Get user information by email
+     * @param email
+     * @return user
+     */
     public User getMemberByEmail(String email) {
         Query q = getEntityManager().createQuery("SELECT u from User u WHERE u.email=:email");
         q.setParameter("email", email);
         List<User> memberList = (List<User>) q.getResultList();
         return (ArgumentUtils.isNullOrEmpty(memberList) ? null : memberList.get(0));
+    }
+
+    /**
+     * Get all users
+     * @return list of all users
+     */
+    public List<User> getAllUser(){
+        Query q = getEntityManager().createQuery("SELECT u from User u");
+        List<User> memberList = (List<User>) q.getResultList();
+        return (ArgumentUtils.isNullOrEmpty(memberList) ? null : memberList);
     }
 }

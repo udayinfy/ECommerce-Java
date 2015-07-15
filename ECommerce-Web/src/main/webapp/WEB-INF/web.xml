@@ -26,8 +26,9 @@
                 com.appdynamicspilot.rest.CatalogRequest,
                 com.appdynamicspilot.rest.UserLogin,
                 com.appdynamicspilot.rest.Fulfillment,
-                com.appdynamicspilot.restv2.Carts2,
-                com.appdynamicspilot.restv2.Items2
+                com.appdynamicspilot.restv2.Carts,
+                com.appdynamicspilot.restv2.Items,
+                com.appdynamicspilot.restv2.Users
             </param-value>
         </init-param>
     </servlet>

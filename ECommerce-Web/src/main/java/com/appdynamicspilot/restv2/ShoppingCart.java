@@ -21,30 +21,30 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-public class ShoppingCart2 implements java.io.Serializable {
-    Logger log = Logger.getLogger(ShoppingCart2.class);
+public class ShoppingCart implements java.io.Serializable {
+    Logger log = Logger.getLogger(ShoppingCart.class);
 
-    private List<ShoppingCartItem2> items;
+    private List<ShoppingCartItem> items;
 
-    public ShoppingCart2() {
-        items = new ArrayList<ShoppingCartItem2>();
+    public ShoppingCart() {
+        items = new ArrayList<ShoppingCartItem>();
     }
 
-    public void addItem(ShoppingCartItem2 item) {
+    public void addItem(ShoppingCartItem item) {
         items.add(item);
     }
 
-    public void removeItem(ShoppingCartItem2 item) {
+    public void removeItem(ShoppingCartItem item) {
         items.remove(item);
     }
 
-    public List<ShoppingCartItem2> getAllItems() {
+    public List<ShoppingCartItem> getAllItems() {
         return items;
     }
 
     public double getCartTotal() {
         double total = 0.0;
-        for (ShoppingCartItem2 item : items) {
+        for (ShoppingCartItem item : items) {
             total += item.getPrice();
         }
         return total;

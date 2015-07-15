@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "cart-item")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ShoppingCartItem2 implements java.io.Serializable {
+public class ShoppingCartItem implements java.io.Serializable {
 
     @XmlElement
     private String id;
