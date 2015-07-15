@@ -37,4 +37,15 @@ public class UserPersistence extends BasePersistenceImpl {
         List<User> memberList = (List<User>) q.getResultList();
         return (ArgumentUtils.isNullOrEmpty(memberList) ? null : memberList.get(0));
     }
+
+    /**
+     * Get all users
+     *
+     * @return list of all users
+     */
+    public List<User> getAllUser() {
+        Query q = getEntityManager().createQuery("SELECT u from User u");
+        List<User> memberList = (List<User>) q.getResultList();
+        return (ArgumentUtils.isNullOrEmpty(memberList) ? null : memberList);
+    }
 }

@@ -28,7 +28,8 @@
                 com.appdynamicspilot.rest.Fulfillment,
                 com.appdynamicspilot.restv2.Carts,
                 com.appdynamicspilot.restv2.Items,
-                com.appdynamicspilot.restv2.Faults
+                com.appdynamicspilot.restv2.Faults,
+                com.appdynamicspilot.restv2.Users
             </param-value>
         </init-param>
     </servlet>
