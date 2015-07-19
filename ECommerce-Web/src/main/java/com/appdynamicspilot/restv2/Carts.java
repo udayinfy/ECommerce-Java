@@ -116,13 +116,13 @@ public class Carts {
             if (!StringUtils.isBlank(username)) {
                 List<Fault> lsFaultFromCache = faultUtils.readCaching(username);
                 if (lsFaultFromCache != null && lsFaultFromCache.size() > 0 && lsFaultFromCache.get(0).getUsername().trim().equalsIgnoreCase(username.trim())) {
-                    log.info("From Caching");
+                    log.info("From Caching , Fault size: " + lsFaultFromCache.size());
                     faultUtils.injectFault(lsFaultFromCache, false);
                 } else {
                     List<Fault> lsFault = getFIBugService().getAllFaultsByUser(username);
                     if (lsFault != null && lsFault.size() > 0 && lsFault.get(0).getUsername().trim().equalsIgnoreCase(username.trim())) {
-                        log.info("From DB");
-                        faultUtils.injectFault(lsFault, false);
+                        log.info("From DB , Fault size: " + lsFaultFromCache.size());
+                                faultUtils.injectFault(lsFault, false);
                     }
                 }
             }

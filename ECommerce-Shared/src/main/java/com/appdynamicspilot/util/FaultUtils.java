@@ -5,6 +5,7 @@ import com.appdynamicspilot.faultinjection.FaultInjectionFactory;
 import com.appdynamicspilot.model.Fault;
 import org.apache.log4j.Logger;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -41,23 +42,23 @@ public class FaultUtils {
      * @throws Exception
      */
     private boolean checkTime(String timeFrame) {
-        //Variables used for comparison with current date in the parsed format.
-        Date parsedStartTime = null, parsedEndTime = null, parsedCurrentTime = null;
-        Calendar cal = new GregorianCalendar();
 
         //Parsing the date according to Hours, Minutes set on the UI and setting the Locale to US.
         SimpleDateFormat parser = new SimpleDateFormat("HH:mm", Locale.US);
 
         String startTimeString = timeFrame.substring(0, 5);
         String endTimeString = timeFrame.substring(8);
-
-        String currentTime = cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE);
-
+        String currentTime = formatDateToString(new Date(),"HH:mm","UTC");
 
         try {
-            parsedStartTime = parser.parse(startTimeString);
-            parsedEndTime = parser.parse(endTimeString);
-            parsedCurrentTime = parser.parse(currentTime);
+            //Variables used for comparison with current date in the parsed format.
+            Date parsedStartTime = parser.parse(startTimeString);
+            log.info("parsedStartTime" + parsedStartTime.toString());
+            Date parsedEndTime = parser.parse(endTimeString);
+            log.info("parsedEndTime" + parsedEndTime.toString());
+            Date parsedCurrentTime = parser.parse(currentTime);
+            log.info("parsedCurrentTime" + parsedCurrentTime.toString());
+
             //returns only if the time is within the time range selected on the UI.
             if (parsedCurrentTime.after(parsedStartTime) && parsedCurrentTime.before(parsedEndTime)) {
                 return true;
@@ -66,6 +67,29 @@ public class FaultUtils {
             log.error(e);
         }
         return false;
+    }
+
+    /**
+     * Utility function to convert java Date to TimeZone format
+     * @param date
+     * @param format
+     * @param timeZone
+     * @return
+     */
+    private String formatDateToString(Date date, String format,
+                                            String timeZone) {
+        // null check
+        if (date == null) return null;
+        // create SimpleDateFormat object with input format
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        // default system timezone if passed null or empty
+        if (timeZone == null || "".equalsIgnoreCase(timeZone.trim())) {
+            timeZone = Calendar.getInstance().getTimeZone().getID();
+        }
+        // set timezone to SimpleDateFormat
+        sdf.setTimeZone(TimeZone.getTimeZone(timeZone));
+        // return Date in required format with timezone as String
+        return sdf.format(date);
     }
 
     /**
