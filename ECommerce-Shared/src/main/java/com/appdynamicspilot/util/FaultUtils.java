@@ -48,7 +48,7 @@ public class FaultUtils {
 
         String startTimeString = timeFrame.substring(0, 5);
         String endTimeString = timeFrame.substring(8);
-        String currentTime = formatDateToString(new Date(),"HH:mm","UTC");
+        String currentTime = formatDateToString(new Date(), "HH:mm", "UTC");
 
         try {
             //Variables used for comparison with current date in the parsed format.
@@ -71,13 +71,14 @@ public class FaultUtils {
 
     /**
      * Utility function to convert java Date to TimeZone format
+     *
      * @param date
      * @param format
      * @param timeZone
      * @return
      */
     private String formatDateToString(Date date, String format,
-                                            String timeZone) {
+                                      String timeZone) {
         // null check
         if (date == null) return null;
         // create SimpleDateFormat object with input format
@@ -114,14 +115,16 @@ public class FaultUtils {
      */
     public void saveCaching(String userName, List<Fault> lsFault) {
         //Check if cache already exists
-        List<Fault> lsFaultFromCache = (List<Fault>) CacheManager.getInstance().get(userName + "faultCache");
-        if (lsFaultFromCache != null && lsFaultFromCache.size() > 0) {
-            //If yes, get the existing list and add it to the newly created list
-            for (Fault fault : lsFault) {
-                lsFaultFromCache.add(fault);
+        if (CacheManager.getInstance().get(userName + "faultCache") != null) {
+            List<Fault> lsFaultFromCache = (List<Fault>) CacheManager.getInstance().get(userName + "faultCache");
+            if(lsFaultFromCache.size() > 0) {
+                //If yes, get the existing list and add it to the newly created list
+                for (Fault fault : lsFault) {
+                    lsFaultFromCache.add(fault);
+                }
+                CacheManager.getInstance().clear(userName + "faultCache");
+                CacheManager.getInstance().put(userName + "faultCache", lsFaultFromCache);
             }
-            CacheManager.getInstance().clear(userName + "faultCache");
-            CacheManager.getInstance().put(userName + "faultCache", lsFaultFromCache);
         } else {
             CacheManager.getInstance().clear(userName + "faultCache");
             CacheManager.getInstance().put(userName + "faultCache", lsFault);
@@ -135,7 +138,10 @@ public class FaultUtils {
      * @return
      */
     public List<Fault> readCaching(String userName) {
-        return (List<Fault>) CacheManager.getInstance().get(userName + "faultCache");
+        if (CacheManager.getInstance().get(userName + "faultCache") != null)
+            return (List<Fault>) CacheManager.getInstance().get(userName + "faultCache");
+        else
+            return null;
     }
 
     /**
@@ -145,16 +151,18 @@ public class FaultUtils {
      * @param faultName
      */
     public void deleteCaching(String userName, String faultName) {
-        List<Fault> lsFaultFromCache = (List<Fault>) CacheManager.getInstance().get(userName + "faultCache");
-        if (lsFaultFromCache != null && lsFaultFromCache.size() > 0) {
 
-            for(int i=0; i<lsFaultFromCache.size(); i++) {
-                if (lsFaultFromCache.get(i).getUsername().equals(userName.trim()) && lsFaultFromCache.get(i).getBugname().equals(faultName.trim())) {
-                    lsFaultFromCache.remove(i);
+        if (CacheManager.getInstance().get(userName + "faultCache") != null) {
+            List<Fault> lsFaultFromCache = (List<Fault>) CacheManager.getInstance().get(userName + "faultCache");
+            if(lsFaultFromCache.size() > 0) {
+                for (int i = 0; i < lsFaultFromCache.size(); i++) {
+                    if (lsFaultFromCache.get(i).getUsername().equals(userName.trim()) && lsFaultFromCache.get(i).getBugname().equals(faultName.trim())) {
+                        lsFaultFromCache.remove(i);
+                    }
                 }
+                CacheManager.getInstance().clear(userName + "faultCache");
+                CacheManager.getInstance().put(userName + "faultCache", lsFaultFromCache);
             }
-            CacheManager.getInstance().clear(userName + "faultCache");
-            CacheManager.getInstance().put(userName + "faultCache", lsFaultFromCache);
         }
     }
 

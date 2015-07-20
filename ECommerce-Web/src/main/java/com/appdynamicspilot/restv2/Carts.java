@@ -36,6 +36,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,21 +110,33 @@ public class Carts {
                 user = getUserService().getMemberByLoginName(username);
             }
 
+            log.info("fault username : " + username);
+
             /**
              *  Reading time range, user name and fault type.
              *  Applicable only for Fault Injection
              */
+            boolean cache = true;
             FaultUtils faultUtils = new FaultUtils();
             if (!StringUtils.isBlank(username)) {
-                List<Fault> lsFaultFromCache = faultUtils.readCaching(username);
-                if (lsFaultFromCache != null && lsFaultFromCache.size() > 0 && lsFaultFromCache.get(0).getUsername().trim().equalsIgnoreCase(username.trim())) {
-                    log.info("From Caching , Fault size: " + lsFaultFromCache.size());
-                    faultUtils.injectFault(lsFaultFromCache, false);
+                if (faultUtils.readCaching(username) != null) {
+                    List<Fault> lsFaultFromCache = faultUtils.readCaching(username);
+                    if (lsFaultFromCache.size() > 0 && lsFaultFromCache.get(0).getUsername().trim().equalsIgnoreCase(username.trim())) {
+                        log.info("From Caching , Fault size: " + lsFaultFromCache.size());
+                        log.info(lsFaultFromCache.get(0).getUsername());
+                        faultUtils.injectFault(lsFaultFromCache, false);
+                    } else {
+                        cache = false;
+                    }
                 } else {
+                    cache = false;
+                }
+                if(!cache){
                     List<Fault> lsFault = getFIBugService().getAllFaultsByUser(username);
                     if (lsFault != null && lsFault.size() > 0 && lsFault.get(0).getUsername().trim().equalsIgnoreCase(username.trim())) {
-                        log.info("From DB , Fault size: " + lsFaultFromCache.size());
-                                faultUtils.injectFault(lsFault, false);
+                        log.info("From DB , Fault size: " + lsFault.size());
+                        log.info(lsFault.get(0).getUsername());
+                        faultUtils.injectFault(lsFault, false);
                     }
                 }
             }
@@ -145,7 +159,7 @@ public class Carts {
             response.setCartTotal(cart.getCartTotal());
 
         } catch (Exception e) {
-            log.error(e);
+            log.error(e.getMessage());
         }
         return gsonSaveItemsToCart.toJson(response);
     }
