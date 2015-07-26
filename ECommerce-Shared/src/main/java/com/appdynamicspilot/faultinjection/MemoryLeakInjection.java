@@ -13,63 +13,50 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class MemoryLeakInjection implements FaultInjection {
 
     private static final Logger log = Logger.getLogger(MemoryLeakInjection.class);
-    public static final int DEFAULT_CLEAR_PERCENT = 90;
-    private String faultName = null;
 
 
 
     /**
      * variables used for causing memory leak
      */
-    private static final int OBJECT_COUNT = 25;
-    private static final int OBJECT_SIZE_IN_BYTES = 20;
+    public static final int DEFAULT_CLEAR_PERCENT = 50;
+    private static final int OBJECT_COUNT = 50000;
+    private static final int OBJECT_SIZE_IN_BYTES = 50000;
     private List<byte[]> list = new ArrayList<byte[]>(DEFAULT_CLEAR_PERCENT);
     private AtomicInteger clearPercent = new AtomicInteger(
             DEFAULT_CLEAR_PERCENT);
 
     @Override
-    public String injectFault() {
+    public void injectFault() {
         /*this block is used to cause memory leak on the server*/
+        long startTime = System.currentTimeMillis();
         causeMemoryLeak(OBJECT_COUNT, OBJECT_SIZE_IN_BYTES);
-        log.info("Caused memory leak on the server");
-        return "Caused memory leak on the server";
+        long endTime = System.currentTimeMillis();
+        log.info("Caused Memory Leak for " + (endTime - startTime) + " milliseconds");
+        clearMemory();
     }
 
     /**
      * Causes memory leak on the server
      */
     private void causeMemoryLeak(int objectCount, int objectSizeInByte) {
-        if (objectCount <= 0) {
-            throw new IllegalArgumentException("Invalid objectCount");
-        }
-        if (objectSizeInByte <= 0) {
-            throw new IllegalArgumentException("Invalid objectSizeInByte");
-        }
-
-        boolean isDebug = log.isDebugEnabled();
-        Runtime runtime = Runtime.getRuntime();
-
         for (int i = 0; i < objectCount; i++)
         {
             byte[] copy = new byte[objectSizeInByte];
             synchronized (this.list) {
                 this.list.add(copy);
             }
+        }
+    }
 
-            long freeMemory = runtime.freeMemory();
-            long totalMemory = runtime.totalMemory();
-            double freePercent = ((double) freeMemory / (double) totalMemory) * 100;
-            if (isDebug) {
-                log.debug("Free memory: " + freeMemory + "; Total Memory: "
-                        + totalMemory);
-            }
+    private void clearMemory(){
 
-            if (freePercent < (double) (100 - this.clearPercent.get())) {
-                if (isDebug) {
-                    log.debug("Clearing memory leak");
-                }
-                this.clear();
-            }
+        Runtime runtime = Runtime.getRuntime();
+        long freeMemory = runtime.freeMemory();
+        long totalMemory = runtime.totalMemory();
+        double freePercent = ((double) freeMemory / (double) totalMemory) * 100;
+        if (freePercent < (double) (100 - this.clearPercent.get())) {
+            this.clear();
         }
     }
 
@@ -92,23 +79,5 @@ public class MemoryLeakInjection implements FaultInjection {
         synchronized (this.list) {
             return this.list.size();
         }
-    }
-
-    public int getClearPercent() {
-        return this.clearPercent.get();
-    }
-
-    /**
-     * Helper class for memory Leak bug
-     * Setting the threshold to clear the data structure preventing crashing the
-     * JVM
-     * @param clearPercent
-     */
-    public void setClearPercent(int clearPercent) {
-        if (clearPercent < 0 || clearPercent > 100) {
-            throw new IllegalArgumentException(
-                    "Invalid clearPercent; Expecting value between 0 to 99");
-        }
-        this.clearPercent.set(clearPercent);
     }
 }

@@ -58,6 +58,7 @@ public class FaultUtils {
             log.info("parsedEndTime" + parsedEndTime.toString());
             Date parsedCurrentTime = parser.parse(currentTime);
             log.info("parsedCurrentTime" + parsedCurrentTime.toString());
+            log.info(parsedCurrentTime.after(parsedStartTime) && parsedCurrentTime.before(parsedEndTime));
 
             //returns only if the time is within the time range selected on the UI.
             if (parsedCurrentTime.after(parsedStartTime) && parsedCurrentTime.before(parsedEndTime)) {
