@@ -19,7 +19,7 @@ public class CPUBurnerInjection implements FaultInjection {
     @Override
     public void injectFault() {
         long startTime = System.currentTimeMillis();
-        causeCPUBurn(90000);
+        causeCPUBurn(30000);
         long endTime = System.currentTimeMillis();
         log.info("Caused CPU Burn for " + (endTime - startTime) + " milliseconds");
     }
