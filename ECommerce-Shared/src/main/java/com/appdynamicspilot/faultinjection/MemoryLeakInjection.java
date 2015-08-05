@@ -2,9 +2,7 @@ package com.appdynamicspilot.faultinjection;
 
 import org.apache.log4j.Logger;
 
-import java.lang.management.GarbageCollectorMXBean;
 import java.lang.management.ManagementFactory;
-import java.lang.management.MemoryPoolMXBean;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,20 +33,25 @@ public class MemoryLeakInjection implements FaultInjection {
     private void causeMemoryLeak() {
         try {
             List<byte[]> list = new ArrayList<byte[]>();
-
-            ManagementFactory.getMemoryMXBean().getHeapMemoryUsage();
             log.info("Heap : " + ManagementFactory.getMemoryMXBean().getHeapMemoryUsage());
-
-            for(int i = 0; i < 300000 ; i ++){
+            long usedMemory = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed();
+            long totalMemory = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax();
+            double usedPercentage = ((double) usedMemory / (double) totalMemory) * 100.0;
+            int i = 0;
+            while (usedPercentage <= 83) {
                 byte[] copy = new byte[1024];
                 synchronized (list) {
                     list.add(copy);
                 }
-                if(i%1000 == 0) {
+                i++;
+                if (i % 1000 == 0) {
                     log.info(i);
                     Thread.sleep(1000);
-                    ManagementFactory.getMemoryMXBean().getHeapMemoryUsage();
                     log.info("Heap : " + ManagementFactory.getMemoryMXBean().getHeapMemoryUsage());
+                    usedMemory = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed();
+                    totalMemory = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax();
+                    usedPercentage = ((double) usedMemory / (double) totalMemory) * 100.0;
+                    log.info("usedPercentage : " + usedPercentage);
                 }
             }
 

@@ -1,8 +1,9 @@
 package com.appdynamicspilot.faultinjection;
 
+import com.sun.management.OperatingSystemMXBean;
 import org.apache.log4j.Logger;
 
-import java.util.List;
+import java.lang.management.ManagementFactory;
 import java.util.Random;
 import java.util.UUID;
 
@@ -18,6 +19,10 @@ public class CPUBurnerInjection implements FaultInjection {
 
     @Override
     public void injectFault() {
+        OperatingSystemMXBean bean = (OperatingSystemMXBean) ManagementFactory
+                .getOperatingSystemMXBean();
+        log.info("Process CPU Load : " + bean.getProcessCpuLoad());
+        log.info("SyStem CPU Load : " + bean.getSystemCpuLoad());
         long startTime = System.currentTimeMillis();
         causeCPUBurn(30000);
         long endTime = System.currentTimeMillis();
