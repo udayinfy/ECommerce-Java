@@ -56,7 +56,7 @@ dependencies {
     //Added Gson for parsing json
     compile 'com.google.code.gson:gson:1.7.2';
 
-    compile files('libs/dot_net_webservice_stub.jar', 'libs/orderservice_stub.jar','libs/ojdbc6.jar');
+    compile files('libs/dot_net_webservice_stub.jar','libs/ojdbc6.jar');
     providedCompile files('libs/javaagent.jar');
 }
 
