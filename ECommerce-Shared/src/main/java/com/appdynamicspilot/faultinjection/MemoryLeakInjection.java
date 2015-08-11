@@ -11,20 +11,16 @@ import java.util.List;
  */
 public class MemoryLeakInjection implements FaultInjection {
 
-    public static final int DEFAULT_CLEAR_PERCENT = 10;
     private static final Logger log = Logger.getLogger(MemoryLeakInjection.class);
-    /**
-     * variables used for causing memory leak
-     */
-    private static final int OBJECT_COUNT = 100;
 
     @Override
-    public void injectFault() {
+    public String injectFault() {
         /*this block is used to cause memory leak on the server*/
         long startTime = System.currentTimeMillis();
         causeMemoryLeak();
         long endTime = System.currentTimeMillis();
         log.info("Caused Memory Leak for " + (endTime - startTime) + " milliseconds");
+        return "Caused Memory Leak for " + (endTime - startTime) + " milliseconds";
     }
 
     /**
@@ -37,6 +33,7 @@ public class MemoryLeakInjection implements FaultInjection {
             long usedMemory = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed();
             long totalMemory = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax();
             double usedPercentage = ((double) usedMemory / (double) totalMemory) * 100.0;
+            log.info("usedPercentage : " + usedPercentage);
             int i = 0;
             while (usedPercentage <= 83) {
                 byte[] copy = new byte[1024];
@@ -45,13 +42,15 @@ public class MemoryLeakInjection implements FaultInjection {
                 }
                 i++;
                 if (i % 1000 == 0) {
-                    log.info(i);
                     Thread.sleep(1000);
-                    log.info("Heap : " + ManagementFactory.getMemoryMXBean().getHeapMemoryUsage());
                     usedMemory = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed();
                     totalMemory = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax();
                     usedPercentage = ((double) usedMemory / (double) totalMemory) * 100.0;
-                    log.info("usedPercentage : " + usedPercentage);
+                    if (i % 100000 == 0) {
+                        log.info(i);
+                        log.info("Heap : " + ManagementFactory.getMemoryMXBean().getHeapMemoryUsage());
+                        log.info("usedPercentage : " + usedPercentage);
+                    }
                 }
             }
 

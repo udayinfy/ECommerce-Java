@@ -3,6 +3,9 @@ package com.appdynamicspilot.util;
 import com.appdynamicspilot.faultinjection.FaultInjection;
 import com.appdynamicspilot.faultinjection.FaultInjectionFactory;
 import com.appdynamicspilot.model.Fault;
+import com.appdynamicspilot.service.FaultService;
+import com.appdynamicspilot.service.FaultServiceInterface;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import java.sql.Timestamp;
@@ -17,21 +20,23 @@ public class FaultUtils {
 
     private static final Logger log = Logger.getLogger(FaultUtils.class.getName());
 
-
     /**
      * Injects Faults
      *
      * @param lsFault - List of faults available
      */
-    public void injectFault(List<Fault> lsFault, boolean injectNow) {
+    public String injectFault(List<Fault> lsFault, boolean injectNow) {
         for (Fault fault : lsFault) {
             //Parsing time frame and calling the inject fault method based on time and user.
             if (!injectNow && checkTime(fault.getTimeframe())) {
-                instantiateFault(fault);
+                return  instantiateFault(fault);
             } else if (injectNow) {
-                instantiateFault(fault);
+                return instantiateFault(fault);
+            } else {
+                return "Faults doesn't fall under the time frame selected";
             }
         }
+        return "Fault list is empty";
     }
 
     /**
@@ -99,13 +104,14 @@ public class FaultUtils {
      *
      * @param fault
      */
-    private void instantiateFault(Fault fault) {
+    private String instantiateFault(Fault fault) {
         //Creating Fault injection object parsing the bugName removing spaces.
         FaultInjectionFactory fiFactory = new FaultInjectionFactory();
         FaultInjection fi = fiFactory.getFaultInjection(fault.getBugname().replace(" ", ""));
         if (fi != null) {
-            fi.injectFault();
+            return fi.injectFault();
         }
+        return "Fault Name is appropriate";
     }
 
     /**

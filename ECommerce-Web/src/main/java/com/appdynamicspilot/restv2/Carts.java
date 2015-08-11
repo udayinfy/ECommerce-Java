@@ -128,10 +128,12 @@ public class Carts {
                 cart.setUser(user);
                 cart.addItem(item);
                 getCartService().saveItemInCart(cart);
-            } else {
+            } else if (cart != null && !cart.findItem(item)) {
                 cart.setUser(user);
                 cart.addItem(item);
                 getCartService().updateItemInCart(cart);
+            } else {
+                log.info("item already exists " + username + " " + id);
             }
             response.setCartSize(String.valueOf(cart.getCartSize()));
             response.setCartTotal(cart.getCartTotal());
@@ -228,41 +230,6 @@ public class Carts {
             }
         }
         Cart cart = getCartService().getCartByUser(user.getId());
-        log.info("UserName : " + username);
-
-        /**
-         *  Reading time range, user name and fault type.
-         *  Applicable only for Fault Injection
-         */
-        List<Fault> lsFault = new ArrayList<Fault>();
-        boolean cache = true;
-        FaultUtils faultUtils = new FaultUtils();
-        if (!StringUtils.isBlank(username)) {
-            if (faultUtils.readCaching(username) != null) {
-                lsFault = faultUtils.readCaching(username);
-                if (lsFault.size() > 0 && lsFault.get(0).getUsername().trim().equalsIgnoreCase(username.trim())) {
-                    log.info("From Caching , Fault size: " + lsFault.size());
-                } else {
-                    cache = false;
-                }
-            } else {
-                cache = false;
-            }
-            if(!cache){
-                lsFault = getFIBugService().getAllFaultsByUser(username);
-                if (lsFault != null && lsFault.size() > 0 && lsFault.get(0).getUsername().trim().equalsIgnoreCase(username.trim())) {
-                    log.info("From DB , Fault size: " + lsFault.size());
-                }
-            }
-        }
-
-        /**
-         * Inject Faults based on time
-         */
-        if(lsFault != null && lsFault.size() > 0){
-            faultUtils.injectFault(lsFault, false);
-        }
-
         if (cart == null) {
             return "Nothing In cart to checkout.";
         }
@@ -353,5 +320,4 @@ public class Carts {
         }
         return "Error occured processing checkout";
     }
-
 }

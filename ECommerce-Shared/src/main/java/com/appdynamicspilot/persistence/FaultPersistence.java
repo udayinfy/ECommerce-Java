@@ -37,6 +37,21 @@ public class FaultPersistence extends BasePersistenceImpl {
     }
 
     /**
+     * Get all the bugs for Fault Injection
+     *
+     * @return List of Bugs
+     */
+    public List<Fault> getAllFaults() {
+        Query q = getEntityManager().createQuery("SELECT f FROM Fault f");
+        List<Fault> lsFaults = q.getResultList();
+        if ((lsFaults == null) || (lsFaults.size() == 0)) {
+            return Collections.EMPTY_LIST;
+        }
+
+        return lsFaults;
+    }
+
+    /**
      * Deletes faults based on user name and fault name
      *
      * @param userName
