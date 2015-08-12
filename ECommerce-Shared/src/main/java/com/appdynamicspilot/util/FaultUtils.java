@@ -25,16 +25,9 @@ public class FaultUtils {
      *
      * @param lsFault - List of faults available
      */
-    public String injectFault(List<Fault> lsFault, boolean injectNow) {
+    public String injectFault(List<Fault> lsFault) {
         for (Fault fault : lsFault) {
-            //Parsing time frame and calling the inject fault method based on time and user.
-            if (!injectNow && checkTime(fault.getTimeframe())) {
-                return  instantiateFault(fault);
-            } else if (injectNow) {
-                return instantiateFault(fault);
-            } else {
-                return "Faults doesn't fall under the time frame selected";
-            }
+            return instantiateFault(fault);
         }
         return "Fault list is empty";
     }
@@ -46,7 +39,7 @@ public class FaultUtils {
      * @return
      * @throws Exception
      */
-    private boolean checkTime(String timeFrame) {
+    public boolean checkTime(String timeFrame) {
 
         //Parsing the date according to Hours, Minutes set on the UI and setting the Locale to US.
         SimpleDateFormat parser = new SimpleDateFormat("HH:mm", Locale.US);
@@ -124,7 +117,7 @@ public class FaultUtils {
         //Check if cache already exists
         if (CacheManager.getInstance().get(userName + "faultCache") != null) {
             List<Fault> lsFaultFromCache = (List<Fault>) CacheManager.getInstance().get(userName + "faultCache");
-            if(lsFaultFromCache.size() > 0) {
+            if (lsFaultFromCache.size() > 0) {
                 //If yes, get the existing list and add it to the newly created list
                 for (Fault fault : lsFault) {
                     lsFaultFromCache.add(fault);
@@ -161,7 +154,7 @@ public class FaultUtils {
 
         if (CacheManager.getInstance().get(userName + "faultCache") != null) {
             List<Fault> lsFaultFromCache = (List<Fault>) CacheManager.getInstance().get(userName + "faultCache");
-            if(lsFaultFromCache.size() > 0) {
+            if (lsFaultFromCache.size() > 0) {
                 for (int i = 0; i < lsFaultFromCache.size(); i++) {
                     if (lsFaultFromCache.get(i).getUsername().equals(userName.trim()) && lsFaultFromCache.get(i).getBugname().equals(faultName.trim())) {
                         lsFaultFromCache.remove(i);

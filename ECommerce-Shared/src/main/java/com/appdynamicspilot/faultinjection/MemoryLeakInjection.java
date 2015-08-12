@@ -29,11 +29,11 @@ public class MemoryLeakInjection implements FaultInjection {
     private void causeMemoryLeak() {
         try {
             List<byte[]> list = new ArrayList<byte[]>();
-            log.info("Heap : " + ManagementFactory.getMemoryMXBean().getHeapMemoryUsage());
+            log.info("Initial Heap : " + ManagementFactory.getMemoryMXBean().getHeapMemoryUsage());
             long usedMemory = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed();
             long totalMemory = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax();
             double usedPercentage = ((double) usedMemory / (double) totalMemory) * 100.0;
-            log.info("usedPercentage : " + usedPercentage);
+            log.info("Initial UsedPercentage : " + usedPercentage);
             int i = 0;
             while (usedPercentage <= 83) {
                 byte[] copy = new byte[1024];
@@ -47,9 +47,8 @@ public class MemoryLeakInjection implements FaultInjection {
                     totalMemory = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax();
                     usedPercentage = ((double) usedMemory / (double) totalMemory) * 100.0;
                     if (i % 100000 == 0) {
-                        log.info(i);
                         log.info("Heap : " + ManagementFactory.getMemoryMXBean().getHeapMemoryUsage());
-                        log.info("usedPercentage : " + usedPercentage);
+                        log.info("UsedPercentage : " + usedPercentage);
                     }
                 }
             }

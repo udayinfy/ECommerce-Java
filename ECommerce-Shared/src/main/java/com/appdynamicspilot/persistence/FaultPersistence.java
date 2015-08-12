@@ -32,7 +32,6 @@ public class FaultPersistence extends BasePersistenceImpl {
         if ((lsFaults == null) || (lsFaults.size() == 0)) {
             return Collections.EMPTY_LIST;
         }
-
         return lsFaults;
     }
 
@@ -47,7 +46,6 @@ public class FaultPersistence extends BasePersistenceImpl {
         if ((lsFaults == null) || (lsFaults.size() == 0)) {
             return Collections.EMPTY_LIST;
         }
-
         return lsFaults;
     }
 

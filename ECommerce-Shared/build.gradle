@@ -1,5 +1,3 @@
-import javax.xml.bind.annotation.XmlElement
-
 apply plugin: 'java'
 
 repositories {

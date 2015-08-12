@@ -2,6 +2,7 @@ package com.appdynamicspilot.restv2;
 
 import com.appdynamicspilot.model.Fault;
 import com.appdynamicspilot.service.FaultService;
+import com.appdynamicspilot.servlet.BooksListServlet;
 import com.appdynamicspilot.util.FaultUtils;
 import com.appdynamicspilot.util.SpringContext;
 import org.apache.commons.lang.StringUtils;
@@ -58,33 +59,6 @@ public class Faults {
                     getFIBugService().saveFaults(fault);
                 }
                 faultUtils.saveCaching(userName, lsFault);
-                returnMessage = "Fault(s) injected successfully";
-            } else {
-                returnMessage = "No Fault received";
-            }
-
-        } catch (Exception ex) {
-            log.error(ex);
-        }
-        return returnMessage;
-    }
-
-    /**
-     * Inject the faults now
-     *
-     * @param lsFault
-     * @return
-     * @throws Exception
-     */
-    @Path("/injectfaults")
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.TEXT_PLAIN)
-    public String injectFaults(List<Fault> lsFault) throws Exception {
-        String returnMessage = "";
-        try {
-            if (lsFault != null && lsFault.size() > 0) {
-                faultUtils.injectFault(lsFault, true);
                 returnMessage = "Fault(s) injected successfully";
             } else {
                 returnMessage = "No Fault received";
@@ -171,29 +145,43 @@ public class Faults {
     @Path("/getfaults")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Fault> getFaults(@Context HttpServletRequest req) throws Exception {
+    public List<Fault> getFaultsBeforeInjecting(@Context HttpServletRequest req) throws Exception {
 
         String username = req.getHeader("USERNAME");
-        return getAllFaults(username);
+        List<Fault> lsFaultReturn = new ArrayList<>();
+        List<Fault> lsFault = new ArrayList<>();
+        try {
+            FaultUtils faultUtils = new FaultUtils();
+            log.info(username);
+            if (!StringUtils.isBlank(username)) {
+                if (faultUtils.readCaching(username) != null) {
+                    lsFault = faultUtils.readCaching(username);
+                } else {
+                    lsFault = getFIBugService().getAllFaultsByUser(username);
+                }
+            }
+            for (Fault fault : lsFault) {
+                if(faultUtils.checkTime(fault.getTimeframe()))
+                    lsFaultReturn.add(fault);
+            }
+        } catch (Exception ex) {
+            log.error(ex);
+        }
+        return lsFaultReturn;
     }
 
     /**
-     * Inject the faults now
+     * Inject the faults now/ Saved faults
      *
      * @return
      * @throws Exception
      */
-    @Path("/injectsavedfaults")
-    @GET
+    @Path("/injectfaults")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public void injectSavedFaultsAsync(@Suspended final AsyncResponse asyncResponse, @Context final HttpServletRequest req) throws Exception {
+    public void injectFaults(@Suspended final AsyncResponse asyncResponse, final List<Fault> lsFault) throws Exception {
         try {
-            final String username = req.getHeader("USERNAME");
-            final List<Fault> lsFault = getAllFaults(username);
-            if (lsFault != null && lsFault.size() > 0 && lsFault.get(0).getUsername().trim().equalsIgnoreCase(username.trim())) {
-                log.info(lsFault.size());
-            }
-
             asyncResponse.setTimeoutHandler(new TimeoutHandler() {
                 @Override
                 public void handleTimeout(AsyncResponse asyncResponse) {
@@ -213,50 +201,14 @@ public class Faults {
                 private String veryExpensiveOperation() {
                     // ... very expensive operation that typically finishes within 6 minutes
                     if (lsFault != null && lsFault.size() > 0) {
-                        return faultUtils.injectFault(lsFault, false);
+                        return faultUtils.injectFault(lsFault);
                     }
-                    return "No Faults being injected.";
+                    return "Fault List is Empty. No Faults being injected.";
                 }
             }).start();
         } catch (Exception ex) {
             log.error(ex);
         }
     }
-
-    private List<Fault> getAllFaults(String username) {
-        List<Fault> lsFault = new ArrayList<Fault>();
-        try {
-
-            boolean cache = true;
-            FaultUtils faultUtils = new FaultUtils();
-            log.info(username);
-            if (!StringUtils.isBlank(username)) {
-                if (faultUtils.readCaching(username) != null) {
-                    lsFault = faultUtils.readCaching(username);
-                    if (lsFault.size() > 0 && lsFault.get(0).getUsername().trim().equalsIgnoreCase(username.trim())) {
-                        log.info("From Caching , Fault size: " + lsFault.size());
-                    } else {
-                        cache = false;
-                    }
-                } else {
-                    cache = false;
-                }
-                if (!cache) {
-                    lsFault = getFIBugService().getAllFaultsByUser(username);
-                    if (lsFault != null && lsFault.size() > 0 && lsFault.get(0).getUsername().trim().equalsIgnoreCase(username.trim())) {
-                        log.info("From DB , Fault size: " + lsFault.size());
-                    }
-                }
-            }
-
-            if (lsFault != null && lsFault.size() > 0) {
-                return lsFault;
-            }
-        } catch (Exception ex) {
-            log.error(ex);
-        }
-        return lsFault;
-    }
-
 
 }
