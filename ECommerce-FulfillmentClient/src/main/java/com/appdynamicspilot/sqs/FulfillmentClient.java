@@ -24,12 +24,16 @@ import java.util.logging.Logger;
         List <Message> messages  = result.getMessages();
         while (true) {
             for (Message message : messages) {
-                client.deleteMessage(new DeleteMessageRequest(getQueue().getQueueUrl(), message.getReceiptHandle()));
-                logger.info("Message Deleted:" + message.getReceiptHandle());
+                processMessage(message);
             }
             try {Thread.sleep(1*1000);} catch(InterruptedException ie) {}
         }
 
+    }
+
+    private void processMessage(Message message) {
+        client.deleteMessage(new DeleteMessageRequest(getQueue().getQueueUrl(), message.getReceiptHandle()));
+        logger.info("Message Deleted:" + message.getReceiptHandle());
     }
 
     public static void main(String [] args) {
