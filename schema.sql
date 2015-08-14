@@ -105,7 +105,7 @@ CREATE TABLE `user` (
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 LOCK TABLES `user` WRITE;
 INSERT INTO `user` VALUES 
-(1,'test','appdynamics','appd','GOLD','San Francisco'),
+(1,'test','appdynamics','appd','DIAMOND','San Francisco'),
 (2,'appdynamics','appdynamics','appd','PLATINUM','Paris'),
 (3,'val.chibisov@appdynamics.com','appdynamics', 'Val Chibisov', 'SILVER','San Francisco'),
 (4,'bhaskar.sunkara@appdynamics.com','appdynamics','Bhaskar Sunkara','DIAMOND','Bangalore'),
@@ -131,7 +131,7 @@ INSERT INTO `user` VALUES
 (24,'jacquie.finney@appdynamics.com','appdynamics','Jacquie Finney','PLATINUM','Honolulu'),
 (25,'charles.smith@appdynamics.com','appdynamics','Charles Smith','PLATINUM','Honolulu'),
 (26,'eric.mackay@appdynamics.com','appdynamics','Eric MacKay','DIAMOND','Honolulu'),
-(27,'byron.martin@appdynamics.com','appdynamics','Byron Martin','DIAMOND','Honolulu');
+(27,'byron.martin@appdynamics.com','appdynamics','Byron Martin','GOLD','Honolulu');
 UNLOCK TABLES;
 
 /*!40101 SET NAMES utf8 */;
