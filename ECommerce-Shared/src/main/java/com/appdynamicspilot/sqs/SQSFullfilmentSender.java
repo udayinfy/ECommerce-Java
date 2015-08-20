@@ -4,12 +4,22 @@ import com.amazonaws.services.sqs.*;
 import com.amazonaws.services.sqs.model.*;
 import com.amazonaws.auth.*;
 import java.util.Map;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
 import javax.xml.bind.*;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import java.io.*;
 
 import com.appdynamicspilot.model.FulfillmentOrder;
 
+import java.util.Random;
 import java.util.logging.Logger;
 
 /**
@@ -18,6 +28,7 @@ import java.util.logging.Logger;
 public class SQSFullfilmentSender extends AbstractSQSClient {
 
     private static Logger logger = Logger.getLogger(SQSFullfilmentSender.class.getName());
+
 
     public SQSFullfilmentSender()  {
         super();
@@ -44,6 +55,5 @@ public class SQSFullfilmentSender extends AbstractSQSClient {
         return writer.toString();
 
     }
-
 
 }

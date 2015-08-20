@@ -46,7 +46,7 @@ public class ItemPersistence extends BasePersistenceImpl {
 
 		//DEMO-367 Calling Oracle db in certain percentage
         //Supressed the slow query to make it generic
-		/*if (shouldFireSlow()) {
+		if (shouldFireSlow()) {
 			LOGGER.info("Querying oracle db");
 			if (Math.random() >= 0.7) {
 				LOGGER.error("Critical transaction Error, rolling back changes. Order execution aborted.");
@@ -55,7 +55,7 @@ public class ItemPersistence extends BasePersistenceImpl {
 			OracleQueryExecutor oracleItems = (OracleQueryExecutor) SpringContext
 					.getBean("oracleQueryExecutor");
 			oracleItems.executeOracleQuery();
-		}*/
+		}
 
 		return itemList;
 	}
