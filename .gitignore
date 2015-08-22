@@ -20,3 +20,6 @@ gradle/
 .classpath
 .project
 .settings/
+
+#maven
+target/

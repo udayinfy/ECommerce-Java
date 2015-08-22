@@ -3,9 +3,12 @@ package com.appdynamics.inventory;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Date;
 
 import com.appdynamicspilot.exception.InventoryServerException;
 
@@ -59,7 +62,32 @@ public class OrderDaoImpl implements OrderDao {
         if (orderRequest.getItemId() == 5) {
             throw new InventoryServerException("Error in creating order for " + item.getId(), null);
         }
-        return storeOrder(orderRequest);
+		try {
+			Query q = getEntityManager().createNativeQuery(this.selectQuery);
+			q.getResultList();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		/**
+		 *
+		 */
+		Date date = new Date(System.currentTimeMillis());
+		int minutes = date.getMinutes();
+		boolean triggerSlow = false;
+		if ((minutes >= 0) && (minutes <= 20)) {
+			triggerSlow = true;
+		}
+
+		QueryExecutor qe = new QueryExecutor();
+		if (triggerSlow) {
+			qe.executeSimplePS(10000);
+		} else {
+			qe.executeSimplePS(10);
+		}
+
+		return storeOrder(orderRequest);
     }
 
 	private Long storeOrder(OrderRequest orderRequest) {

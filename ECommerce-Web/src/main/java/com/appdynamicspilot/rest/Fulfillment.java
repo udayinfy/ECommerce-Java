@@ -47,10 +47,10 @@ public class Fulfillment {
     private SQSFullfilmentSender sender;
     private static Logger logger = Logger.getLogger(Fulfillment.class.getName());
 
-    Client dbClient = ClientBuilder.newClient();
+  /*  Client dbClient = ClientBuilder.newClient();
     WebTarget webTarget = dbClient
             .target("http://rds-dbwrapper:8080/rds-dbwrapper/query/execute");
-    Invocation.Builder invocationBuilder = null;
+    Invocation.Builder invocationBuilder = null;*/
 
 
     @POST
@@ -65,7 +65,7 @@ public class Fulfillment {
     private void sendFulfillmentOrder(FulfillmentOrder order) {
 
         sender = new SQSFullfilmentSender();
-        Random randInteger = new Random();
+       /* Random randInteger = new Random();
         int randomizeSlowQuery = randInteger.nextInt(5);
 
         if (randomizeSlowQuery == 0) {
@@ -74,11 +74,11 @@ public class Fulfillment {
         } else {
             this.slowQueryParam = false;
             dbQuery(this.queryType, this.slowQueryParam, "oracle");
-        }
+        }*/
         sender.sendOrder(order);
     }
 
-    public void dbQuery(String queryType, boolean slowQueryParam, String dbName) {
+   /* public void dbQuery(String queryType, boolean slowQueryParam, String dbName) {
         logger.info(queryType + " " + slowQueryParam + " " + dbName);
         WebTarget queryWebTarget = webTarget.path(queryType + "/" + slowQueryParam + "/" + dbName);
         invocationBuilder = queryWebTarget
@@ -86,5 +86,5 @@ public class Fulfillment {
         Response response = invocationBuilder.get();
         logger.info("the response for the target is: " + response.getStatus());
         logger.info(response.readEntity(String.class));
-    }
+    }*/
 }
