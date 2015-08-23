@@ -1,25 +1,10 @@
 package com.appdynamicspilot.sqs;
 
-import com.amazonaws.services.sqs.*;
-import com.amazonaws.services.sqs.model.*;
-import com.amazonaws.auth.*;
-import java.util.Map;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.xml.bind.*;
-
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Invocation;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import java.io.*;
-
 import com.appdynamicspilot.model.FulfillmentOrder;
 
-import java.util.Random;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import java.io.StringWriter;
 import java.util.logging.Logger;
 
 /**
